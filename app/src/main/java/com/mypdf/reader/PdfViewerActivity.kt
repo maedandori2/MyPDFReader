@@ -69,9 +69,10 @@ class PdfViewerActivity : AppCompatActivity() {
         binding = ActivityPdfViewerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        filePath = intent.getStringExtra("file_path") ?: return
+        filePath = intent.getStringExtra("file_path") ?: run { finish(); return }
         val fileName = intent.getStringExtra("file_name") ?: ""
-        fileList = intent.getStringArrayListExtra("file_list") ?: arrayListOf(filePath)
+        val intentList = intent.getStringArrayListExtra("file_list")
+        fileList = if (!intentList.isNullOrEmpty()) intentList else listOf(filePath)
         fileIndex = fileList.indexOf(filePath).takeIf { it >= 0 } ?: 0
 
         binding.tvTitle.text = fileName
@@ -208,19 +209,34 @@ class PdfViewerActivity : AppCompatActivity() {
     // ───────── FILE SWITCH ─────────
 
     private fun switchFile(direction: Int) {
-        val newIndex = fileIndex + direction
-        if (newIndex < 0 || newIndex >= fileList.size) {
-            Toast.makeText(this,
-                if (direction > 0) "Đây là file cuối" else "Đây là file đầu",
-                Toast.LENGTH_SHORT).show()
+        if (fileList.size <= 1) {
+            Toast.makeText(this, "Không có file khác", Toast.LENGTH_SHORT).show()
             return
         }
-        fileIndex = newIndex
-        val newPath = fileList[fileIndex]
-        binding.tvTitle.text = File(newPath).nameWithoutExtension + ".pdf"
-        ReadingListManager.markAsRead(newPath)
-        openPdf(newPath)
-        showUI()
+        val newIndex = fileIndex + direction
+        if (newIndex < 0) {
+            Toast.makeText(this, "Đây là file đầu", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (newIndex >= fileList.size) {
+            Toast.makeText(this, "Đây là file cuối", Toast.LENGTH_SHORT).show()
+            return
+        }
+        try {
+            fileIndex = newIndex
+            val newPath = fileList[fileIndex]
+            val newFile = File(newPath)
+            if (!newFile.exists()) {
+                Toast.makeText(this, "File không tồn tại", Toast.LENGTH_SHORT).show()
+                return
+            }
+            binding.tvTitle.text = newFile.nameWithoutExtension + ".pdf"
+            ReadingListManager.markAsRead(newPath)
+            openPdf(newPath)
+            showUI()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Lỗi chuyển file: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     // ───────── NAV BUTTONS ─────────
