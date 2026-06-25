@@ -19,20 +19,21 @@ object ReadingListManager {
 
     fun getList(): List<PdfFile> = list.toList()
 
+    // Cho phép thêm trùng
     fun addToList(file: PdfFile) {
-        if (list.none { it.path == file.path }) {
-            list.add(file.copy(isRead = false))
+        list.add(file.copy(isRead = false))
+        saveToPrefs()
+    }
+
+    fun removeAtPosition(position: Int) {
+        if (position in 0 until list.size) {
+            list.removeAt(position)
             saveToPrefs()
         }
     }
 
-    fun removeFromList(path: String) {
-        list.removeAll { it.path == path }
-        saveToPrefs()
-    }
-
     fun markAsRead(path: String) {
-        val index = list.indexOfFirst { it.path == path }
+        val index = list.indexOfFirst { it.path == path && !it.isRead }
         if (index >= 0) {
             list[index] = list[index].copy(isRead = true)
             saveToPrefs()
@@ -52,11 +53,6 @@ object ReadingListManager {
         if (toPosition < 0 || toPosition >= list.size) return
         val item = list.removeAt(fromPosition)
         list.add(toPosition, item)
-        saveToPrefs()
-    }
-
-    fun clearReadItems() {
-        list.removeAll { it.isRead }
         saveToPrefs()
     }
 
