@@ -120,42 +120,37 @@ class PdfViewerActivity : AppCompatActivity() {
                 velocityX: Float,
                 velocityY: Float
             ): Boolean {
-                val start = e1 ?: return false
-                val dx = e2.x - start.x
-                val dy = e2.y - start.y
-                val absDx = abs(dx)
-                val absDy = abs(dy)
-
-                // Khi đang zoom thì không xử lý swipe
-                if (isZoomed) return false
-
-                if (absDx > absDy && absDx > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
-                    // Vuốt ngang → chuyển file
-                    if (dx < 0) switchFile(1)   // trái → file tiếp theo
-                    else switchFile(-1)           // phải → file trước
-                    return true
-                }
-
-                if (absDy > absDx && absDy > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
-                    // Vuốt dọc → chuyển trang
-                    if (dy < 0) {
-                        // vuốt lên → trang tiếp
-                        if (currentPageIndex < totalPages - 1) {
-                            renderPage(currentPageIndex + 1)
-                        } else {
-                            Toast.makeText(this@PdfViewerActivity, "Trang cuối", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        // vuốt xuống → trang trước
-                        if (currentPageIndex > 0) {
-                            renderPage(currentPageIndex - 1)
-                        } else {
-                            Toast.makeText(this@PdfViewerActivity, "Trang đầu", Toast.LENGTH_SHORT).show()
-                        }
+                try {
+                    val start = e1 ?: return false
+                    val dx = e2.x - start.x
+                    val dy = e2.y - start.y
+                    val absDx = abs(dx)
+                    val absDy = abs(dy)
+            
+                    if (isZoomed) return false
+            
+                    if (absDx > absDy && absDx > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
+                        if (dx < 0) switchFile(1) else switchFile(-1)
+                        return true
                     }
-                    return true
+            
+                    if (absDy > absDx && absDy > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
+                        if (dy < 0) {
+                            if (currentPageIndex < totalPages - 1) renderPage(currentPageIndex + 1)
+                            else Toast.makeText(this@PdfViewerActivity, "Trang cuối", Toast.LENGTH_SHORT).show()
+                        } else {
+                            if (currentPageIndex > 0) renderPage(currentPageIndex - 1)
+                            else Toast.makeText(this@PdfViewerActivity, "Trang đầu", Toast.LENGTH_SHORT).show()
+                        }
+                        return true
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        this@PdfViewerActivity,
+                        "Lỗi: ${e.javaClass.simpleName}: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-
                 return false
             }
         })
