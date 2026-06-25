@@ -68,7 +68,8 @@ class MainActivity : AppCompatActivity() {
             onItemLongClick = { file -> removeFromReadingList(file) },
             isReadingList = true,
             onMoveUp = { pos -> moveItem(pos, -1) },
-            onMoveDown = { pos -> moveItem(pos, 1) }
+            onMoveDown = { pos -> moveItem(pos, 1) },
+            onMoveTo = { from, to -> moveItemTo(from, to) }
         )
         binding.rvReadingList.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -83,7 +84,6 @@ class MainActivity : AppCompatActivity() {
             binding.btnTabReadingList.isSelected = false
             binding.layoutAll.visibility = View.VISIBLE
             binding.layoutReadingList.visibility = View.GONE
-            updateReadingListBadge()
         }
 
         binding.btnTabReadingList.setOnClickListener {
@@ -93,9 +93,9 @@ class MainActivity : AppCompatActivity() {
             binding.layoutAll.visibility = View.GONE
             binding.layoutReadingList.visibility = View.VISIBLE
             readingListAdapter.notifyDataSetChanged()
+            updateReadingListBadge()
         }
 
-        // Default: show All tab
         binding.btnTabAll.isSelected = true
         binding.layoutAll.visibility = View.VISIBLE
         binding.layoutReadingList.visibility = View.GONE
@@ -103,9 +103,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupSearch() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                filterFiles(s.toString())
-            }
+            override fun afterTextChanged(s: Editable?) { filterFiles(s.toString()) }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -114,23 +112,15 @@ class MainActivity : AppCompatActivity() {
     private fun setupFab() {
         binding.fabReadNext.setOnClickListener {
             val nextUnread = readingList.firstOrNull { !it.isRead }
-            if (nextUnread != null) {
-                openPdf(nextUnread)
-            } else {
-                Toast.makeText(this, "Không còn file chưa đọc trong danh sách", Toast.LENGTH_SHORT).show()
-            }
+            if (nextUnread != null) openPdf(nextUnread)
+            else Toast.makeText(this, "Không còn file chưa đọc trong danh sách", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun filterFiles(query: String) {
         filteredFiles.clear()
-        if (query.isEmpty()) {
-            filteredFiles.addAll(allFiles)
-        } else {
-            filteredFiles.addAll(allFiles.filter {
-                it.name.contains(query, ignoreCase = true)
-            })
-        }
+        if (query.isEmpty()) filteredFiles.addAll(allFiles)
+        else filteredFiles.addAll(allFiles.filter { it.name.contains(query, ignoreCase = true) })
         binding.tvFileCount.text = "${filteredFiles.size} / ${allFiles.size} file"
         fileAdapter.notifyDataSetChanged()
     }
@@ -141,29 +131,20 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
                 startActivity(intent)
                 Toast.makeText(this, "Vui lòng cấp quyền truy cập bộ nhớ", Toast.LENGTH_LONG).show()
-            } else {
-                loadPdfFiles()
-            }
+            } else loadPdfFiles()
         } else {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    REQUEST_PERMISSION
-                )
-            } else {
-                loadPdfFiles()
-            }
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_PERMISSION)
+            } else loadPdfFiles()
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_PERMISSION && grantResults.isNotEmpty()
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadPdfFiles()
-        }
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) loadPdfFiles()
     }
 
     override fun onResume() {
@@ -171,7 +152,6 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
             if (allFiles.isEmpty()) loadPdfFiles()
         }
-        // Refresh reading list status
         readingList.clear()
         readingList.addAll(ReadingListManager.getList())
         readingListAdapter.notifyDataSetChanged()
@@ -196,27 +176,22 @@ class MainActivity : AppCompatActivity() {
         binding.tvFileCount.text = "${allFiles.size} file"
         fileAdapter.notifyDataSetChanged()
 
-        if (allFiles.isEmpty()) {
-            binding.tvEmpty.visibility = View.VISIBLE
-            binding.tvEmpty.text = "Chưa có file PDF\nCopy file vào: $PDF_FOLDER"
-        } else {
-            binding.tvEmpty.visibility = View.GONE
-        }
+        binding.tvEmpty.visibility = if (allFiles.isEmpty()) View.VISIBLE else View.GONE
+        if (allFiles.isEmpty()) binding.tvEmpty.text = "Chưa có file PDF\nCopy file vào: $PDF_FOLDER"
     }
 
     private fun openPdf(file: PdfFile) {
+        ReadingListManager.markAsRead(file.path)
         val intent = Intent(this, PdfViewerActivity::class.java).apply {
             putExtra("file_path", file.path)
-            putExtra("file_name", file.name)
+            putExtra("file_name", "${file.name}.pdf")
         }
-        // Mark as read in reading list
-        ReadingListManager.markAsRead(file.path)
         startActivity(intent)
     }
 
     private fun addToReadingList(file: PdfFile) {
         if (readingList.any { it.path == file.path }) {
-            Toast.makeText(this, "${file.name} đã có trong danh sách", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${file.name}.pdf đã có trong danh sách", Toast.LENGTH_SHORT).show()
             return
         }
         ReadingListManager.addToList(file)
@@ -224,7 +199,7 @@ class MainActivity : AppCompatActivity() {
         readingList.addAll(ReadingListManager.getList())
         readingListAdapter.notifyDataSetChanged()
         updateReadingListBadge()
-        Toast.makeText(this, "✓ Đã thêm ${file.name} vào danh sách đọc", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "✓ Đã thêm ${file.name}.pdf vào danh sách đọc", Toast.LENGTH_SHORT).show()
     }
 
     private fun removeFromReadingList(file: PdfFile) {
@@ -233,7 +208,7 @@ class MainActivity : AppCompatActivity() {
         readingList.addAll(ReadingListManager.getList())
         readingListAdapter.notifyDataSetChanged()
         updateReadingListBadge()
-        Toast.makeText(this, "Đã xóa ${file.name} khỏi danh sách", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Đã xóa ${file.name}.pdf khỏi danh sách", Toast.LENGTH_SHORT).show()
     }
 
     private fun moveItem(position: Int, direction: Int) {
@@ -241,6 +216,14 @@ class MainActivity : AppCompatActivity() {
         readingList.clear()
         readingList.addAll(ReadingListManager.getList())
         readingListAdapter.notifyDataSetChanged()
+    }
+
+    private fun moveItemTo(fromPosition: Int, toPosition: Int) {
+        ReadingListManager.moveToPosition(fromPosition, toPosition)
+        readingList.clear()
+        readingList.addAll(ReadingListManager.getList())
+        readingListAdapter.notifyDataSetChanged()
+        Toast.makeText(this, "Đã chuyển đến vị trí ${toPosition + 1}", Toast.LENGTH_SHORT).show()
     }
 
     private fun updateReadingListBadge() {
