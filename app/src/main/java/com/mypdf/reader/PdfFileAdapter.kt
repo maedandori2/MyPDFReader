@@ -25,7 +25,7 @@ class PdfFileAdapter(
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
         val btnUp: ImageButton = view.findViewById(R.id.btnMoveUp)
         val btnDown: ImageButton = view.findViewById(R.id.btnMoveDown)
-        val btnMoveTo: ImageButton = view.findViewById(R.id.btnMoveTo)
+        val btnMoveTo: TextView = view.findViewById(R.id.btnMoveTo)
         val layoutControls: View = view.findViewById(R.id.layoutControls)
     }
 
@@ -38,7 +38,6 @@ class PdfFileAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val file = files[position]
 
-        // Hiển thị tên file đầy đủ với đuôi .pdf
         holder.tvName.text = "${file.name}.pdf"
         holder.tvName.setTextColor(
             if (file.isRead && isReadingList) Color.parseColor("#999999")
@@ -59,7 +58,6 @@ class PdfFileAdapter(
             holder.btnUp.setOnClickListener { onMoveUp?.invoke(position) }
             holder.btnDown.setOnClickListener { onMoveDown?.invoke(position) }
 
-            // Nút sửa vị trí: nhập số thứ tự muốn chuyển đến
             holder.btnMoveTo.setOnClickListener {
                 val context = holder.itemView.context
                 val input = EditText(context).apply {
