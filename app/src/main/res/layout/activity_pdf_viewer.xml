@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="#212121">
 
-    <!-- Top bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -19,7 +18,6 @@
             android:layout_height="40dp"
             android:text="← Back"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#0D47A1"
             style="@style/Widget.MaterialComponents.Button.TextButton" />
 
         <TextView
@@ -33,7 +31,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:gravity="center"
-            android:paddingHorizontal="8dp" />
+            android:paddingHorizontal="4dp" />
 
         <TextView
             android:id="@+id/tvPageInfo"
@@ -41,54 +39,80 @@
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:paddingHorizontal="8dp" />
+            android:paddingHorizontal="4dp" />
     </LinearLayout>
 
-    <!-- PDF Page -->
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#0D47A1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp">
+
+        <Button
+            android:id="@+id/btnRotate"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="⇔ Ngang"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:backgroundTint="#1565C0"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <View android:layout_width="8dp" android:layout_height="1dp" />
+
+        <Button
+            android:id="@+id/btnFitScreen"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="⛶ Fit màn hình"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:backgroundTint="#1565C0"
+            style="@style/Widget.MaterialComponents.Button" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivPage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="#212121"
+        android:scaleType="matrix" />
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/ivPage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="matrix" />
-        </HorizontalScrollView>
-    </androidx.core.widget.NestedScrollView>
-
-    <!-- Navigation -->
     <LinearLayout
         android:id="@+id/layoutNav"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="52dp"
         android:background="#1A1A1A"
         android:gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnPrevPage"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp"
             android:text="◀ Trang trước"
             android:textColor="#FFFFFF"
             android:backgroundTint="#333333"
-            android:layout_marginHorizontal="8dp" />
+            style="@style/Widget.MaterialComponents.Button" />
 
         <Button
             android:id="@+id/btnNextPage"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp"
             android:text="Trang sau ▶"
             android:textColor="#FFFFFF"
             android:backgroundTint="#1565C0"
-            android:layout_marginHorizontal="8dp" />
+            style="@style/Widget.MaterialComponents.Button" />
     </LinearLayout>
 
 </LinearLayout>
