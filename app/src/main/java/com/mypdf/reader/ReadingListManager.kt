@@ -47,6 +47,14 @@ object ReadingListManager {
         saveToPrefs()
     }
 
+    fun moveToPosition(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < 0 || fromPosition >= list.size) return
+        if (toPosition < 0 || toPosition >= list.size) return
+        val item = list.removeAt(fromPosition)
+        list.add(toPosition, item)
+        saveToPrefs()
+    }
+
     fun clearReadItems() {
         list.removeAll { it.isRead }
         saveToPrefs()
