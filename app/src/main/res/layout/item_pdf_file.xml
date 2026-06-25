@@ -13,14 +13,28 @@
         android:paddingHorizontal="12dp"
         android:gravity="center_vertical">
 
-        <!-- PDF Icon -->
+        <!-- Số thứ tự (chỉ hiện trong reading list) -->
         <TextView
+            android:id="@+id/tvIndex"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="#1565C0"
+            android:visibility="gone" />
+
+        <!-- PDF Icon (hiện trong tab All) -->
+        <TextView
+            android:id="@+id/tvIcon"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:gravity="center"
             android:text="📄"
             android:textSize="18sp"
-            android:background="#E3F2FD" />
+            android:background="#E3F2FD"
+            android:visibility="visible" />
 
         <!-- File name -->
         <TextView
@@ -44,7 +58,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:visibility="gone" />
 
-        <!-- Nút thêm vào danh sách (+) - tab All -->
+        <!-- Nút thêm (+) - tab All -->
         <TextView
             android:id="@+id/btnAddToList"
             android:layout_width="44dp"
@@ -64,7 +78,7 @@
             android:gravity="center_vertical"
             android:visibility="gone">
 
-            <!-- Mở file trong reading list -->
+            <!-- Mở file -->
             <TextView
                 android:id="@+id/btnOpenReading"
                 android:layout_width="48dp"
@@ -96,22 +110,21 @@
                 android:textColor="#1565C0"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
-            <!-- Sửa vị trí -->
+            <!-- Xoá khỏi danh sách -->
             <TextView
-                android:id="@+id/btnMoveTo"
+                android:id="@+id/btnRemove"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:gravity="center"
-                android:text="✎"
+                android:text="🗑"
                 android:textSize="22sp"
-                android:textColor="#1565C0"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <!-- Status + divider -->
+    <!-- Status -->
     <TextView
         android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
