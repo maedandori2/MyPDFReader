@@ -25,6 +25,7 @@ class PdfViewerActivity : AppCompatActivity() {
     private var currentPage: PdfRenderer.Page? = null
     private var currentPageIndex = 0
     private var totalPages = 0
+    private var currentBitmap: Bitmap? = null
 
     // Zoom & pan
     private val matrix = Matrix()
@@ -35,11 +36,14 @@ class PdfViewerActivity : AppCompatActivity() {
     private var midY = 0f
     private var mode = NONE
     private var dist = 0f
+    private var isZoomed = false
 
-    // Swipe between files
+    // File list
     private var filePath = ""
     private var fileList = listOf<String>()
     private var fileIndex = 0
+
+    // Gesture
     private lateinit var gestureDetector: GestureDetector
 
     // Auto-hide UI
@@ -52,8 +56,8 @@ class PdfViewerActivity : AppCompatActivity() {
         const val DRAG = 1
         const val ZOOM = 2
         const val HIDE_DELAY = 2000L
-        const val SWIPE_THRESHOLD = 100
-        const val SWIPE_VELOCITY = 100
+        const val SWIPE_THRESHOLD = 80
+        const val SWIPE_VELOCITY = 80
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,10 +78,12 @@ class PdfViewerActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
 
         setupGestures()
-        setupNavigation()
+        setupNavButtons()
         openPdf(filePath)
         scheduleHide()
     }
+
+    // ───────── UI HIDE / SHOW ─────────
 
     private fun scheduleHide() {
         hideHandler.removeCallbacks(hideRunnable)
@@ -97,6 +103,8 @@ class PdfViewerActivity : AppCompatActivity() {
         binding.layoutNav.visibility = View.GONE
     }
 
+    // ───────── GESTURES ─────────
+
     private fun setupGestures() {
         gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
 
@@ -111,22 +119,42 @@ class PdfViewerActivity : AppCompatActivity() {
                 velocityX: Float,
                 velocityY: Float
             ): Boolean {
-                val e1 = e1 ?: return false
-                val dx = e2.x - e1.x
-                val dy = e2.y - e1.y
+                val start = e1 ?: return false
+                val dx = e2.x - start.x
+                val dy = e2.y - start.y
+                val absDx = abs(dx)
+                val absDy = abs(dy)
 
-                // Vuốt ngang để chuyển file (chỉ khi không zoom)
-                if (abs(dx) > abs(dy) && abs(dx) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
-                    val vals = FloatArray(9)
-                    matrix.getValues(vals)
-                    val currentScale = vals[Matrix.MSCALE_X]
+                // Khi đang zoom thì không xử lý swipe
+                if (isZoomed) return false
 
-                    if (currentScale <= 1.05f) {
-                        if (dx < 0) switchFile(1)   // vuốt trái → file tiếp
-                        else switchFile(-1)           // vuốt phải → file trước
-                        return true
-                    }
+                if (absDx > absDy && absDx > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
+                    // Vuốt ngang → chuyển file
+                    if (dx < 0) switchFile(1)   // trái → file tiếp theo
+                    else switchFile(-1)           // phải → file trước
+                    return true
                 }
+
+                if (absDy > absDx && absDy > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
+                    // Vuốt dọc → chuyển trang
+                    if (dy < 0) {
+                        // vuốt lên → trang tiếp
+                        if (currentPageIndex < totalPages - 1) {
+                            renderPage(currentPageIndex + 1)
+                        } else {
+                            Toast.makeText(this@PdfViewerActivity, "Trang cuối", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        // vuốt xuống → trang trước
+                        if (currentPageIndex > 0) {
+                            renderPage(currentPageIndex - 1)
+                        } else {
+                            Toast.makeText(this@PdfViewerActivity, "Trang đầu", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    return true
+                }
+
                 return false
             }
         })
@@ -150,14 +178,11 @@ class PdfViewerActivity : AppCompatActivity() {
                     }
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    if (mode == DRAG) {
-                        val dx = event.x - lastX
-                        val dy = event.y - lastY
-                        if (dx * dx + dy * dy > 100) {
-                            matrix.set(savedMatrix)
-                            matrix.postTranslate(dx, dy)
-                            binding.ivPage.imageMatrix = matrix
-                        }
+                    if (mode == DRAG && isZoomed) {
+                        // Pan chỉ khi đã zoom
+                        matrix.set(savedMatrix)
+                        matrix.postTranslate(event.x - lastX, event.y - lastY)
+                        binding.ivPage.imageMatrix = matrix
                     } else if (mode == ZOOM && event.pointerCount == 2) {
                         val newDist = spacing(event)
                         if (newDist > 10f) {
@@ -165,14 +190,22 @@ class PdfViewerActivity : AppCompatActivity() {
                             val scale = newDist / dist
                             matrix.postScale(scale, scale, midX, midY)
                             binding.ivPage.imageMatrix = matrix
+                            // Kiểm tra có đang zoom không
+                            val vals = FloatArray(9)
+                            matrix.getValues(vals)
+                            isZoomed = vals[Matrix.MSCALE_X] > 1.05f
                         }
                     }
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> mode = NONE
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                    mode = NONE
+                }
             }
             true
         }
     }
+
+    // ───────── FILE SWITCH ─────────
 
     private fun switchFile(direction: Int) {
         val newIndex = fileIndex + direction
@@ -184,27 +217,15 @@ class PdfViewerActivity : AppCompatActivity() {
         }
         fileIndex = newIndex
         val newPath = fileList[fileIndex]
-        val newName = File(newPath).nameWithoutExtension + ".pdf"
-        binding.tvTitle.text = newName
+        binding.tvTitle.text = File(newPath).nameWithoutExtension + ".pdf"
         ReadingListManager.markAsRead(newPath)
-        pdfRenderer?.close()
-        currentPage?.close()
         openPdf(newPath)
         showUI()
     }
 
-    private fun spacing(event: MotionEvent): Float {
-        val x = event.getX(0) - event.getX(1)
-        val y = event.getY(0) - event.getY(1)
-        return kotlin.math.sqrt(x * x + y * y)
-    }
+    // ───────── NAV BUTTONS ─────────
 
-    private fun midPoint(event: MotionEvent) {
-        midX = (event.getX(0) + event.getX(1)) / 2
-        midY = (event.getY(0) + event.getY(1)) / 2
-    }
-
-    private fun setupNavigation() {
+    private fun setupNavButtons() {
         binding.btnPrevPage.setOnClickListener {
             if (currentPageIndex > 0) renderPage(currentPageIndex - 1)
             scheduleHide()
@@ -214,6 +235,8 @@ class PdfViewerActivity : AppCompatActivity() {
             scheduleHide()
         }
     }
+
+    // ───────── PDF OPEN / RENDER ─────────
 
     private fun openPdf(path: String) {
         try {
@@ -241,10 +264,16 @@ class PdfViewerActivity : AppCompatActivity() {
         val scaleH = dm.heightPixels.toFloat() / page.height
         val scale = min(scaleW, scaleH) * dm.density
 
-        val bmp = Bitmap.createBitmap((page.width * scale).toInt(), (page.height * scale).toInt(), Bitmap.Config.ARGB_8888)
+        val bmp = Bitmap.createBitmap(
+            (page.width * scale).toInt(),
+            (page.height * scale).toInt(),
+            Bitmap.Config.ARGB_8888
+        )
         bmp.eraseColor(android.graphics.Color.WHITE)
         page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
 
+        currentBitmap = bmp
+        isZoomed = false
         binding.ivPage.scaleType = android.widget.ImageView.ScaleType.MATRIX
         binding.ivPage.setImageBitmap(bmp)
         binding.ivPage.post { fitToScreen(bmp) }
@@ -267,6 +296,19 @@ class PdfViewerActivity : AppCompatActivity() {
         binding.btnPrevPage.isEnabled = currentPageIndex > 0
         binding.btnNextPage.isEnabled = currentPageIndex < totalPages - 1
         binding.layoutNav.visibility = if (totalPages > 1) View.VISIBLE else View.GONE
+    }
+
+    // ───────── HELPERS ─────────
+
+    private fun spacing(event: MotionEvent): Float {
+        val x = event.getX(0) - event.getX(1)
+        val y = event.getY(0) - event.getY(1)
+        return kotlin.math.sqrt(x * x + y * y)
+    }
+
+    private fun midPoint(event: MotionEvent) {
+        midX = (event.getX(0) + event.getX(1)) / 2
+        midY = (event.getY(0) + event.getY(1)) / 2
     }
 
     override fun onDestroy() {
