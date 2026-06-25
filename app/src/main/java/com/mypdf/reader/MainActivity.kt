@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             onOpenFile = { file -> openPdf(file) },
             onMoveUp = { pos -> moveItem(pos, -1) },
             onMoveDown = { pos -> moveItem(pos, 1) },
-            onMoveTo = { from, to -> moveItemTo(from, to) }
+            onRemove = { pos -> removeFromReadingList(pos) }
         )
         binding.rvReadingList.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -99,7 +99,12 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
-
+    private fun removeFromReadingList(position: Int) {
+        val name = readingList.getOrNull(position)?.name ?: ""
+        ReadingListManager.removeAtPosition(position)
+        refreshReadingList()
+        Toast.makeText(this, "Đã xóa $name.pdf khỏi danh sách", Toast.LENGTH_SHORT).show()
+    }
     private fun setupFab() {
         binding.fabReadNext.setOnClickListener {
             val next = readingList.firstOrNull { !it.isRead }
@@ -168,9 +173,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun openPdf(file: PdfFile) {
         ReadingListManager.markAsRead(file.path)
+        val currentList = if (binding.layoutReadingList.visibility == View.VISIBLE)
+            readingList.map { it.path }
+        else
+            filteredFiles.map { it.path }
+    
         startActivity(Intent(this, PdfViewerActivity::class.java).apply {
             putExtra("file_path", file.path)
             putExtra("file_name", "${file.name}.pdf")
+            putStringArrayListExtra("file_list", ArrayList(currentList))
         })
     }
 
