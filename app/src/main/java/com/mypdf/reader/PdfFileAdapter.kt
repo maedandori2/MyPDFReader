@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class PdfFileAdapter(
     private val files: List<PdfFile>,
-    private val onItemClick: (PdfFile) -> Unit,
-    private val onItemLongClick: (PdfFile) -> Unit,
     private val isReadingList: Boolean = false,
+    private val onOpenFile: (PdfFile) -> Unit,
+    private val onAddToList: ((PdfFile) -> Unit)? = null,
     private val onMoveUp: ((Int) -> Unit)? = null,
     private val onMoveDown: ((Int) -> Unit)? = null,
     private val onMoveTo: ((Int, Int) -> Unit)? = null
@@ -23,10 +22,13 @@ class PdfFileAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvFileName)
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
-        val btnUp: ImageButton = view.findViewById(R.id.btnMoveUp)
-        val btnDown: ImageButton = view.findViewById(R.id.btnMoveDown)
-        val btnMoveTo: TextView = view.findViewById(R.id.btnMoveTo)
+        val btnOpenFile: TextView = view.findViewById(R.id.btnOpenFile)
+        val btnAddToList: TextView = view.findViewById(R.id.btnAddToList)
         val layoutControls: View = view.findViewById(R.id.layoutControls)
+        val btnOpenReading: TextView = view.findViewById(R.id.btnOpenReading)
+        val btnMoveUp: TextView = view.findViewById(R.id.btnMoveUp)
+        val btnMoveDown: TextView = view.findViewById(R.id.btnMoveDown)
+        val btnMoveTo: TextView = view.findViewById(R.id.btnMoveTo)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,24 +41,27 @@ class PdfFileAdapter(
         val file = files[position]
 
         holder.tvName.text = "${file.name}.pdf"
-        holder.tvName.setTextColor(
-            if (file.isRead && isReadingList) Color.parseColor("#999999")
-            else Color.parseColor("#212121")
-        )
 
         if (isReadingList) {
+            // Reading list mode
+            holder.tvName.setTextColor(
+                if (file.isRead) Color.parseColor("#999999") else Color.parseColor("#212121")
+            )
             holder.tvStatus.visibility = View.VISIBLE
             holder.tvStatus.text = if (file.isRead) "✓ Đã đọc" else "Chưa đọc"
             holder.tvStatus.setTextColor(
                 if (file.isRead) Color.parseColor("#4CAF50") else Color.parseColor("#FF9800")
             )
             holder.layoutControls.visibility = View.VISIBLE
-            holder.btnUp.visibility = if (position > 0) View.VISIBLE else View.INVISIBLE
-            holder.btnDown.visibility = if (position < files.size - 1) View.VISIBLE else View.INVISIBLE
-            holder.btnMoveTo.visibility = View.VISIBLE
+            holder.btnOpenFile.visibility = View.GONE
+            holder.btnAddToList.visibility = View.GONE
 
-            holder.btnUp.setOnClickListener { onMoveUp?.invoke(position) }
-            holder.btnDown.setOnClickListener { onMoveDown?.invoke(position) }
+            holder.btnMoveUp.visibility = if (position > 0) View.VISIBLE else View.INVISIBLE
+            holder.btnMoveDown.visibility = if (position < files.size - 1) View.VISIBLE else View.INVISIBLE
+
+            holder.btnOpenReading.setOnClickListener { onOpenFile(file) }
+            holder.btnMoveUp.setOnClickListener { onMoveUp?.invoke(position) }
+            holder.btnMoveDown.setOnClickListener { onMoveDown?.invoke(position) }
 
             holder.btnMoveTo.setOnClickListener {
                 val context = holder.itemView.context
@@ -78,15 +83,17 @@ class PdfFileAdapter(
                     .setNegativeButton("Hủy", null)
                     .show()
             }
+
         } else {
+            // All files mode
+            holder.tvName.setTextColor(Color.parseColor("#212121"))
             holder.tvStatus.visibility = View.GONE
             holder.layoutControls.visibility = View.GONE
-        }
+            holder.btnOpenFile.visibility = View.VISIBLE
+            holder.btnAddToList.visibility = View.VISIBLE
 
-        holder.itemView.setOnClickListener { onItemClick(file) }
-        holder.itemView.setOnLongClickListener {
-            onItemLongClick(file)
-            true
+            holder.btnOpenFile.setOnClickListener { onOpenFile(file) }
+            holder.btnAddToList.setOnClickListener { onAddToList?.invoke(file) }
         }
     }
 
