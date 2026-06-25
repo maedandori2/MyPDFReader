@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#212121">
+
+    <!-- Top bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#1565C0"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="← Back"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#0D47A1"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:gravity="center"
+            android:paddingHorizontal="8dp" />
+
+        <TextView
+            android:id="@+id/tvPageInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:paddingHorizontal="8dp" />
+    </LinearLayout>
+
+    <!-- PDF Page -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="matrix" />
+        </HorizontalScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Navigation -->
+    <LinearLayout
+        android:id="@+id/layoutNav"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#1A1A1A"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPrevPage"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="◀ Trang trước"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#333333"
+            android:layout_marginHorizontal="8dp" />
+
+        <Button
+            android:id="@+id/btnNextPage"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Trang sau ▶"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#1565C0"
+            android:layout_marginHorizontal="8dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#1565C0"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📄 My PDF Reader"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Search Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:elevation="2dp">
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_search"
+            android:hint="🔍 Tìm kiếm theo mã số..."
+            android:inputType="number"
+            android:paddingHorizontal="12dp"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:imeOptions="actionSearch" />
+    </LinearLayout>
+
+    <!-- Tabs -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnTabAll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Tất cả file"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="#1565C0"
+            android:textSize="14sp"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#EEEEEE" />
+        <Button
+            android:id="@+id/btnTabReadingList"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Danh sách đọc"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="#757575"
+            android:textSize="14sp"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+    <!-- All Files Tab -->
+    <FrameLayout
+        android:id="@+id/layoutAll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFiles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="4dp"
+            android:clipToPadding="false" />
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#999999"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvFileCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:background="#CC1565C0"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:text="0 file" />
+    </FrameLayout>
+
+    <!-- Reading List Tab -->
+    <FrameLayout
+        android:id="@+id/layoutReadingList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvReadingList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false" />
+
+        <!-- FAB: Read Next -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabReadNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="16dp"
+            android:text="▶ Đọc file tiếp theo"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#1565C0"
+            xmlns:app="http://schemas.android.com/apk/res-auto" />
+    </FrameLayout>
+
+</LinearLayout>
