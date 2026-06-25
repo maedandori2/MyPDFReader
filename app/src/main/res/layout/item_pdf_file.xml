@@ -9,9 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="12dp"
         android:gravity="center_vertical">
 
+        <!-- PDF Icon -->
         <TextView
             android:layout_width="36dp"
             android:layout_height="36dp"
@@ -20,67 +22,104 @@
             android:textSize="18sp"
             android:background="#E3F2FD" />
 
-        <LinearLayout
+        <!-- File name -->
+        <TextView
+            android:id="@+id/tvFileName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="10dp">
+            android:textSize="15sp"
+            android:textColor="#212121"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="10dp" />
 
-            <TextView
-                android:id="@+id/tvFileName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="#212121"
-                android:textStyle="bold" />
+        <!-- Nút mở file (mắt) - tab All -->
+        <TextView
+            android:id="@+id/btnOpenFile"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="👁"
+            android:textSize="22sp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                android:visibility="gone" />
-        </LinearLayout>
+        <!-- Nút thêm vào danh sách (+) - tab All -->
+        <TextView
+            android:id="@+id/btnAddToList"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="➕"
+            android:textSize="22sp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="gone" />
 
+        <!-- Controls reading list -->
         <LinearLayout
             android:id="@+id/layoutControls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:visibility="gone">
 
-            <ImageButton
+            <!-- Mở file trong reading list -->
+            <TextView
+                android:id="@+id/btnOpenReading"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="👁"
+                android:textSize="24sp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <!-- Lên -->
+            <TextView
                 android:id="@+id/btnMoveUp"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@android:drawable/arrow_up_float"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Lên" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="▲"
+                android:textSize="22sp"
+                android:textColor="#1565C0"
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
-            <ImageButton
+            <!-- Xuống -->
+            <TextView
                 android:id="@+id/btnMoveDown"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@android:drawable/arrow_down_float"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Xuống" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="▼"
+                android:textSize="22sp"
+                android:textColor="#1565C0"
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
+            <!-- Sửa vị trí -->
             <TextView
                 android:id="@+id/btnMoveTo"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:gravity="center"
                 android:text="✎"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:textColor="#1565C0"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:visibility="gone" />
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <!-- Status + divider -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginStart="58dp"
+        android:layout_marginBottom="6dp"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
