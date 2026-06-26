@@ -15,7 +15,7 @@ class SyncWorker(
             if (!SyncManager.isLoggedIn()) return Result.success()
 
             val prefs = applicationContext.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
-            val folderName = prefs.getString("drive_folder", "MyPDF") ?: "MyPDF"
+            val folderName = prefs.getString("drive_folder", "shiyo") ?: "shiyo"
 
             val result = SyncManager.syncFiles(
                 driveFolderName = folderName,
