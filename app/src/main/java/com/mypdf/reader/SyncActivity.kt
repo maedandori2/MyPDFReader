@@ -71,7 +71,7 @@ class SyncActivity : AppCompatActivity() {
             binding.layoutLoggedOut.visibility = View.GONE
             binding.layoutLoggedIn.visibility = View.VISIBLE
             binding.tvLastSync.text = "Lần sync cuối: ${SyncManager.getLastSync()}"
-            binding.tvDriveFolder.setText(prefs.getString("drive_folder", "MyPDF"))
+            binding.tvDriveFolder.setText(prefs.getString("drive_folder", "shiyo"))
             val autoSync = prefs.getBoolean("auto_sync", false)
             binding.switchAutoSync.isChecked = autoSync
             updateNextSyncTime()
