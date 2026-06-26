@@ -1,5 +1,5 @@
-- name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+name: Build Debug APK
+        run: ./gradlew assembleDebug --info 2>&1 | grep -A 5 "error:"
 on:
   workflow_dispatch:
 
