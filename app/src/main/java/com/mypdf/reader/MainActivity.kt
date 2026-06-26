@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             onOpenFile = { file -> openPdf(file) },
             onMoveUp = { pos -> moveItem(pos, -1) },
             onMoveDown = { pos -> moveItem(pos, 1) },
-            onRemove = { pos -> removeFromReadingList(pos) }
+            onRemove = { pos -> removeFromReadingList(pos as Int) }
         )
         binding.rvReadingList.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun removeFromReadingList(file: PdfFile) {
-        ReadingListManager.removeFromList(file.path)
+        ReadingListManager.removeAtPosition(position)
         readingList.clear()
         readingList.addAll(ReadingListManager.getList())
         readingListAdapter.notifyDataSetChanged()
