@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -62,44 +61,25 @@
                     android:textStyle="bold"
                     android:textColor="#212121"
                     android:gravity="center"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nhấn nút bên dưới, đăng nhập Google rồi app sẽ tự động xác thực."
+                    android:textSize="13sp"
+                    android:textColor="#666666"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp" />
 
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="🔑 Mở trang đăng nhập Google"
+                    android:layout_height="52dp"
+                    android:text="🔑 Đăng nhập Google"
                     android:backgroundTint="#1565C0"
                     android:textColor="#FFFFFF"
-                    style="@style/Widget.MaterialComponents.Button" />
-
-                <TextView
-                    android:id="@+id/tvAuthHint"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Sau khi đăng nhập, copy phần code=XXXX từ URL và dán vào ô bên dưới"
-                    android:textSize="13sp"
-                    android:textColor="#E65100"
-                    android:layout_marginTop="12dp"
-                    android:visibility="gone" />
-
-                <EditText
-                    android:id="@+id/etAuthCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Dán mã xác thực vào đây..."
-                    android:layout_marginTop="12dp"
-                    android:padding="12dp"
-                    android:background="@drawable/bg_search" />
-
-                <Button
-                    android:id="@+id/btnSubmitCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="✓ Xác nhận đăng nhập"
-                    android:backgroundTint="#4CAF50"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="12dp"
+                    android:textSize="16sp"
                     style="@style/Widget.MaterialComponents.Button" />
 
             </LinearLayout>
@@ -289,7 +269,6 @@
 
                 </LinearLayout>
 
-                <!-- Logout -->
                 <Button
                     android:id="@+id/btnLogout"
                     android:layout_width="match_parent"
