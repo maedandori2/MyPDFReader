@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#1565C0"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="← Back"
+            android:textColor="#FFFFFF"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="☁ Sync Google Drive"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <View android:layout_width="80dp" android:layout_height="1dp" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Chưa đăng nhập -->
+            <LinearLayout
+                android:id="@+id/layoutLoggedOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng nhập Google Drive"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:gravity="center"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nhấn nút bên dưới để mở trình duyệt đăng nhập Google, sau đó copy mã xác thực về đây."
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp" />
+
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="🔑 Mở trang đăng nhập Google"
+                    android:backgroundTint="#1565C0"
+                    android:textColor="#FFFFFF"
+                    style="@style/Widget.MaterialComponents.Button" />
+
+                <TextView
+                    android:id="@+id/tvAuthHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sau khi đăng nhập, trình duyệt sẽ chuyển đến trang lỗi localhost — copy phần ?code=XXXX từ URL và dán vào ô bên dưới"
+                    android:textSize="13sp"
+                    android:textColor="#E65100"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/etAuthCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Dán mã xác thực vào đây..."
+                    android:layout_marginTop="12dp"
+                    android:padding="12dp"
+                    android:background="@drawable/bg_search" />
+
+                <Button
+                    android:id="@+id/btnSubmitCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="✓ Xác nhận đăng nhập"
+                    android:backgroundTint="#4CAF50"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="12dp"
+                    style="@style/Widget.MaterialComponents.Button" />
+
+            </LinearLayout>
+
+            <!-- Đã đăng nhập -->
+            <LinearLayout
+                android:id="@+id/layoutLoggedIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Status card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✅ Đã kết nối Google Drive"
+                        android:textSize="15sp"
+                        android:textColor="#4CAF50"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvLastSync"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="#666666"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+
+                <!-- Sync settings -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên thư mục trên Google Drive:"
+                        android:textSize="14sp"
+                        android:textColor="#212121"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/tvDriveFolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="VD: MyPDF"
+                        android:padding="12dp"
+                        android:background="@drawable/bg_search"
+                        android:layout_marginBottom="16dp" />
+
+                    <Button
+                        android:id="@+id/btnSync"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="☁ Bắt đầu Sync"
+                        android:backgroundTint="#1565C0"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        style="@style/Widget.MaterialComponents.Button" />
+
+                </LinearLayout>
+
+                <!-- Progress -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvSyncStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#333333"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Logout -->
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Đăng xuất"
+                    android:backgroundTint="#F44336"
+                    android:textColor="#FFFFFF"
+                    style="@style/Widget.MaterialComponents.Button" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
