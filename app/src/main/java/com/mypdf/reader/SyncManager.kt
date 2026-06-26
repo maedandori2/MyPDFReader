@@ -127,7 +127,15 @@ object SyncManager {
 
             // Tạo thư mục local nếu chưa có
             val localDir = File(localFolder)
-            if (!localDir.exists()) localDir.mkdirs()
+            if (!localDir.exists()) {
+                val created = localDir.mkdirs()
+                if (!created) {
+                    return@withContext SyncResult.Error("Không thể tạo thư mục $localFolder\nVui lòng cấp quyền MANAGE_EXTERNAL_STORAGE")
+                }
+            }
+            if (!localDir.canWrite()) {
+                return@withContext SyncResult.Error("Không có quyền ghi vào $localFolder\nVui lòng cấp quyền trong Settings → Apps → MyPDFReader → Permissions")
+            }
 
             // So sánh và download file mới
             var downloaded = 0
