@@ -64,15 +64,6 @@
                     android:gravity="center"
                     android:layout_marginBottom="12dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Nhấn nút bên dưới để mở trình duyệt đăng nhập Google, sau đó copy mã xác thực về đây."
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:gravity="center"
-                    android:layout_marginBottom="16dp" />
-
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
@@ -86,11 +77,10 @@
                     android:id="@+id/tvAuthHint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sau khi đăng nhập, trình duyệt sẽ chuyển đến trang lỗi localhost — copy phần ?code=XXXX từ URL và dán vào ô bên dưới"
+                    android:text="Sau khi đăng nhập, copy phần code=XXXX từ URL và dán vào ô bên dưới"
                     android:textSize="13sp"
                     android:textColor="#E65100"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="8dp"
                     android:visibility="gone" />
 
                 <EditText
@@ -122,7 +112,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <!-- Status card -->
+                <!-- Status -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -178,11 +168,98 @@
                         android:id="@+id/btnSync"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:text="☁ Bắt đầu Sync"
+                        android:text="☁ Sync ngay"
                         android:backgroundTint="#1565C0"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp"
                         style="@style/Widget.MaterialComponents.Button" />
+
+                </LinearLayout>
+
+                <!-- Auto sync -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tự động sync"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#212121" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switchAutoSync"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tần suất sync:"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:layout_marginBottom="8dp" />
+
+                    <RadioGroup
+                        android:id="@+id/rgInterval"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb1h"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="1h" />
+
+                        <RadioButton
+                            android:id="@+id/rb2h"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="2h"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/rb4h"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="4h" />
+
+                        <RadioButton
+                            android:id="@+id/rb8h"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="8h" />
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tvNextSync"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="#1565C0"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -209,6 +286,7 @@
                         android:textSize="14sp"
                         android:textColor="#333333"
                         android:visibility="gone" />
+
                 </LinearLayout>
 
                 <!-- Logout -->
