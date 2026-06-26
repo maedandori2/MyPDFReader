@@ -30,10 +30,40 @@ class SyncActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         SyncManager.init(this)
-
         binding.btnBack.setOnClickListener { finish() }
+
+        // Nhận OAuth callback từ deep link
+        handleIntent(intent)
         updateUI()
         setupButtons()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        val uri = intent.data ?: return
+        if (uri.scheme == "com.mypdf.reader" && uri.host == "oauth2callback") {
+            val code = uri.getQueryParameter("code")
+            if (code != null) {
+                lifecycleScope.launch {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.tvSyncStatus.visibility = View.VISIBLE
+                    binding.tvSyncStatus.text = "Đang xác thực..."
+                    val success = SyncManager.exchangeCodeForToken(code)
+                    binding.progressBar.visibility = View.GONE
+                    if (success) {
+                        Toast.makeText(this@SyncActivity, "✅ Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                        updateUI()
+                    } else {
+                        binding.tvSyncStatus.text = "❌ Đăng nhập thất bại"
+                        Toast.makeText(this@SyncActivity, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun updateUI() {
@@ -41,10 +71,7 @@ class SyncActivity : AppCompatActivity() {
             binding.layoutLoggedOut.visibility = View.GONE
             binding.layoutLoggedIn.visibility = View.VISIBLE
             binding.tvLastSync.text = "Lần sync cuối: ${SyncManager.getLastSync()}"
-            binding.tvDriveFolder.setText(
-                prefs.getString("drive_folder", "MyPDF")
-            )
-            // Hiện trạng thái auto sync
+            binding.tvDriveFolder.setText(prefs.getString("drive_folder", "MyPDF"))
             val autoSync = prefs.getBoolean("auto_sync", false)
             binding.switchAutoSync.isChecked = autoSync
             updateNextSyncTime()
@@ -55,31 +82,10 @@ class SyncActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
+        // Đăng nhập — mở trình duyệt, tự động callback về app
         binding.btnLogin.setOnClickListener {
             val authUrl = SyncManager.getAuthUrl()
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)))
-            binding.tvAuthHint.visibility = View.VISIBLE
-        }
-
-        binding.btnSubmitCode.setOnClickListener {
-            val code = binding.etAuthCode.text.toString().trim()
-            if (code.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập mã xác thực", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            lifecycleScope.launch {
-                binding.progressBar.visibility = View.VISIBLE
-                binding.btnSubmitCode.isEnabled = false
-                val success = SyncManager.exchangeCodeForToken(code)
-                binding.progressBar.visibility = View.GONE
-                binding.btnSubmitCode.isEnabled = true
-                if (success) {
-                    Toast.makeText(this@SyncActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
-                    updateUI()
-                } else {
-                    Toast.makeText(this@SyncActivity, "Mã không hợp lệ, thử lại", Toast.LENGTH_SHORT).show()
-                }
-            }
         }
 
         binding.btnSync.setOnClickListener {
@@ -92,23 +98,20 @@ class SyncActivity : AppCompatActivity() {
             startSync(folderName)
         }
 
-        // Auto sync toggle
         binding.switchAutoSync.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean("auto_sync", isChecked).apply()
             if (isChecked) {
                 val folderName = binding.tvDriveFolder.text.toString().trim()
                 prefs.edit().putString("drive_folder", folderName).apply()
                 scheduleAutoSync(getSelectedInterval())
-                Toast.makeText(this, "Đã bật tự động sync", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "✅ Đã bật tự động sync", Toast.LENGTH_SHORT).show()
             } else {
                 cancelAutoSync()
-                binding.tvNextSync.text = ""
                 Toast.makeText(this, "Đã tắt tự động sync", Toast.LENGTH_SHORT).show()
             }
             updateNextSyncTime()
         }
 
-        // Chọn tần suất
         binding.rgInterval.setOnCheckedChangeListener { _, _ ->
             if (prefs.getBoolean("auto_sync", false)) {
                 scheduleAutoSync(getSelectedInterval())
@@ -138,19 +141,14 @@ class SyncActivity : AppCompatActivity() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-
-        val request = PeriodicWorkRequestBuilder<SyncWorker>(
-            intervalHours, TimeUnit.HOURS
-        )
+        val request = PeriodicWorkRequestBuilder<SyncWorker>(intervalHours, TimeUnit.HOURS)
             .setConstraints(constraints)
             .build()
-
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "auto_sync",
             ExistingPeriodicWorkPolicy.UPDATE,
             request
         )
-
         prefs.edit().putLong("sync_interval", intervalHours).apply()
     }
 
@@ -162,7 +160,7 @@ class SyncActivity : AppCompatActivity() {
         val autoSync = prefs.getBoolean("auto_sync", false)
         if (autoSync) {
             val interval = prefs.getLong("sync_interval", 2L)
-            binding.tvNextSync.text = "Tự động sync mỗi ${interval} giờ"
+            binding.tvNextSync.text = "Tự động sync mỗi ${interval}h"
             binding.tvNextSync.visibility = View.VISIBLE
         } else {
             binding.tvNextSync.visibility = View.GONE
@@ -179,18 +177,14 @@ class SyncActivity : AppCompatActivity() {
             val result = SyncManager.syncFiles(
                 driveFolderName = folderName,
                 localFolder = MainActivity.PDF_FOLDER,
-                onProgress = { msg ->
-                    runOnUiThread { binding.tvSyncStatus.text = msg }
-                }
+                onProgress = { msg -> runOnUiThread { binding.tvSyncStatus.text = msg } }
             )
-
             binding.progressBar.visibility = View.GONE
             binding.btnSync.isEnabled = true
-
             when (result) {
                 is SyncManager.SyncResult.Success -> {
                     binding.tvSyncStatus.text =
-                        "✅ Hoàn thành! Tải mới: ${result.downloaded} file, bỏ qua: ${result.skipped} file"
+                        "✅ Hoàn thành! Tải mới: ${result.downloaded}, bỏ qua: ${result.skipped}"
                     binding.tvLastSync.text = "Lần sync cuối: ${SyncManager.getLastSync()}"
                 }
                 is SyncManager.SyncResult.Error -> {
