@@ -20,7 +20,7 @@ object SyncManager {
 
     private const val CLIENT_ID = "663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com"
     private const val CLIENT_SECRET = "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"
-    private const val REDIRECT_URI = "http://localhost"
+    private const val REDIRECT_URI = "com.mypdf.reader:/oauth2callback"
     private const val SCOPE = "https://www.googleapis.com/auth/drive.readonly"
 
     private lateinit var prefs: SharedPreferences
@@ -75,7 +75,7 @@ object SyncManager {
         }
     }
 
-    private suspend fun refreshAccessToken(): Boolean = withContext(Dispatchers.IO) {
+    suspend fun refreshAccessToken(): Boolean = withContext(Dispatchers.IO) {
         val refreshToken = prefs.getString(KEY_REFRESH_TOKEN, null) ?: return@withContext false
         try {
             val url = URL("https://oauth2.googleapis.com/token")
@@ -102,7 +102,7 @@ object SyncManager {
         }
     }
 
-    private fun getAccessToken(): String? = prefs.getString(KEY_ACCESS_TOKEN, null)
+    fun getAccessToken(): String? = prefs.getString(KEY_ACCESS_TOKEN, null)
 
     suspend fun syncFiles(
         driveFolderName: String,
@@ -111,33 +111,22 @@ object SyncManager {
     ): SyncResult = withContext(Dispatchers.IO) {
         try {
             onProgress("Đang kết nối Google Drive...")
-
-            // Refresh token trước
             refreshAccessToken()
             val token = getAccessToken() ?: return@withContext SyncResult.Error("Chưa đăng nhập")
 
-            // Tìm folder trên Drive
             onProgress("Đang tìm thư mục $driveFolderName...")
             val folderId = findFolderId(token, driveFolderName)
-                ?: return@withContext SyncResult.Error("Không tìm thấy thư mục '$driveFolderName' trên Google Drive")
+                ?: return@withContext SyncResult.Error("Không tìm thấy thư mục '$driveFolderName'")
 
-            // Lấy danh sách file PDF trên Drive
             onProgress("Đang lấy danh sách file...")
             val driveFiles = listPdfFiles(token, folderId)
 
-            // Tạo thư mục local nếu chưa có
             val localDir = File(localFolder)
             if (!localDir.exists()) {
                 val created = localDir.mkdirs()
-                if (!created) {
-                    return@withContext SyncResult.Error("Không thể tạo thư mục $localFolder\nVui lòng cấp quyền MANAGE_EXTERNAL_STORAGE")
-                }
-            }
-            if (!localDir.canWrite()) {
-                return@withContext SyncResult.Error("Không có quyền ghi vào $localFolder\nVui lòng cấp quyền trong Settings → Apps → MyPDFReader → Permissions")
+                if (!created) return@withContext SyncResult.Error("Không thể tạo thư mục $localFolder")
             }
 
-            // So sánh và download file mới
             var downloaded = 0
             var skipped = 0
             driveFiles.forEachIndexed { index, driveFile ->
@@ -151,7 +140,6 @@ object SyncManager {
                 }
             }
 
-            // Lưu thời gian sync
             val now = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
                 .format(java.util.Date())
             prefs.edit().putString(KEY_LAST_SYNC, now).apply()
@@ -178,7 +166,6 @@ object SyncManager {
     private fun listPdfFiles(token: String, folderId: String): List<DriveFile> {
         val result = mutableListOf<DriveFile>()
         var pageToken: String? = null
-
         do {
             val query = URLEncoder.encode(
                 "'$folderId' in parents and mimeType='application/pdf' and trashed=false",
@@ -186,20 +173,17 @@ object SyncManager {
             )
             var urlStr = "https://www.googleapis.com/drive/v3/files?q=$query&fields=files(id,name),nextPageToken&pageSize=1000"
             if (pageToken != null) urlStr += "&pageToken=$pageToken"
-
             val conn = URL(urlStr).openConnection() as HttpURLConnection
             conn.setRequestProperty("Authorization", "Bearer $token")
             val response = conn.inputStream.bufferedReader().readText()
             val json = JSONObject(response)
             val files = json.getJSONArray("files")
-
             for (i in 0 until files.length()) {
                 val f = files.getJSONObject(i)
                 result.add(DriveFile(f.getString("id"), f.getString("name")))
             }
             pageToken = json.optString("nextPageToken").takeIf { it.isNotEmpty() }
         } while (pageToken != null)
-
         return result
     }
 
