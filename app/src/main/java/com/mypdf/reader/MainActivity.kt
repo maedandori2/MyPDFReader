@@ -60,22 +60,22 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerViews() {
         fileAdapter = PdfFileAdapter(
             files = filteredFiles,
-            onItemClick = { file -> openPdf(file) },
-            onItemLongClick = { file -> addToReadingList(file) }
+            isReadingList = false,
+            onOpenFile = { file -> openPdf(file) },
+            onAddToList = { file -> addToReadingList(file) }
         )
         binding.rvFiles.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = fileAdapter
         }
-
+    
         readingListAdapter = PdfFileAdapter(
             files = readingList,
-            onItemClick = { file -> openPdf(file) },
-            onItemLongClick = { file -> removeFromReadingList(file) },
             isReadingList = true,
+            onOpenFile = { file -> openPdf(file) },
             onMoveUp = { pos -> moveItem(pos, -1) },
             onMoveDown = { pos -> moveItem(pos, 1) },
-            onMoveTo = { from, to -> moveItemTo(from, to) }
+            onRemove = { pos -> removeFromReadingList(pos) }
         )
         binding.rvReadingList.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
