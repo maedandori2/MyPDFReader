@@ -15,12 +15,15 @@ object ReadingListManager {
     private lateinit var appContext: Context
     private lateinit var db: AppDatabase
     private val list = mutableListOf<PdfFile>()
+    
+    var currentListName: String = "Chung"
+        private set
 
     fun init(context: Context) {
         appContext = context.applicationContext
         db = AppDatabase.getDatabase(appContext)
         migrateIfNeeded()
-        loadFromDb()
+        loadList("Chung")
     }
 
     private fun migrateIfNeeded() {
@@ -33,11 +36,10 @@ object ReadingListManager {
                     val type = object : TypeToken<MutableList<PdfFile>>() {}.type
                     val loaded: MutableList<PdfFile> = Gson().fromJson(json, type)
                     
-                    // Lọc trùng lặp path để tránh crash PrimaryKey (do cũ cho phép trùng)
                     val uniqueList = loaded.distinctBy { it.path }
                     
                     val entities = uniqueList.mapIndexed { index, pdfFile ->
-                        PdfEntity(pdfFile.path, pdfFile.name, pdfFile.isRead, index)
+                        PdfEntity(pdfFile.path, "Chung", pdfFile.name, pdfFile.isRead, index)
                     }
                     db.pdfDao().insertAll(entities)
                 } catch (e: Exception) {
@@ -48,8 +50,20 @@ object ReadingListManager {
         }
     }
 
-    private fun loadFromDb() {
-        val entities = db.pdfDao().getAll()
+    fun getAllListNames(): List<String> {
+        val names = db.pdfDao().getAllListNames().toMutableList()
+        if (!names.contains("Chung")) {
+            names.add(0, "Chung")
+        } else {
+            names.remove("Chung")
+            names.add(0, "Chung") // Luôn đưa danh sách "Chung" lên đầu
+        }
+        return names
+    }
+
+    fun loadList(listName: String) {
+        currentListName = listName
+        val entities = db.pdfDao().getAllByList(listName)
         list.clear()
         entities.forEach { entity ->
             list.add(PdfFile(entity.name, entity.path, entity.isRead))
@@ -58,19 +72,31 @@ object ReadingListManager {
 
     fun getList(): List<PdfFile> = list.toList()
 
-    fun addToList(file: PdfFile) {
-        val existingIndex = list.indexOfFirst { it.path == file.path }
-        if (existingIndex >= 0) {
-            list.removeAt(existingIndex)
+    fun addToList(file: PdfFile, listName: String = "Chung") {
+        // Kiểm tra xem đã có trong DB của list này chưa
+        val existingEntities = db.pdfDao().getAllByList(listName)
+        if (existingEntities.any { it.path == file.path }) {
+            // Đã có, xóa cũ để dời xuống cuối
+            db.pdfDao().deleteByPathAndList(file.path, listName)
+            if (listName == currentListName) {
+                list.removeAll { it.path == file.path }
+            }
         }
-        list.add(file.copy(isRead = false))
-        syncDb()
+        
+        val maxPos = db.pdfDao().getMaxPosition(listName) ?: -1
+        val newEntity = PdfEntity(file.path, listName, file.name, false, maxPos + 1)
+        db.pdfDao().insert(newEntity)
+        
+        if (listName == currentListName) {
+            list.add(file.copy(isRead = false))
+        }
     }
 
     fun removeAtPosition(position: Int) {
         if (position in 0 until list.size) {
-            list.removeAt(position)
-            syncDb()
+            val file = list.removeAt(position)
+            db.pdfDao().deleteByPathAndList(file.path, currentListName)
+            syncPositions()
         }
     }
 
@@ -78,7 +104,7 @@ object ReadingListManager {
         val index = list.indexOfFirst { it.path == path && !it.isRead }
         if (index >= 0) {
             list[index] = list[index].copy(isRead = true)
-            db.pdfDao().updateReadStatus(path, true)
+            db.pdfDao().updateReadStatus(path, currentListName, true)
         }
     }
 
@@ -87,7 +113,7 @@ object ReadingListManager {
         if (newPos < 0 || newPos >= list.size) return
         val item = list.removeAt(position)
         list.add(newPos, item)
-        syncDb()
+        syncPositions()
     }
 
     fun moveToPosition(fromPosition: Int, toPosition: Int) {
@@ -95,15 +121,12 @@ object ReadingListManager {
         if (toPosition < 0 || toPosition >= list.size) return
         val item = list.removeAt(fromPosition)
         list.add(toPosition, item)
-        syncDb()
+        syncPositions()
     }
 
-    private fun syncDb() {
-        // Để đảm bảo cập nhật thứ tự (position) và xóa phần tử cũ,
-        // xóa toàn bộ và insert lại. Với Room và < 10,000 items, thao tác này diễn ra trong mili-giây.
-        db.pdfDao().deleteAll()
+    private fun syncPositions() {
         val entities = list.mapIndexed { index, pdfFile ->
-            PdfEntity(pdfFile.path, pdfFile.name, pdfFile.isRead, index)
+            PdfEntity(pdfFile.path, currentListName, pdfFile.name, pdfFile.isRead, index)
         }
         if (entities.isNotEmpty()) {
             db.pdfDao().insertAll(entities)

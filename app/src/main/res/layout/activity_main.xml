@@ -25,22 +25,22 @@
 
         <TextView
             android:id="@+id/btnLangVi"
-            android:layout_width="48dp"
+            android:layout_width="56dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="🇻🇳"
-            android:textSize="22sp"
-            android:layout_marginEnd="4dp"
+            android:textSize="28sp"
+            android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
         <TextView
             android:id="@+id/btnLangJa"
-            android:layout_width="48dp"
+            android:layout_width="56dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="🇯🇵"
-            android:textSize="22sp"
-            android:layout_marginEnd="20dp"
+            android:textSize="28sp"
+            android:layout_marginEnd="32dp"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
         <Button
@@ -152,29 +152,61 @@
     </FrameLayout>
 
     <!-- Reading List Tab -->
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/layoutReadingList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:visibility="gone">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvReadingList"
+        <!-- Spinner Container -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="80dp"
-            android:clipToPadding="false" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fabReadNext"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="16dp"
-            android:text="▶ Đọc file tiếp theo"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="#1565C0"
-            xmlns:app="http://schemas.android.com/apk/res-auto" />
-    </FrameLayout>
+            android:background="#FAFAFA"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Danh sách:"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:layout_marginEnd="8dp" />
+
+            <Spinner
+                android:id="@+id/spinnerReadingList"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:backgroundTint="#1565C0" />
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvReadingList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="80dp"
+                android:clipToPadding="false" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/fabReadNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_margin="16dp"
+                android:text="▶ Đọc file tiếp theo"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#1565C0"
+                xmlns:app="http://schemas.android.com/apk/res-auto" />
+        </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

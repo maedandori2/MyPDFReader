@@ -2,13 +2,33 @@
 
 ---
 
+## [v1.4.0] - 2026-06-27
+
+### ✨ Tính năng mới: Đa danh sách đọc
+- **Tạo và phân loại danh sách đọc tự do**: Người dùng có thể tạo nhiều danh sách đọc với tên gọi riêng (vd: Công việc, Giải trí, Tài liệu học tập...). 
+- **Tương tác thông minh qua nút `+`**: Khi bấm thêm một PDF vào danh sách đọc, hệ thống sẽ mở một hộp thoại cho phép bạn chọn danh sách muốn thêm vào, hoặc tạo ngay một danh sách mới. Nếu bạn bỏ qua hoặc không chọn tên, hệ thống tự động đưa file vào danh sách đọc mặc định mang tên **"Chung"**.
+- **Chuyển đổi linh hoạt (Dropdown/Spinner)**: Trong tab "Danh sách đọc", một menu thả xuống (Spinner) được bổ sung ở trên cùng giúp bạn dễ dàng chuyển qua lại giữa các danh sách đọc cá nhân hóa của mình.
+- **Tương thích Room Database**: Nâng cấp schema Room DB với tính năng `Migration` (khóa chính ghép từ đường dẫn file và tên danh sách). Toàn bộ dữ liệu danh sách đọc trước đây sẽ tự động được chuyển sang danh sách "Chung" mà không bị mất mát.
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `PdfEntity` & `PdfDao` | Thay đổi khóa chính thành `(path, listName)` để 1 file có thể nằm ở nhiều danh sách khác nhau |
+| `AppDatabase` | Viết mã tự động di chuyển dữ liệu (Migration) từ DB cũ sang cấu trúc đa danh sách |
+| `ReadingListManager.kt` | Nâng cấp lõi lưu trữ và quản lý tập tin theo tên danh sách đọc |
+| `activity_main.xml` | Gắn `Spinner` (menu chọn danh sách) vào ngay trên thẻ hiển thị Danh sách đọc |
+| `MainActivity.kt` | Lập trình hộp thoại Dialog khi bấm nút `+`, xử lý sự kiện chuyển list trong `Spinner` |
+| `HISTORY.md` | Cập nhật changelog lên `v1.4.0` |
+
+---
+
 ## [v1.3.1] - 2026-06-27
 
 ### 🎨 Cập nhật Giao diện (UI)
 - **Đổi tên ứng dụng**: Đổi tiêu đề ứng dụng trên màn hình chính từ "My PDF Reader" thành "仕様書".
 - **Tối ưu hiển thị cho Tablet**:
-  - Mở rộng vùng cảm ứng của các nút chuyển đổi ngôn ngữ (🇻🇳, 🇯🇵) và nút "Sync" sao cho chiều cao lấp đầy toàn bộ header (56dp).
-  - Tăng khoảng cách an toàn giữa cụm nút ngôn ngữ và nút Sync để tránh bấm nhầm trên màn hình lớn.
+  - Mở rộng vùng cảm ứng của các nút chuyển đổi ngôn ngữ (🇻🇳, 🇯🇵) và nút "Sync" lấp đầy chiều cao header (56dp).
+  - Tăng kích thước emoji cờ (lên 28sp) và nới rộng khoảng cách giữa các cờ (16dp), cũng như đẩy khoảng cách cụm cờ và nút Sync (32dp) để chống bấm nhầm trên màn hình cảm ứng lớn.
 
 ### 📝 File đã sửa
 | File | Thay đổi |
