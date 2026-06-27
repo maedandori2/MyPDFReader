@@ -3,8 +3,9 @@ package com.mypdf.reader
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -36,7 +37,7 @@ class SyncActivity : AppCompatActivity() {
     private var btnLogout: Button? = null
     private var btnSync: Button? = null
     
-    private var tvDriveFolder: EditText? = null // ID là tvDriveFolder nhưng kiểu là EditText
+    private var tvDriveFolder: AutoCompleteTextView? = null
     private var tvSyncStatus: TextView? = null
     private var tvLastSync: TextView? = null
     private var progressBar: ProgressBar? = null
@@ -257,10 +258,41 @@ class SyncActivity : AppCompatActivity() {
         tvSyncStatus?.visibility = View.GONE
         progressBar?.visibility = View.GONE
 
-        // Khôi phục folder name đã lưu
-        val savedFolder = SyncManager.getDriveFolder()
-        if (tvDriveFolder?.text.isNullOrEmpty() && savedFolder.isNotEmpty()) {
-            tvDriveFolder?.setText(savedFolder)
+        if (loggedIn) {
+            // Tắt input tạm thời trong khi tải danh sách
+            tvDriveFolder?.isEnabled = false
+            lifecycleScope.launch {
+                val result = SyncManager.listAllFolders()
+                if (result.isSuccess) {
+                    val folders = result.getOrNull() ?: emptyList()
+                    val adapter = ArrayAdapter(
+                        this@SyncActivity,
+                        android.R.layout.simple_dropdown_item_1line,
+                        folders
+                    )
+                    tvDriveFolder?.setAdapter(adapter)
+                }
+                tvDriveFolder?.isEnabled = true
+                
+                // Khôi phục folder name đã lưu (hoặc mặc định là "shiyo")
+                val savedFolder = SyncManager.getDriveFolder()
+                if (tvDriveFolder?.text.isNullOrEmpty() && savedFolder.isNotEmpty()) {
+                    tvDriveFolder?.setText(savedFolder, false)
+                }
+                
+                // Hiển thị dropdown khi click hoặc focus
+                tvDriveFolder?.setOnFocusChangeListener { _, hasFocus ->
+                    if (hasFocus) tvDriveFolder?.showDropDown()
+                }
+                tvDriveFolder?.setOnClickListener {
+                    tvDriveFolder?.showDropDown()
+                }
+            }
+        } else {
+            val savedFolder = SyncManager.getDriveFolder()
+            if (tvDriveFolder?.text.isNullOrEmpty() && savedFolder.isNotEmpty()) {
+                tvDriveFolder?.setText(savedFolder, false)
+            }
         }
     }
 

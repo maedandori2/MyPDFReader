@@ -236,6 +236,44 @@ object SyncManager {
         }
     }
 
+    suspend fun listAllFolders(): Result<List<String>> = withContext(Dispatchers.IO) {
+        try {
+            refreshAccessToken()
+            val token = getAccessToken() ?: return@withContext Result.failure(Exception(LocaleHelper.getString("not_logged_in")))
+            
+            val result = mutableListOf<String>()
+            var pageToken: String? = null
+            do {
+                val query = URLEncoder.encode(
+                    "mimeType='application/vnd.google-apps.folder' and trashed=false",
+                    "UTF-8"
+                )
+                var urlStr = "https://www.googleapis.com/drive/v3/files?q=$query&fields=files(name),nextPageToken&pageSize=1000"
+                if (pageToken != null) urlStr += "&pageToken=$pageToken"
+                
+                val conn = URL(urlStr).openConnection() as HttpURLConnection
+                conn.setRequestProperty("Authorization", "Bearer $token")
+                
+                if (conn.responseCode != 200) break
+                
+                val response = conn.inputStream.bufferedReader().readText()
+                val json = JSONObject(response)
+                val files = json.getJSONArray("files")
+                
+                for (i in 0 until files.length()) {
+                    val f = files.getJSONObject(i)
+                    result.add(f.getString("name"))
+                }
+                pageToken = json.optString("nextPageToken").takeIf { it.isNotEmpty() }
+            } while (pageToken != null)
+            
+            // Lọc trùng lặp và sắp xếp alphabet
+            Result.success(result.distinct().sorted())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     // ─── INTERNAL ───
 
     private fun findFolderId(token: String, folderName: String): String? {

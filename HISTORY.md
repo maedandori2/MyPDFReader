@@ -2,6 +2,22 @@
 
 ---
 
+## [v1.2.3] - 2026-06-27
+
+### ✨ Tính năng mới
+- **Danh sách thư mục Drive**: Sau khi kết nối thành công với Google Drive, app sẽ tự động gọi API để lấy toàn bộ danh sách các thư mục có sẵn và hiển thị trong dropdown.
+- Người dùng có thể nhấn vào để chọn thư mục từ danh sách (mặc định vẫn là `shiyo`), hoặc tự gõ tên thư mục nếu muốn (nhờ sử dụng `AutoCompleteTextView`).
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `SyncManager.kt` | Thêm hàm `listAllFolders()` gọi API Drive để tìm các file có `mimeType='application/vnd.google-apps.folder'` |
+| `activity_sync.xml` | Đổi `EditText` thành `AutoCompleteTextView` |
+| `SyncActivity.kt` | Tải danh sách thư mục ngầm và gắn vào Adapter khi đăng nhập thành công |
+| `HISTORY.md` | Cập nhật changelog |
+
+---
+
 ## [v1.2.2] - 2026-06-27
 
 ### 🐛 Sửa lỗi
