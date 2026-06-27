@@ -37,6 +37,7 @@ class PdfViewerActivity : AppCompatActivity() {
     private var mode = NONE
     private var dist = 0f
     private var isZoomed = false
+    private var isNavigating = false  // Chống crash khi gesture trigger lúc đang chuyển file
 
     // File list
     private var filePath = ""
@@ -75,7 +76,12 @@ class PdfViewerActivity : AppCompatActivity() {
         fileList = if (!intentList.isNullOrEmpty()) intentList else listOf(filePath)
         fileIndex = fileList.indexOf(filePath).takeIf { it >= 0 } ?: 0
 
-        binding.tvTitle.text = fileName
+        // Hiển thị vị trí file trong danh sách
+        if (fileList.size > 1) {
+            binding.tvTitle.text = "[${fileIndex + 1}/${fileList.size}] $fileName"
+        } else {
+            binding.tvTitle.text = fileName
+        }
         binding.btnBack.setOnClickListener { finish() }
 
         setupGestures()
@@ -121,24 +127,42 @@ class PdfViewerActivity : AppCompatActivity() {
                 velocityY: Float
             ): Boolean {
                 val start = e1 ?: return false
+                if (isZoomed || isNavigating) return false
+
                 val dx = e2.x - start.x
                 val dy = e2.y - start.y
                 val absDx = abs(dx)
                 val absDy = abs(dy)
 
-                if (isZoomed) return false
-
+                // Vuốt trái/phải: chuyển trang, trang cuối/đầu thì chuyển file
                 if (absDx > absDy && absDx > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
-                    if (dx < 0) switchFile(1) else switchFile(-1)
+                    if (dx < 0) {
+                        // Vuốt trái → trang tiếp theo, nếu trang cuối → file tiếp theo
+                        if (currentPageIndex < totalPages - 1) {
+                            renderPage(currentPageIndex + 1)
+                        } else {
+                            switchFile(1)
+                        }
+                    } else {
+                        // Vuốt phải → trang trước, nếu trang đầu → file trước
+                        if (currentPageIndex > 0) {
+                            renderPage(currentPageIndex - 1)
+                        } else {
+                            switchFile(-1)
+                        }
+                    }
                     return true
                 }
 
+                // Vuốt lên/xuống: cũng chuyển trang (backup gesture)
                 if (absDy > absDx && absDy > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
                     if (dy < 0) {
                         if (currentPageIndex < totalPages - 1) renderPage(currentPageIndex + 1)
+                        else if (fileList.size > 1) switchFile(1)
                         else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("last_page"), Toast.LENGTH_SHORT).show()
                     } else {
                         if (currentPageIndex > 0) renderPage(currentPageIndex - 1)
+                        else if (fileList.size > 1) switchFile(-1)
                         else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("first_page"), Toast.LENGTH_SHORT).show()
                     }
                     return true
@@ -192,6 +216,7 @@ class PdfViewerActivity : AppCompatActivity() {
     // ─── FILE SWITCH ───
 
     private fun switchFile(direction: Int) {
+        if (isNavigating) return
         if (fileList.size <= 1) {
             Toast.makeText(this, LocaleHelper.getString("no_other_file"), Toast.LENGTH_SHORT).show()
             return
@@ -205,20 +230,28 @@ class PdfViewerActivity : AppCompatActivity() {
             Toast.makeText(this, LocaleHelper.getString("last_file"), Toast.LENGTH_SHORT).show()
             return
         }
+        isNavigating = true
         try {
+            // Đóng page hiện tại trước khi chuyển file
+            currentPage?.close()
+            currentPage = null
+
             fileIndex = newIndex
             val newPath = fileList[fileIndex]
             val newFile = File(newPath)
             if (!newFile.exists()) {
                 Toast.makeText(this, LocaleHelper.getString("file_not_found"), Toast.LENGTH_SHORT).show()
+                isNavigating = false
                 return
             }
-            binding.tvTitle.text = newFile.nameWithoutExtension + ".pdf"
+            binding.tvTitle.text = "[${fileIndex + 1}/${fileList.size}] ${newFile.nameWithoutExtension}.pdf"
             ReadingListManager.markAsRead(newPath)
             openPdf(newPath)
             showUI()
         } catch (e: Exception) {
             Toast.makeText(this, "${LocaleHelper.getString("error_prefix")}: ${e.message}", Toast.LENGTH_SHORT).show()
+        } finally {
+            isNavigating = false
         }
     }
 
@@ -226,11 +259,19 @@ class PdfViewerActivity : AppCompatActivity() {
 
     private fun setupNavButtons() {
         binding.btnPrevPage.setOnClickListener {
-            if (currentPageIndex > 0) renderPage(currentPageIndex - 1)
+            if (currentPageIndex > 0) {
+                renderPage(currentPageIndex - 1)
+            } else if (fileIndex > 0) {
+                switchFile(-1)
+            }
             scheduleHide()
         }
         binding.btnNextPage.setOnClickListener {
-            if (currentPageIndex < totalPages - 1) renderPage(currentPageIndex + 1)
+            if (currentPageIndex < totalPages - 1) {
+                renderPage(currentPageIndex + 1)
+            } else if (fileIndex < fileList.size - 1) {
+                switchFile(1)
+            }
             scheduleHide()
         }
     }
@@ -292,9 +333,9 @@ class PdfViewerActivity : AppCompatActivity() {
 
     private fun updatePageInfo() {
         binding.tvPageInfo.text = "${currentPageIndex + 1} / $totalPages"
-        binding.btnPrevPage.isEnabled = currentPageIndex > 0
-        binding.btnNextPage.isEnabled = currentPageIndex < totalPages - 1
-        binding.layoutNav.visibility = if (totalPages > 1) View.VISIBLE else View.GONE
+        binding.btnPrevPage.isEnabled = currentPageIndex > 0 || fileIndex > 0
+        binding.btnNextPage.isEnabled = currentPageIndex < totalPages - 1 || fileIndex < fileList.size - 1
+        binding.layoutNav.visibility = if (totalPages > 1 || fileList.size > 1) View.VISIBLE else View.GONE
     }
 
     // ─── HELPERS ───

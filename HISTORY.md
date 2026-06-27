@@ -2,6 +2,26 @@
 
 ---
 
+## [v1.2.1] - 2026-06-27
+
+### 🐛 Sửa lỗi
+- **Fix crash khi vuốt trái/phải**: App bị crash khi vuốt ngang để chuyển file do gesture trigger đồng thời với việc close/reopen PdfRenderer. Thêm flag `isNavigating` chống double-trigger, đóng page trước khi chuyển file.
+
+### 🔧 Thay đổi
+- **Đổi logic vuốt trái/phải**: Vuốt trái = chuyển sang trang tiếp theo (thay vì chuyển file). Nếu đang ở trang cuối thì mới chuyển sang file tiếp theo. Vuốt phải tương tự ngược lại.
+- **Nút ◀/▶ cũng chuyển file**: Khi đang ở trang cuối, ấn ▶ sẽ mở file tiếp theo. Khi đang ở trang đầu, ấn ◀ sẽ mở file trước đó.
+- **Natural sort thứ tự file**: Sắp xếp file theo số tự nhiên (1 → 2 → 10 → 20) thay vì alphabetical (1 → 10 → 2 → 20). File có tên là số sẽ được sắp xếp đúng thứ tự.
+- **Hiển thị vị trí file**: Title bar hiển thị `[3/10] filename.pdf` để biết đang xem file thứ mấy trong danh sách.
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `PdfViewerActivity.kt` | Fix crash, đổi logic vuốt, hiển thị vị trí file, nút nav chuyển file |
+| `MainActivity.kt` | Natural sort thứ tự file |
+| `HISTORY.md` | Cập nhật changelog |
+
+---
+
 ## [v1.2] - 2026-06-27
 
 ### ✨ Tính năng mới

@@ -270,7 +270,10 @@ class MainActivity : AppCompatActivity() {
         
         allFiles.clear()
         folder.listFiles { file -> file.extension.lowercase() == "pdf" }
-            ?.sortedBy { it.name }
+            ?.sortedWith(compareBy<File> {
+                // Natural sort: sắp xếp theo số nếu tên file là số, còn lại theo alphabet
+                it.nameWithoutExtension.toIntOrNull() ?: Int.MAX_VALUE
+            }.thenBy { it.name })
             ?.forEach { allFiles.add(PdfFile(name = it.nameWithoutExtension, path = it.absolutePath)) }
 
         filteredFiles.clear()
