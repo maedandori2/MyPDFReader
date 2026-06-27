@@ -18,10 +18,12 @@ object SyncManager {
     private const val KEY_REFRESH_TOKEN = "refresh_token"
     private const val KEY_LAST_SYNC = "last_sync"
 
-    private const val CLIENT_ID = "663951043914-43isa7rumla07clj6tppf07695177q40.apps.googleusercontent.com"
+    // 1. SỬ DỤNG WEB CLIENT ID (Bắt buộc đối với luồng cấp đổi Token)
+    private const val CLIENT_ID = "663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com"
     private const val CLIENT_SECRET = "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"
-    private const val REDIRECT_URI = "com.mypdf.reader:/oauth2callback"
-    private const val SCOPE = "https://www.googleapis.com/auth/drive.readonly"
+    
+    // 2. SỬ DỤNG CHUỖI RỖNG CHO REDIRECT URI KHI DÙNG NATIVE SDK
+    private const val REDIRECT_URI = "" 
 
     private lateinit var prefs: SharedPreferences
 
@@ -29,15 +31,7 @@ object SyncManager {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
-    fun getAuthUrl(): String {
-        return "https://accounts.google.com/o/oauth2/v2/auth?" +
-            "client_id=${URLEncoder.encode(CLIENT_ID, "UTF-8")}" +
-            "&redirect_uri=${URLEncoder.encode(REDIRECT_URI, "UTF-8")}" +
-            "&response_type=code" +
-            "&scope=${URLEncoder.encode(SCOPE, "UTF-8")}" +
-            "&access_type=offline" +
-            "&prompt=consent"
-    }
+    // Đã xóa hàm getAuthUrl() vì hệ thống không còn sử dụng WebView thủ công
 
     fun isLoggedIn(): Boolean = prefs.getString(KEY_REFRESH_TOKEN, null) != null
 
@@ -62,14 +56,20 @@ object SyncManager {
                 "&grant_type=authorization_code"
 
             conn.outputStream.write(body.toByteArray())
-            val response = conn.inputStream.bufferedReader().readText()
-            val json = JSONObject(response)
 
-            prefs.edit()
-                .putString(KEY_ACCESS_TOKEN, json.getString("access_token"))
-                .putString(KEY_REFRESH_TOKEN, json.optString("refresh_token"))
-                .apply()
-            true
+            // Kiểm tra HTTP Response Code trước khi đọc luồng để tránh Crash
+            if (conn.responseCode == 200) {
+                val response = conn.inputStream.bufferedReader().readText()
+                val json = JSONObject(response)
+
+                prefs.edit()
+                    .putString(KEY_ACCESS_TOKEN, json.getString("access_token"))
+                    .putString(KEY_REFRESH_TOKEN, json.optString("refresh_token"))
+                    .apply()
+                true
+            } else {
+                false
+            }
         } catch (e: Exception) {
             false
         }
@@ -90,13 +90,18 @@ object SyncManager {
                 "&grant_type=refresh_token"
 
             conn.outputStream.write(body.toByteArray())
-            val response = conn.inputStream.bufferedReader().readText()
-            val json = JSONObject(response)
 
-            prefs.edit()
-                .putString(KEY_ACCESS_TOKEN, json.getString("access_token"))
-                .apply()
-            true
+            if (conn.responseCode == 200) {
+                val response = conn.inputStream.bufferedReader().readText()
+                val json = JSONObject(response)
+
+                prefs.edit()
+                    .putString(KEY_ACCESS_TOKEN, json.getString("access_token"))
+                    .apply()
+                true
+            } else {
+                false
+            }
         } catch (e: Exception) {
             false
         }
@@ -158,6 +163,9 @@ object SyncManager {
         val url = URL("https://www.googleapis.com/drive/v3/files?q=$query&fields=files(id,name)")
         val conn = url.openConnection() as HttpURLConnection
         conn.setRequestProperty("Authorization", "Bearer $token")
+        
+        if (conn.responseCode != 200) return null
+        
         val response = conn.inputStream.bufferedReader().readText()
         val files = JSONObject(response).getJSONArray("files")
         return if (files.length() > 0) files.getJSONObject(0).getString("id") else null
@@ -173,17 +181,23 @@ object SyncManager {
             )
             var urlStr = "https://www.googleapis.com/drive/v3/files?q=$query&fields=files(id,name),nextPageToken&pageSize=1000"
             if (pageToken != null) urlStr += "&pageToken=$pageToken"
+            
             val conn = URL(urlStr).openConnection() as HttpURLConnection
             conn.setRequestProperty("Authorization", "Bearer $token")
+            
+            if (conn.responseCode != 200) break
+            
             val response = conn.inputStream.bufferedReader().readText()
             val json = JSONObject(response)
             val files = json.getJSONArray("files")
+            
             for (i in 0 until files.length()) {
                 val f = files.getJSONObject(i)
                 result.add(DriveFile(f.getString("id"), f.getString("name")))
             }
             pageToken = json.optString("nextPageToken").takeIf { it.isNotEmpty() }
         } while (pageToken != null)
+        
         return result
     }
 
@@ -191,8 +205,11 @@ object SyncManager {
         val url = URL("https://www.googleapis.com/drive/v3/files/$fileId?alt=media")
         val conn = url.openConnection() as HttpURLConnection
         conn.setRequestProperty("Authorization", "Bearer $token")
-        FileOutputStream(destination).use { out ->
-            conn.inputStream.use { it.copyTo(out) }
+        
+        if (conn.responseCode == 200) {
+            FileOutputStream(destination).use { out ->
+                conn.inputStream.use { it.copyTo(out) }
+            }
         }
     }
 
