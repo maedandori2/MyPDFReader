@@ -18,7 +18,7 @@ class SyncActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySyncBinding
 
-    // Đăng ký bộ nhận kết quả trả về từ giao diện đăng nhập Google Native
+    // Bộ nhận kết quả trả về từ hộp thoại đăng nhập Google Native của hệ thống
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -29,7 +29,6 @@ class SyncActivity : AppCompatActivity() {
 
             if (authCode != null) {
                 updateUIForSyncing("Đang xác thực tài khoản...")
-                // Chạy Coroutine chuyển mã Auth Code sang cho SyncManager đổi Token offline
                 lifecycleScope.launch {
                     val success = SyncManager.exchangeCodeForToken(authCode)
                     if (success) {
@@ -55,30 +54,30 @@ class SyncActivity : AppCompatActivity() {
         SyncManager.init(this)
         updateUI()
 
-        // Sự kiện click nút Đăng nhập bằng Google SDK Native
+        // Xử lý sự kiện nút bấm Đăng nhập (btnLogin trong XML gốc)
         binding.btnLogin.setOnClickListener {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope("https://www.googleapis.com/auth/drive.readonly"))
-                .requestServerAuthCode("663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com") // Sử dụng Web Client ID để xin quyền Server
+                .requestServerAuthCode("663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com")
                 .requestEmail()
                 .build()
 
             val googleSignInClient = GoogleSignIn.getClient(this, gso)
             
-            // Đăng xuất phiên cũ ngầm để luôn hiển thị bảng chọn tài khoản khi bấm nút
             googleSignInClient.signOut().addOnCompleteListener {
                 val signInIntent = googleSignInClient.signInIntent
                 googleSignInLauncher.launch(signInIntent)
             }
         }
 
+        // Xử lý sự kiện nút bấm Đăng xuất (btnLogout trong XML gốc)
         binding.btnLogout.setOnClickListener {
             SyncManager.logout()
             updateUI()
             Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
         }
 
-        // Sửa lỗi Unresolved reference bằng cách gọi đúng ID gốc: btn_start_sync
+        // Xử lý sự kiện nút bấm Bắt đầu đồng bộ (btn_start_sync trong XML chuyển thành btnStartSync)
         binding.btnStartSync.setOnClickListener {
             val driveFolder = binding.etDriveFolder.text.toString().trim()
             if (driveFolder.isEmpty()) {
@@ -114,7 +113,6 @@ class SyncActivity : AppCompatActivity() {
 
     private fun updateUI() {
         val loggedIn = SyncManager.isLoggedIn()
-        // Cập nhật lại toàn bộ các view theo đúng định dạng View Binding map từ layout XML gốc
         binding.layoutLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
         binding.layoutSync.visibility = if (loggedIn) View.VISIBLE else View.GONE
         binding.tvLastSync.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
