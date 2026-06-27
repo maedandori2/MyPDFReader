@@ -1,4 +1,4 @@
-name: Get sha-1 key
+name: Build APK 02
 
 on:
   workflow_dispatch:
@@ -34,6 +34,7 @@ jobs:
         env:
           ENCODED_KEYSTORE: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
+          # Giải mã an toàn từ chuỗi Base64 sạch do máy Linux tự tạo ra
           echo "$ENCODED_KEYSTORE" | base64 --decode > app/github_actions_keystore.jks
 
       - name: Make gradlew executable
@@ -45,12 +46,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleDebug --stacktrace
-      - name: Get SHA-1 Fingerprint
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: |
-          # Dùng keytool để đọc trực tiếp từ file keystore vừa được giải mã
-          keytool -list -v -keystore app/github_actions_keystore.jks -storepass "$KEYSTORE_PASSWORD"
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
