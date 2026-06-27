@@ -2,6 +2,22 @@
 
 ---
 
+## [v1.3.1] - 2026-06-27
+
+### 🎨 Cập nhật Giao diện (UI)
+- **Đổi tên ứng dụng**: Đổi tiêu đề ứng dụng trên màn hình chính từ "My PDF Reader" thành "仕様書".
+- **Tối ưu hiển thị cho Tablet**:
+  - Mở rộng vùng cảm ứng của các nút chuyển đổi ngôn ngữ (🇻🇳, 🇯🇵) và nút "Sync" sao cho chiều cao lấp đầy toàn bộ header (56dp).
+  - Tăng khoảng cách an toàn giữa cụm nút ngôn ngữ và nút Sync để tránh bấm nhầm trên màn hình lớn.
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `activity_main.xml` | Đổi text header, chỉnh `layout_height="match_parent"` và cập nhật `marginEnd` cho các nút |
+| `HISTORY.md` | Cập nhật changelog |
+
+---
+
 ## [v1.3.0] - 2026-06-27
 
 ### ✨ Tính năng mới & Nâng cấp (Major Update)
