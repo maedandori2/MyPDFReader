@@ -20,14 +20,12 @@ android {
     // -------------------------------------------------------------------------
     signingConfigs {
         appSigning {
-            // Kiểm tra nếu biến môi trường từ GitHub Secrets tồn tại (Môi trường CI)
             if (System.getenv("KEYSTORE_PASSWORD") != null) {
                 storeFile file("github_actions_keystore.jks")
                 storePassword System.getenv("KEYSTORE_PASSWORD")
                 keyAlias System.getenv("KEY_ALIAS")
                 keyPassword System.getenv("KEY_PASSWORD")
             } else {
-                // Cấu hình mặc định khi chạy cục bộ nếu chưa thiết lập Keystore hệ thống
                 storeFile file(System.getProperty("user.home") + "/.android/debug.keystore")
                 storePassword "android"
                 keyAlias "androiddebugkey"
@@ -48,15 +46,15 @@ android {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Cấu hình tính năng cốt lõi của dự án
+    // -------------------------------------------------------------------------
     buildFeatures {
-        compose true
+        // Đã xóa bỏ hoàn toàn 'compose true' vì dự án dùng kiến trúc XML
         viewBinding true
     }
 
-    // NÂNG CẤP LÊN 1.5.1 ĐỂ TƯƠNG THÍCH HOÀN TOÀN VỚI KOTLIN 1.9.0
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.5.1'
-    }
+    // Đã xóa bỏ hoàn toàn khối 'composeOptions' không cần thiết
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -65,6 +63,7 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
+        // Đã dọn dẹp các cờ lệnh ép buộc kiểm tra phiên bản Compose dư thừa
     }
 }
 
