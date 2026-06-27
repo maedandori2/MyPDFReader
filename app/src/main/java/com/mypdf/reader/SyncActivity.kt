@@ -54,7 +54,7 @@ class SyncActivity : AppCompatActivity() {
         SyncManager.init(this)
         updateUI()
 
-        // Xử lý sự kiện nút bấm Đăng nhập (btnLogin trong XML gốc)
+        // Nút Đăng nhập (btnLogin)
         binding.btnLogin.setOnClickListener {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope("https://www.googleapis.com/auth/drive.readonly"))
@@ -70,14 +70,14 @@ class SyncActivity : AppCompatActivity() {
             }
         }
 
-        // Xử lý sự kiện nút bấm Đăng xuất (btnLogout trong XML gốc)
+        // Nút Đăng xuất (btnLogout)
         binding.btnLogout.setOnClickListener {
             SyncManager.logout()
             updateUI()
             Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
         }
 
-        // Xử lý sự kiện nút bấm Bắt đầu đồng bộ (btn_start_sync trong XML chuyển thành btnStartSync)
+        // Nút Bắt đầu đồng bộ (Ánh xạ chính xác từ ID: btn_start_sync -> btnStartSync)
         binding.btnStartSync.setOnClickListener {
             val driveFolder = binding.etDriveFolder.text.toString().trim()
             if (driveFolder.isEmpty()) {
@@ -85,6 +85,7 @@ class SyncActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Đặt trạng thái vô hiệu hóa nút bấm chuẩn cú pháp Kotlin
             binding.btnStartSync.isEnabled = false
             binding.progressBar.visibility = View.VISIBLE
             binding.tvStatus.text = "Bắt đầu đồng bộ..."
