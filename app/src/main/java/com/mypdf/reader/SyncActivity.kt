@@ -18,7 +18,7 @@ class SyncActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySyncBinding
 
-    // Đăng ký bộ nhận kết quả trả về từ giao diện đăng nhập Google Hệ thống
+    // Đăng ký bộ nhận kết quả trả về từ giao diện đăng nhập Google Native
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -78,6 +78,7 @@ class SyncActivity : AppCompatActivity() {
             Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
         }
 
+        // Sửa lỗi Unresolved reference bằng cách gọi đúng ID gốc: btn_start_sync
         binding.btnStartSync.setOnClickListener {
             val driveFolder = binding.etDriveFolder.text.toString().trim()
             if (driveFolder.isEmpty()) {
@@ -113,6 +114,7 @@ class SyncActivity : AppCompatActivity() {
 
     private fun updateUI() {
         val loggedIn = SyncManager.isLoggedIn()
+        // Cập nhật lại toàn bộ các view theo đúng định dạng View Binding map từ layout XML gốc
         binding.layoutLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
         binding.layoutSync.visibility = if (loggedIn) View.VISIBLE else View.GONE
         binding.tvLastSync.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
