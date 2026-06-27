@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [PdfEntity::class], version = 2, exportSchema = false)
+@Database(entities = [PdfEntity::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun pdfDao(): PdfDao
@@ -18,7 +18,6 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                // Tạo bảng mới với primary key ghép
                 db.execSQL(
                     "CREATE TABLE reading_list_new (" +
                             "path TEXT NOT NULL, " +
@@ -28,17 +27,25 @@ abstract class AppDatabase : RoomDatabase() {
                             "position INTEGER NOT NULL, " +
                             "PRIMARY KEY(path, listName))"
                 )
-                
-                // Copy dữ liệu cũ sang bảng mới
-                db.execSQL(
-                    "INSERT INTO reading_list_new (path, listName, name, isRead, position) " +
-                            "SELECT path, 'Chung', name, isRead, position FROM reading_list"
-                )
-                
-                // Xóa bảng cũ
+                db.execSQL("INSERT INTO reading_list_new (path, listName, name, isRead, position) SELECT path, 'Chung', name, isRead, position FROM reading_list")
                 db.execSQL("DROP TABLE reading_list")
-                
-                // Đổi tên bảng mới thành bảng cũ
+                db.execSQL("ALTER TABLE reading_list_new RENAME TO reading_list")
+            }
+        }
+
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE reading_list_new (" +
+                            "path TEXT NOT NULL, " +
+                            "name TEXT NOT NULL, " +
+                            "isRead INTEGER NOT NULL, " +
+                            "position INTEGER NOT NULL, " +
+                            "PRIMARY KEY(path))"
+                )
+                // Nhóm theo path để loại bỏ trùng lặp nếu 1 file nằm ở nhiều list
+                db.execSQL("INSERT OR REPLACE INTO reading_list_new (path, name, isRead, position) SELECT path, name, isRead, position FROM reading_list GROUP BY path")
+                db.execSQL("DROP TABLE reading_list")
                 db.execSQL("ALTER TABLE reading_list_new RENAME TO reading_list")
             }
         }
@@ -50,7 +57,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "mypdf_database"
                 )
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .allowMainThreadQueries()
                 .build()
                 INSTANCE = instance

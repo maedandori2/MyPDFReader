@@ -152,61 +152,29 @@
     </FrameLayout>
 
     <!-- Reading List Tab -->
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/layoutReadingList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:visibility="gone">
 
-        <!-- Spinner Container -->
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvReadingList"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabReadNext"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FAFAFA"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Danh sách:"
-                android:textColor="#757575"
-                android:textSize="14sp"
-                android:layout_marginEnd="8dp" />
-
-            <Spinner
-                android:id="@+id/spinnerReadingList"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:backgroundTint="#1565C0" />
-        </LinearLayout>
-
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvReadingList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="80dp"
-                android:clipToPadding="false" />
-
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/fabReadNext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:layout_margin="16dp"
-                android:text="▶ Đọc file tiếp theo"
-                android:textColor="#FFFFFF"
-                app:backgroundTint="#1565C0"
-                xmlns:app="http://schemas.android.com/apk/res-auto" />
-        </FrameLayout>
-    </LinearLayout>
+            android:layout_gravity="bottom|center"
+            android:layout_margin="16dp"
+            android:text="▶ Đọc file tiếp theo"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#1565C0"
+            xmlns:app="http://schemas.android.com/apk/res-auto" />
+    </FrameLayout>
 
 </LinearLayout>

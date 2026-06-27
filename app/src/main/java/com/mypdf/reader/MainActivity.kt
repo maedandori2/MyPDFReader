@@ -8,15 +8,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -29,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fileAdapter: PdfFileAdapter
     private lateinit var readingListAdapter: PdfFileAdapter
-    private lateinit var listSpinnerAdapter: ArrayAdapter<String>
     
     private val allFiles = mutableListOf<PdfFile>()
     private val filteredFiles = mutableListOf<PdfFile>()
@@ -77,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         readingList.addAll(ReadingListManager.getList())
 
         // Thiết lập hệ thống chức năng ngoại vi
-        setupReadingLists()
         setupRecyclerViews()
         setupTabs()
         setupSearch()
@@ -98,7 +90,6 @@ class MainActivity : AppCompatActivity() {
         if (hasStoragePermission()) {
             loadPdfFiles()
         }
-        refreshSpinner()
         refreshReadingList()
         applyLanguage()
     }
@@ -163,7 +154,7 @@ class MainActivity : AppCompatActivity() {
             files = filteredFiles,
             isReadingList = false,
             onOpenFile = { file -> openPdf(file) },
-            onAddToList = { file -> showAddToListDialog(file) }
+            onAddToList = { file -> addToReadingList(file) }
         )
         binding.rvFiles.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -316,7 +307,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    // Lấy phần thêm vào danh sách đọc xử lý qua showAddToListDialog
+    private fun addToReadingList(file: PdfFile) {
+        ReadingListManager.addToList(file)
+        refreshReadingList()
+        Toast.makeText(this, "${LocaleHelper.getString("added_to_list")} ${file.name}.pdf", Toast.LENGTH_SHORT).show()
+    }
 
     private fun removeFromReadingList(position: Int) {
         if (position in readingList.indices) {
@@ -333,8 +328,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refreshReadingList() {
-        // Tải lại list hiện tại
-        ReadingListManager.loadList(ReadingListManager.currentListName)
         readingList.clear()
         readingList.addAll(ReadingListManager.getList())
         readingListAdapter.notifyDataSetChanged()
@@ -353,82 +346,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.fabReadNext.visibility = View.GONE
         }
-    }
-
-    private fun setupReadingLists() {
-        val spinner: Spinner = binding.root.findViewById(R.id.spinnerReadingList) ?: return
-        val listNames = ReadingListManager.getAllListNames()
-        listSpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listNames)
-        listSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = listSpinnerAdapter
-        
-        val defaultPos = listNames.indexOf("Chung")
-        if (defaultPos >= 0) spinner.setSelection(defaultPos)
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedList = listNames[position]
-                if (ReadingListManager.currentListName != selectedList) {
-                    ReadingListManager.loadList(selectedList)
-                    refreshReadingList()
-                }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
-
-    private fun refreshSpinner() {
-        val spinner: Spinner = binding.root.findViewById(R.id.spinnerReadingList) ?: return
-        val listNames = ReadingListManager.getAllListNames()
-        listSpinnerAdapter.clear()
-        listSpinnerAdapter.addAll(listNames)
-        listSpinnerAdapter.notifyDataSetChanged()
-        
-        val selectedPos = listNames.indexOf(ReadingListManager.currentListName)
-        if (selectedPos >= 0) {
-            spinner.setSelection(selectedPos)
-        }
-    }
-
-    private fun showAddToListDialog(file: PdfFile) {
-        val listNames = ReadingListManager.getAllListNames().toMutableList()
-        listNames.add("+ Tạo danh sách mới")
-        
-        AlertDialog.Builder(this)
-            .setTitle(LocaleHelper.getString("toast_added_reading_list").replace("Đã thêm vào", "Thêm vào"))
-            .setItems(listNames.toTypedArray()) { _, which ->
-                val selected = listNames[which]
-                if (selected == "+ Tạo danh sách mới") {
-                    showCreateNewListDialog(file)
-                } else {
-                    ReadingListManager.addToList(file, selected)
-                    Toast.makeText(this, "Đã thêm vào: $selected", Toast.LENGTH_SHORT).show()
-                    refreshSpinner()
-                }
-            }
-            .show()
-    }
-
-    private fun showCreateNewListDialog(file: PdfFile) {
-        val input = EditText(this)
-        input.hint = "Nhập tên danh sách..."
-        input.setPadding(48, 48, 48, 48)
-        
-        AlertDialog.Builder(this)
-            .setTitle("Tạo danh sách mới")
-            .setView(input)
-            .setPositiveButton("Tạo") { _, _ ->
-                val newName = input.text.toString().trim()
-                if (newName.isNotEmpty()) {
-                    ReadingListManager.addToList(file, newName)
-                    Toast.makeText(this, "Đã tạo và thêm vào: $newName", Toast.LENGTH_SHORT).show()
-                    refreshSpinner()
-                } else {
-                    Toast.makeText(this, "Tên không được để trống", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Hủy", null)
-            .show()
     }
 
     private fun moveItem(position: Int, direction: Int) {

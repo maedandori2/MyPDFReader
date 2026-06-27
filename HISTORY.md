@@ -2,6 +2,15 @@
 
 ---
 
+## [v1.4.1] - 2026-06-27
+
+### ⏪ Hoàn tác (Rollback)
+- **Hủy bỏ Đa danh sách đọc**: Đưa ứng dụng về cấu trúc sử dụng duy nhất một danh sách đọc toàn cục để tránh sự phức tạp và nhầm lẫn cho người dùng.
+- **Tự động chuyển đổi dữ liệu**: Cập nhật Database version 3, tự động gộp tất cả file ở mọi danh sách về lại một danh sách duy nhất.
+- **Khôi phục UI**: Gỡ bỏ Spinner chọn danh sách và hộp thoại (Dialog) khi thêm PDF.
+
+---
+
 ## [v1.4.0] - 2026-06-27
 
 ### ✨ Tính năng mới: Đa danh sách đọc
