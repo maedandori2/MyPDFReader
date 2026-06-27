@@ -37,6 +37,7 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
+        freeCompilerArgs += ["-P", "plugin:org.jetbrains.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"]
     }
 }
 
