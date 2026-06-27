@@ -4,8 +4,14 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class PdfFileAdapter(
     private val files: List<PdfFile>,
@@ -17,9 +23,22 @@ class PdfFileAdapter(
     private val onRemove: ((Int) -> Unit)? = null
 ) : RecyclerView.Adapter<PdfFileAdapter.ViewHolder>() {
 
+    private var adapterScope: CoroutineScope? = null
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        adapterScope = CoroutineScope(Dispatchers.Main + Job())
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        adapterScope?.cancel()
+        adapterScope = null
+    }
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvIndex: TextView = view.findViewById(R.id.tvIndex)
-        val tvIcon: TextView = view.findViewById(R.id.tvIcon)
+        val ivThumbnail: ImageView = view.findViewById(R.id.ivThumbnail)
         val tvName: TextView = view.findViewById(R.id.tvFileName)
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
         val btnOpenFile: TextView = view.findViewById(R.id.btnOpenFile)
@@ -42,9 +61,9 @@ class PdfFileAdapter(
         holder.tvName.text = "${file.name}.pdf"
 
         if (isReadingList) {
-            // Số thứ tự thay icon
+            // Số thứ tự thay thumbnail
             holder.tvIndex.visibility = View.VISIBLE
-            holder.tvIcon.visibility = View.GONE
+            holder.ivThumbnail.visibility = View.GONE
             holder.tvIndex.text = "${position + 1}"
 
             holder.tvName.setTextColor(
@@ -70,7 +89,26 @@ class PdfFileAdapter(
 
         } else {
             holder.tvIndex.visibility = View.GONE
-            holder.tvIcon.visibility = View.VISIBLE
+            holder.ivThumbnail.visibility = View.VISIBLE
+            
+            // Xử lý load thumbnail
+            holder.ivThumbnail.tag = file.path
+            holder.ivThumbnail.setImageBitmap(null)
+            holder.ivThumbnail.setBackgroundColor(Color.parseColor("#E0E0E0"))
+
+            adapterScope?.launch {
+                val bitmap = PdfThumbnailLoader.loadThumbnail(file.path, 120, 160)
+                if (holder.ivThumbnail.tag == file.path) {
+                    if (bitmap != null) {
+                        holder.ivThumbnail.setImageBitmap(bitmap)
+                        holder.ivThumbnail.setBackgroundColor(Color.TRANSPARENT)
+                    } else {
+                        // Lỗi load ảnh, đổi màu báo lỗi
+                        holder.ivThumbnail.setBackgroundColor(Color.parseColor("#FFCDD2"))
+                    }
+                }
+            }
+
             holder.tvName.setTextColor(Color.parseColor("#212121"))
             holder.tvStatus.visibility = View.GONE
             holder.layoutControls.visibility = View.GONE

@@ -2,6 +2,30 @@
 
 ---
 
+## [v1.3.0] - 2026-06-27
+
+### ✨ Tính năng mới & Nâng cấp (Major Update)
+- **Ảnh bìa Thumbnail**: Thay thế icon mặc định bằng hình ảnh thu nhỏ trang đầu tiên của file PDF trong tab "Tất cả file".
+  - Áp dụng công nghệ `PdfRenderer` chạy ngầm.
+  - Tối ưu hóa cực nhẹ cho các máy cấu hình thấp (như Kindle Fire HD 10) nhờ vào bộ nhớ đệm `LruCache` giúp vuốt danh sách siêu mượt, không bị tràn RAM.
+- **Tối ưu hoá cực hạn với Room Database**:
+  - Chuyển đổi toàn bộ hệ thống lưu trữ "Danh sách đọc" từ `SharedPreferences` sang kiến trúc `Room Database` (SQLite).
+  - Khắc phục hoàn toàn tình trạng máy bị đứng, treo ứng dụng khi số lượng file lên tới mức hàng ngàn (2.000 - 5.000 file).
+  - Tự động di chuyển (migrate) dữ liệu cũ của người dùng sang hệ thống mới để không mất danh sách đang đọc dở.
+
+### 📝 File đã sửa/thêm mới
+| File | Thay đổi |
+|------|----------|
+| `build.gradle` | Thêm các plugin và thư viện Room |
+| `PdfEntity`, `PdfDao`, `AppDatabase` | Thêm mới: Kiến trúc Database cho Room |
+| `ReadingListManager.kt` | Nâng cấp toàn diện sang Room + tự động chuyển đổi dữ liệu cũ |
+| `item_pdf_file.xml` | Đổi icon thành `ImageView` (id: `ivThumbnail`) |
+| `PdfThumbnailLoader.kt` | Thêm mới: Module nạp ảnh bìa bất đồng bộ có giới hạn RAM an toàn |
+| `PdfFileAdapter.kt` | Tích hợp Coroutines nạp thumbnail bất đồng bộ với cơ chế tái chế chống leak RAM |
+| `HISTORY.md` | Cập nhật changelog lên `v1.3.0` |
+
+---
+
 ## [v1.2.3] - 2026-06-27
 
 ### ✨ Tính năng mới
