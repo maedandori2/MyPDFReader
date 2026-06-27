@@ -1,27 +1,50 @@
 package com.mypdf.reader
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.mypdf.reader.databinding.ActivitySyncBinding
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 class SyncActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySyncBinding
-    private val prefs by lazy {
-        getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
+
+    // Đăng ký bộ nhận kết quả trả về từ giao diện đăng nhập Google Hệ thống
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            val authCode = account?.serverAuthCode
+
+            if (authCode != null) {
+                updateUIForSyncing("Đang xác thực tài khoản...")
+                // Chạy Coroutine chuyển mã Auth Code sang cho SyncManager đổi Token offline
+                lifecycleScope.launch {
+                    val success = SyncManager.exchangeCodeForToken(authCode)
+                    if (success) {
+                        updateUI()
+                        Toast.makeText(this@SyncActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        updateUIForError("Lỗi: Không thể đổi mã xác thực lấy Token")
+                    }
+                }
+            } else {
+                updateUIForError("Lỗi: Không nhận được mã ủy quyền từ Google")
+            }
+        } catch (e: ApiException) {
+            updateUIForError("Đăng nhập thất bại (Mã lỗi: ${e.statusCode})")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,36 +53,58 @@ class SyncActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         SyncManager.init(this)
-        binding.btnBack.setOnClickListener { finish() }
-
-        // Nhận OAuth callback từ deep link
-        handleIntent(intent)
         updateUI()
-        setupButtons()
-    }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleIntent(intent)
-    }
+        // Sự kiện click nút Đăng nhập bằng Google SDK Native
+        binding.btnLogin.setOnClickListener {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(Scope("https://www.googleapis.com/auth/drive.readonly"))
+                .requestServerAuthCode("663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com") // Sử dụng Web Client ID để xin quyền Server
+                .requestEmail()
+                .build()
 
-    private fun handleIntent(intent: Intent) {
-        val uri = intent.data ?: return
-        if (uri.scheme == "com.mypdf.reader" && uri.host == "oauth2callback") {
-            val code = uri.getQueryParameter("code")
-            if (code != null) {
-                lifecycleScope.launch {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.tvSyncStatus.visibility = View.VISIBLE
-                    binding.tvSyncStatus.text = "Đang xác thực..."
-                    val success = SyncManager.exchangeCodeForToken(code)
-                    binding.progressBar.visibility = View.GONE
-                    if (success) {
-                        Toast.makeText(this@SyncActivity, "✅ Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+            val googleSignInClient = GoogleSignIn.getClient(this, gso)
+            
+            // Đăng xuất phiên cũ ngầm để luôn hiển thị bảng chọn tài khoản khi bấm nút
+            googleSignInClient.signOut().addOnCompleteListener {
+                val signInIntent = googleSignInClient.signInIntent
+                googleSignInLauncher.launch(signInIntent)
+            }
+        }
+
+        binding.btnLogout.setOnClickListener {
+            SyncManager.logout()
+            updateUI()
+            Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnStartSync.setOnClickListener {
+            val driveFolder = binding.etDriveFolder.text.toString().trim()
+            if (driveFolder.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập tên thư mục trên Drive", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            binding.btnStartSync.isEnabled = false
+            binding.progressBar.visibility = View.VISIBLE
+            binding.tvStatus.text = "Bắt đầu đồng bộ..."
+
+            lifecycleScope.launch {
+                val result = SyncManager.syncFiles(driveFolder, MainActivity.PDF_FOLDER) { progress ->
+                    runOnUiThread { binding.tvStatus.text = progress }
+                }
+
+                binding.btnStartSync.isEnabled = true
+                binding.progressBar.visibility = View.GONE
+
+                when (result) {
+                    is SyncManager.SyncResult.Success -> {
+                        Toast.makeText(this@SyncActivity, "Thành công!", Toast.LENGTH_LONG).show()
                         updateUI()
-                    } else {
-                        binding.tvSyncStatus.text = "❌ Đăng nhập thất bại"
-                        Toast.makeText(this@SyncActivity, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
+                    }
+                    is SyncManager.SyncResult.Error -> {
+                        binding.tvStatus.text = result.message
+                        Toast.makeText(this@SyncActivity, result.message, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -67,130 +112,25 @@ class SyncActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        if (SyncManager.isLoggedIn()) {
-            binding.layoutLoggedOut.visibility = View.GONE
-            binding.layoutLoggedIn.visibility = View.VISIBLE
-            binding.tvLastSync.text = "Lần sync cuối: ${SyncManager.getLastSync()}"
-            binding.tvDriveFolder.setText(prefs.getString("drive_folder", "shiyo"))
-            val autoSync = prefs.getBoolean("auto_sync", false)
-            binding.switchAutoSync.isChecked = autoSync
-            updateNextSyncTime()
-        } else {
-            binding.layoutLoggedOut.visibility = View.VISIBLE
-            binding.layoutLoggedIn.visibility = View.GONE
-        }
+        val loggedIn = SyncManager.isLoggedIn()
+        binding.layoutLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
+        binding.layoutSync.visibility = if (loggedIn) View.VISIBLE else View.GONE
+        binding.tvLastSync.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
+        binding.tvStatus.text = if (loggedIn) "Sẵn sàng đồng bộ" else "Chưa kết nối"
+        binding.progressBar.visibility = View.GONE
     }
 
-    private fun setupButtons() {
-        // Đăng nhập — mở trình duyệt, tự động callback về app
-        binding.btnLogin.setOnClickListener {
-            val authUrl = SyncManager.getAuthUrl()
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)))
-        }
-
-        binding.btnSync.setOnClickListener {
-            val folderName = binding.tvDriveFolder.text.toString().trim()
-            if (folderName.isEmpty()) {
-                Toast.makeText(this, "Nhập tên thư mục trên Google Drive", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            prefs.edit().putString("drive_folder", folderName).apply()
-            startSync(folderName)
-        }
-
-        binding.switchAutoSync.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean("auto_sync", isChecked).apply()
-            if (isChecked) {
-                val folderName = binding.tvDriveFolder.text.toString().trim()
-                prefs.edit().putString("drive_folder", folderName).apply()
-                scheduleAutoSync(getSelectedInterval())
-                Toast.makeText(this, "✅ Đã bật tự động sync", Toast.LENGTH_SHORT).show()
-            } else {
-                cancelAutoSync()
-                Toast.makeText(this, "Đã tắt tự động sync", Toast.LENGTH_SHORT).show()
-            }
-            updateNextSyncTime()
-        }
-
-        binding.rgInterval.setOnCheckedChangeListener { _, _ ->
-            if (prefs.getBoolean("auto_sync", false)) {
-                scheduleAutoSync(getSelectedInterval())
-                updateNextSyncTime()
-            }
-        }
-
-        binding.btnLogout.setOnClickListener {
-            cancelAutoSync()
-            SyncManager.logout()
-            updateUI()
-            Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun getSelectedInterval(): Long {
-        return when (binding.rgInterval.checkedRadioButtonId) {
-            R.id.rb1h -> 1L
-            R.id.rb2h -> 2L
-            R.id.rb4h -> 4L
-            R.id.rb8h -> 8L
-            else -> 2L
-        }
-    }
-
-    private fun scheduleAutoSync(intervalHours: Long) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        val request = PeriodicWorkRequestBuilder<SyncWorker>(intervalHours, TimeUnit.HOURS)
-            .setConstraints(constraints)
-            .build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "auto_sync",
-            ExistingPeriodicWorkPolicy.UPDATE,
-            request
-        )
-        prefs.edit().putLong("sync_interval", intervalHours).apply()
-    }
-
-    private fun cancelAutoSync() {
-        WorkManager.getInstance(this).cancelUniqueWork("auto_sync")
-    }
-
-    private fun updateNextSyncTime() {
-        val autoSync = prefs.getBoolean("auto_sync", false)
-        if (autoSync) {
-            val interval = prefs.getLong("sync_interval", 2L)
-            binding.tvNextSync.text = "Tự động sync mỗi ${interval}h"
-            binding.tvNextSync.visibility = View.VISIBLE
-        } else {
-            binding.tvNextSync.visibility = View.GONE
-        }
-    }
-
-    private fun startSync(folderName: String) {
-        binding.btnSync.isEnabled = false
+    private fun updateUIForSyncing(message: String) {
+        binding.layoutLogin.visibility = View.GONE
+        binding.layoutSync.visibility = View.VISIBLE
+        binding.btnStartSync.isEnabled = false
         binding.progressBar.visibility = View.VISIBLE
-        binding.tvSyncStatus.visibility = View.VISIBLE
-        binding.tvSyncStatus.text = "Đang bắt đầu..."
+        binding.tvStatus.text = message
+    }
 
-        lifecycleScope.launch {
-            val result = SyncManager.syncFiles(
-                driveFolderName = folderName,
-                localFolder = MainActivity.PDF_FOLDER,
-                onProgress = { msg -> runOnUiThread { binding.tvSyncStatus.text = msg } }
-            )
-            binding.progressBar.visibility = View.GONE
-            binding.btnSync.isEnabled = true
-            when (result) {
-                is SyncManager.SyncResult.Success -> {
-                    binding.tvSyncStatus.text =
-                        "✅ Hoàn thành! Tải mới: ${result.downloaded}, bỏ qua: ${result.skipped}"
-                    binding.tvLastSync.text = "Lần sync cuối: ${SyncManager.getLastSync()}"
-                }
-                is SyncManager.SyncResult.Error -> {
-                    binding.tvSyncStatus.text = "❌ ${result.message}"
-                }
-            }
-        }
+    private fun updateUIForError(errorMessage: String) {
+        updateUI()
+        binding.tvStatus.text = errorMessage
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
     }
 }
