@@ -1,1 +1,11 @@
 
+- name: Generate Keystore on Cloud
+      run: |
+        keytool -genkey -v -keystore cloud.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias -storepass mypassword123 -keypass mypassword123 -dname "CN=MyPDF, O=App, C=VN"
+
+        echo "--- CHUỖI BASE64 CỦA BẠN ĐÂY ---"
+        base64 -w 0 cloud.jks
+        echo -e "\n--------------------------------"
+
+        echo "--- MÃ SHA-1 CỦA BẠN ĐÂY ---"
+        keytool -list -v -keystore cloud.jks -storepass mypassword123 | grep SHA1
