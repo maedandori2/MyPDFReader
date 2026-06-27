@@ -1,0 +1,29 @@
+name: Cloud Keystore Generator
+
+on:
+  workflow_dispatch: # Cho phép bạn bấm nút Run trên web
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate New Keystore and Get Info
+        run: |
+          # 1. Tạo file keystore với mật khẩu là 'mypassword123' và alias là 'mypdfalias'
+          keytool -genkey -v -keystore cloud_release.jks \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -alias mypdfalias \
+            -storepass mypassword123 -keypass mypassword123 \
+            -dname "CN=MyPDFReader, O=App, C=VN"
+          
+          echo "=================================================="
+          echo "BƯỚC A: COPY CHUỖI BASE64 DƯỚI ĐÂY ĐỂ DÁN VÀO SECRETS"
+          echo "=================================================="
+          base64 -w 0 cloud_release.jks
+          echo -e "\n=================================================="
+          
+          echo "=================================================="
+          echo "BƯỚC B: MÃ SHA-1 CỦA BẠN ĐỂ CẤU HÌNH GOOGLE OAUTH"
+          echo "=================================================="
+          keytool -list -v -keystore cloud_release.jks -storepass mypassword123 | grep SHA1
+          echo "=================================================="
