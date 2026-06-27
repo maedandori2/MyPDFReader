@@ -18,7 +18,7 @@ object SyncManager {
     private const val KEY_REFRESH_TOKEN = "refresh_token"
     private const val KEY_LAST_SYNC = "last_sync"
 
-    private const val CLIENT_ID = "663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com"
+    private const val CLIENT_ID = "663951043914-43isa7rumla07clj6tppf07695177q40.apps.googleusercontent.com"
     private const val CLIENT_SECRET = "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"
     private const val REDIRECT_URI = "com.mypdf.reader:/oauth2callback"
     private const val SCOPE = "https://www.googleapis.com/auth/drive.readonly"
