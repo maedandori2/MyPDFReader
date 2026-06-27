@@ -3,6 +3,10 @@ package com.mypdf.reader
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -11,12 +15,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
-import com.mypdf.reader.databinding.ActivitySyncBinding
 import kotlinx.coroutines.launch
 
 class SyncActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySyncBinding
+    // Khai báo các thành phần giao diện theo cơ chế ánh xạ View chuẩn của Android
+    private lateinit var btnLogin: Button
+    private lateinit var btnLogout: Button
+    private lateinit var btnStartSync: Button
+    private lateinit var etDriveFolder: EditText
+    private lateinit var tvStatus: TextView
+    private lateinit var tvLastSync: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var layoutLogin: View
+    private lateinit var layoutSync: View
 
     // Bộ nhận kết quả trả về từ hộp thoại đăng nhập Google Native của hệ thống
     private val googleSignInLauncher = registerForActivityResult(
@@ -48,14 +60,25 @@ class SyncActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySyncBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        // Ánh xạ layout XML gốc vào Activity
+        setContentView(R.layout.activity_sync)
+
+        // Khởi tạo và liên kết trực tiếp các View từ file XML thông qua R.id
+        btnLogin = findViewById(R.id.btnLogin)
+        btnLogout = findViewById(R.id.btnLogout)
+        btnStartSync = findViewById(R.id.btn_start_sync)
+        etDriveFolder = findViewById(R.id.et_drive_folder)
+        tvStatus = findViewById(R.id.tv_status)
+        tvLastSync = findViewById(R.id.tv_last_sync)
+        progressBar = findViewById(R.id.progressBar)
+        layoutLogin = findViewById(R.id.layout_login)
+        layoutSync = findViewById(R.id.layout_sync)
 
         SyncManager.init(this)
         updateUI()
 
-        // Nút Đăng nhập (btnLogin)
-        binding.btnLogin.setOnClickListener {
+        // Xử lý sự kiện nút bấm Đăng nhập Native SDK
+        btnLogin.setOnClickListener {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope("https://www.googleapis.com/auth/drive.readonly"))
                 .requestServerAuthCode("663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com")
@@ -70,33 +93,32 @@ class SyncActivity : AppCompatActivity() {
             }
         }
 
-        // Nút Đăng xuất (btnLogout)
-        binding.btnLogout.setOnClickListener {
+        // Xử lý sự kiện nút bấm Đăng xuất
+        btnLogout.setOnClickListener {
             SyncManager.logout()
             updateUI()
             Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
         }
 
-        // Nút Bắt đầu đồng bộ (Ánh xạ chính xác từ ID: btn_start_sync -> btnStartSync)
-        binding.btnStartSync.setOnClickListener {
-            val driveFolder = binding.etDriveFolder.text.toString().trim()
+        // Xử lý sự kiện nút bấm Bắt đầu đồng bộ
+        btnStartSync.setOnClickListener {
+            val driveFolder = etDriveFolder.text.toString().trim()
             if (driveFolder.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập tên thư mục trên Drive", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Đặt trạng thái vô hiệu hóa nút bấm chuẩn cú pháp Kotlin
-            binding.btnStartSync.isEnabled = false
-            binding.progressBar.visibility = View.VISIBLE
-            binding.tvStatus.text = "Bắt đầu đồng bộ..."
+            btnStartSync.isEnabled = false
+            progressBar.visibility = View.VISIBLE
+            tvStatus.text = "Bắt đầu đồng bộ..."
 
             lifecycleScope.launch {
                 val result = SyncManager.syncFiles(driveFolder, MainActivity.PDF_FOLDER) { progress ->
-                    runOnUiThread { binding.tvStatus.text = progress }
+                    runOnUiThread { tvStatus.text = progress }
                 }
 
-                binding.btnStartSync.isEnabled = true
-                binding.progressBar.visibility = View.GONE
+                btnStartSync.isEnabled = true
+                progressBar.visibility = View.GONE
 
                 when (result) {
                     is SyncManager.SyncResult.Success -> {
@@ -104,7 +126,7 @@ class SyncActivity : AppCompatActivity() {
                         updateUI()
                     }
                     is SyncManager.SyncResult.Error -> {
-                        binding.tvStatus.text = result.message
+                        tvStatus.text = result.message
                         Toast.makeText(this@SyncActivity, result.message, Toast.LENGTH_LONG).show()
                     }
                 }
@@ -114,24 +136,24 @@ class SyncActivity : AppCompatActivity() {
 
     private fun updateUI() {
         val loggedIn = SyncManager.isLoggedIn()
-        binding.layoutLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
-        binding.layoutSync.visibility = if (loggedIn) View.VISIBLE else View.GONE
-        binding.tvLastSync.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
-        binding.tvStatus.text = if (loggedIn) "Sẵn sàng đồng bộ" else "Chưa kết nối"
-        binding.progressBar.visibility = View.GONE
+        layoutLogin.visibility = if (loggedIn) View.GONE else View.VISIBLE
+        layoutSync.visibility = if (loggedIn) View.VISIBLE else View.GONE
+        tvLastSync.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
+        tvStatus.text = if (loggedIn) "Sẵn sàng đồng bộ" else "Chưa kết nối"
+        progressBar.visibility = View.GONE
     }
 
     private fun updateUIForSyncing(message: String) {
-        binding.layoutLogin.visibility = View.GONE
-        binding.layoutSync.visibility = View.VISIBLE
-        binding.btnStartSync.isEnabled = false
-        binding.progressBar.visibility = View.VISIBLE
-        binding.tvStatus.text = message
+        layoutLogin.visibility = View.GONE
+        layoutSync.visibility = View.VISIBLE
+        btnStartSync.isEnabled = false
+        progressBar.visibility = View.VISIBLE
+        tvStatus.text = message
     }
 
     private fun updateUIForError(errorMessage: String) {
         updateUI()
-        binding.tvStatus.text = errorMessage
+        tvStatus.text = errorMessage
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
     }
 }
