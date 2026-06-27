@@ -278,6 +278,7 @@ class SyncActivity : AppCompatActivity() {
         tvAutoSyncDesc?.text = LocaleHelper.getString("auto_sync_desc")
         btnLogout?.text = LocaleHelper.getString("logout")
         tvLastSync?.text = "${LocaleHelper.getString("last_sync")} ${SyncManager.getLastSync()}"
+        btnBack?.text = "← " + LocaleHelper.getString("back_button")
     }
 
     private fun updateUIForSyncing(message: String) {

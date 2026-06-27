@@ -32,6 +32,7 @@ object LocaleHelper {
     private val translations = mapOf(
         "vi" to mapOf(
             // ── MainActivity ──
+            "back_button" to "Quay lại",
             "search_hint" to "🔍 Tìm kiếm theo mã số...",
             "tab_all" to "Tất cả file",
             "tab_reading_list" to "Danh sách đọc",
@@ -101,6 +102,7 @@ object LocaleHelper {
         ),
         "ja" to mapOf(
             // ── MainActivity ──
+            "back_button" to "戻る",
             "search_hint" to "🔍 コードで検索...",
             "tab_all" to "すべてのファイル",
             "tab_reading_list" to "読書リスト",

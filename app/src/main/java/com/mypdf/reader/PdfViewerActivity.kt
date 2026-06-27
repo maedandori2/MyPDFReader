@@ -82,6 +82,11 @@ class PdfViewerActivity : AppCompatActivity() {
         } else {
             binding.tvTitle.text = fileName
         }
+        // Cập nhật ngôn ngữ cho các nút
+        binding.btnBack.text = "← " + LocaleHelper.getString("back_button")
+        binding.btnPrevPage.text = LocaleHelper.getString("prev_page")
+        binding.btnNextPage.text = LocaleHelper.getString("next_page")
+
         binding.btnBack.setOnClickListener { finish() }
 
         setupGestures()

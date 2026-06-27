@@ -2,6 +2,21 @@
 
 ---
 
+## [v1.2.2] - 2026-06-27
+
+### 🐛 Sửa lỗi
+- **Fix lỗi thiếu đa ngôn ngữ**: Cập nhật các nút `← Back`, `◀ Trang trước` và `Trang sau ▶` trong `PdfViewerActivity` và `SyncActivity` sử dụng `LocaleHelper` để hỗ trợ dịch sang tiếng Nhật.
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `LocaleHelper.kt` | Thêm chuỗi dịch `back_button` |
+| `PdfViewerActivity.kt` | Thay hardcoded text bằng `LocaleHelper.getString()` cho các nút điều hướng |
+| `SyncActivity.kt` | Áp dụng đa ngôn ngữ cho nút `btnBack` |
+| `HISTORY.md` | Cập nhật changelog |
+
+---
+
 ## [v1.2.1] - 2026-06-27
 
 ### 🐛 Sửa lỗi
