@@ -19,18 +19,18 @@ import kotlinx.coroutines.launch
 
 class SyncActivity : AppCompatActivity() {
 
-    // Khai báo các thuộc tính View dạng chuẩn để tránh lỗi Unresolved reference
+    // Khai báo biến trùng hoàn toàn với ID gốc trong file XML của bạn
     private var btnLogin: Button? = null
     private var btnLogout: Button? = null
-    private var btnStartSync: Button? = null
-    private var etDriveFolder: EditText? = null
-    private var tvStatus: TextView? = null
-    private var tvLastSync: TextView? = null
+    private var btn_start_sync: Button? = null
+    private var et_drive_folder: EditText? = null
+    private var tv_status: TextView? = null
+    private var tv_last_sync: TextView? = null
     private var progressBar: ProgressBar? = null
-    private var layoutLogin: View? = null
-    private var layoutSync: View? = null
+    private var layout_login: View? = null
+    private var layout_sync: View? = null
 
-    // Bộ nhận kết quả trả về từ hộp thoại đăng nhập Google Native của hệ thống
+    // Luồng xử lý kết quả trả về từ bộ chọn tài khoản Google Native
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -60,24 +60,23 @@ class SyncActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Gắn layout từ file XML
         setContentView(R.layout.activity_sync)
 
-        // Ánh xạ an toàn từ file R.id gốc của hệ thống
+        // Ánh xạ thủ công bằng ID gốc từ file hệ thống R.id
         btnLogin = findViewById(R.id.btnLogin)
         btnLogout = findViewById(R.id.btnLogout)
-        btnStartSync = findViewById(R.id.btn_start_sync)
-        etDriveFolder = findViewById(R.id.et_drive_folder)
-        tvStatus = findViewById(R.id.tv_status)
-        tvLastSync = findViewById(R.id.tv_last_sync)
+        btn_start_sync = findViewById(R.id.btn_start_sync)
+        et_drive_folder = findViewById(R.id.et_drive_folder)
+        tv_status = findViewById(R.id.tv_status)
+        tv_last_sync = findViewById(R.id.tv_last_sync)
         progressBar = findViewById(R.id.progressBar)
-        layoutLogin = findViewById(R.id.layout_login)
-        layoutSync = findViewById(R.id.layout_sync)
+        layout_login = findViewById(R.id.layout_login)
+        layout_sync = findViewById(R.id.layout_sync)
 
         SyncManager.init(this)
         updateUI()
 
-        // Xử lý sự kiện nút bấm Đăng nhập
+        // Sự kiện nút đăng nhập
         btnLogin?.setOnClickListener {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope("https://www.googleapis.com/auth/drive.readonly"))
@@ -93,31 +92,31 @@ class SyncActivity : AppCompatActivity() {
             }
         }
 
-        // Xử lý sự kiện nút bấm Đăng xuất
+        // Sự kiện nút đăng xuất
         btnLogout?.setOnClickListener {
             SyncManager.logout()
             updateUI()
             Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
         }
 
-        // Xử lý sự kiện nút bấm Bắt đầu đồng bộ
-        btnStartSync?.setOnClickListener {
-            val driveFolder = etDriveFolder?.text?.toString()?.trim() ?: ""
+        // Sự kiện nút đồng bộ dữ liệu
+        btn_start_sync?.setOnClickListener {
+            val driveFolder = et_drive_folder?.text?.toString()?.trim() ?: ""
             if (driveFolder.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập tên thư mục trên Drive", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            btnStartSync?.isEnabled = false
+            btn_start_sync?.isEnabled = false
             progressBar?.visibility = View.VISIBLE
-            tvStatus?.text = "Bắt đầu đồng bộ..."
+            tv_status?.text = "Bắt đầu đồng bộ..."
 
             lifecycleScope.launch {
                 val result = SyncManager.syncFiles(driveFolder, MainActivity.PDF_FOLDER) { progress ->
-                    runOnUiThread { tvStatus?.text = progress }
+                    runOnUiThread { tv_status?.text = progress }
                 }
 
-                btnStartSync?.isEnabled = true
+                btn_start_sync?.isEnabled = true
                 progressBar?.visibility = View.GONE
 
                 when (result) {
@@ -126,7 +125,7 @@ class SyncActivity : AppCompatActivity() {
                         updateUI()
                     }
                     is SyncManager.SyncResult.Error -> {
-                        tvStatus?.text = result.message
+                        tv_status?.text = result.message
                         Toast.makeText(this@SyncActivity, result.message, Toast.LENGTH_LONG).show()
                     }
                 }
@@ -136,24 +135,24 @@ class SyncActivity : AppCompatActivity() {
 
     private fun updateUI() {
         val loggedIn = SyncManager.isLoggedIn()
-        layoutLogin?.visibility = if (loggedIn) View.GONE else View.VISIBLE
-        layoutSync?.visibility = if (loggedIn) View.VISIBLE else View.GONE
-        tvLastSync?.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
-        tvStatus?.text = if (loggedIn) "Sẵn sàng đồng bộ" else "Chưa kết nối"
+        layout_login?.visibility = if (loggedIn) View.GONE else View.VISIBLE
+        layout_sync?.visibility = if (loggedIn) View.VISIBLE else View.GONE
+        tv_last_sync?.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
+        tv_status?.text = if (loggedIn) "Sẵn sàng đồng bộ" else "Chưa kết nối"
         progressBar?.visibility = View.GONE
     }
 
     private fun updateUIForSyncing(message: String) {
-        layoutLogin?.visibility = View.GONE
-        layoutSync?.visibility = View.VISIBLE
-        btnStartSync?.isEnabled = false
+        layout_login?.visibility = View.GONE
+        layout_sync?.visibility = View.VISIBLE
+        btn_start_sync?.isEnabled = false
         progressBar?.visibility = View.VISIBLE
-        tvStatus?.text = message
+        tv_status?.text = message
     }
 
     private fun updateUIForError(errorMessage: String) {
         updateUI()
-        tvStatus?.text = errorMessage
+        tv_status?.text = errorMessage
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
     }
 }
