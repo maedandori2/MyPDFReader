@@ -1,4 +1,4 @@
-name: Build APK
+name: Get sha-1 key
 
 on:
   workflow_dispatch:
