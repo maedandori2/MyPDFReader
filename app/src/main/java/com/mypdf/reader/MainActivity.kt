@@ -63,6 +63,9 @@ class MainActivity : AppCompatActivity() {
         // Giữ màn hình luôn sáng trong suốt quá trình đọc tài liệu
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        // Khởi tạo hệ thống đa ngôn ngữ
+        LocaleHelper.init(this)
+
         // Khởi tạo trạng thái danh sách đọc ban đầu
         ReadingListManager.init(this)
         readingList.addAll(ReadingListManager.getList())
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         setupTabs()
         setupSearch()
         setupFab()
+        setupLanguageButtons()
 
         // Sự kiện chuyển hướng đến màn hình đồng bộ Google Drive
         binding.btnSync.setOnClickListener {
@@ -88,7 +92,62 @@ class MainActivity : AppCompatActivity() {
             loadPdfFiles()
         }
         refreshReadingList()
+        applyLanguage()
     }
+
+    // ─── LANGUAGE ───
+
+    private fun setupLanguageButtons() {
+        binding.btnLangVi.setOnClickListener {
+            if (LocaleHelper.getCurrentLanguage() != "vi") {
+                LocaleHelper.setLanguage("vi")
+                applyLanguage()
+            }
+        }
+        binding.btnLangJa.setOnClickListener {
+            if (LocaleHelper.getCurrentLanguage() != "ja") {
+                LocaleHelper.setLanguage("ja")
+                applyLanguage()
+            }
+        }
+        updateFlagHighlight()
+    }
+
+    private fun applyLanguage() {
+        updateFlagHighlight()
+        
+        // Cập nhật text UI theo ngôn ngữ
+        binding.etSearch.hint = LocaleHelper.getString("search_hint")
+        binding.btnTabAll.text = LocaleHelper.getString("tab_all")
+        binding.fabReadNext.text = LocaleHelper.getString("read_next")
+        
+        // Cập nhật badge reading list
+        updateBadge()
+        
+        // Cập nhật file count
+        if (filteredFiles.size != allFiles.size) {
+            binding.tvFileCount.text = "${filteredFiles.size} / ${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
+        } else {
+            binding.tvFileCount.text = "${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
+        }
+        
+        // Cập nhật empty text nếu đang hiện
+        if (binding.tvEmpty.visibility == View.VISIBLE) {
+            binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} $PDF_FOLDER"
+        }
+        
+        // Notify adapter cập nhật text đã đọc/chưa đọc
+        fileAdapter.notifyDataSetChanged()
+        readingListAdapter.notifyDataSetChanged()
+    }
+
+    private fun updateFlagHighlight() {
+        val isVi = LocaleHelper.getCurrentLanguage() == "vi"
+        binding.btnLangVi.alpha = if (isVi) 1.0f else 0.4f
+        binding.btnLangJa.alpha = if (isVi) 0.4f else 1.0f
+    }
+
+    // ─── RECYCLER VIEWS ───
 
     private fun setupRecyclerViews() {
         // Cấu hình danh sách tất cả các file PDF cục bộ
@@ -156,7 +215,7 @@ class MainActivity : AppCompatActivity() {
             if (nextFile != null) {
                 openPdf(nextFile)
             } else {
-                Toast.makeText(this, "Không còn file chưa đọc", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, LocaleHelper.getString("no_unread"), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -168,7 +227,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             filteredFiles.addAll(allFiles.filter { it.name.contains(query, ignoreCase = true) })
         }
-        binding.tvFileCount.text = "${filteredFiles.size} / ${allFiles.size} file"
+        binding.tvFileCount.text = "${filteredFiles.size} / ${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
         fileAdapter.notifyDataSetChanged()
     }
 
@@ -185,7 +244,7 @@ class MainActivity : AppCompatActivity() {
             if (!Environment.isExternalStorageManager()) {
                 val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
                 manageStorageLauncher.launch(intent)
-                Toast.makeText(this, "Vui lòng cấp quyền truy cập bộ nhớ", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, LocaleHelper.getString("grant_permission"), Toast.LENGTH_LONG).show()
             } else {
                 loadPdfFiles()
             }
@@ -199,14 +258,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showPermissionToast() {
-        Toast.makeText(this, "Ứng dụng cần quyền truy cập bộ nhớ để đọc file PDF", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, LocaleHelper.getString("need_permission"), Toast.LENGTH_LONG).show()
     }
 
     private fun loadPdfFiles() {
         val folder = File(PDF_FOLDER)
         if (!folder.exists()) {
             folder.mkdirs()
-            Toast.makeText(this, "Đã tạo thư mục $PDF_FOLDER", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "${LocaleHelper.getString("created_folder")} $PDF_FOLDER", Toast.LENGTH_LONG).show()
         }
         
         allFiles.clear()
@@ -218,12 +277,12 @@ class MainActivity : AppCompatActivity() {
         filteredFiles.addAll(allFiles)
         
         // Cập nhật giao diện dựa trên kết quả quét tệp tin
-        binding.tvFileCount.text = "${allFiles.size} file"
+        binding.tvFileCount.text = "${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
         fileAdapter.notifyDataSetChanged()
         
         if (allFiles.isEmpty()) {
             binding.tvEmpty.visibility = View.VISIBLE
-            binding.tvEmpty.text = "Chưa có file PDF\nCopy vào: $PDF_FOLDER"
+            binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} $PDF_FOLDER"
         } else {
             binding.tvEmpty.visibility = View.GONE
         }
@@ -249,7 +308,7 @@ class MainActivity : AppCompatActivity() {
     private fun addToReadingList(file: PdfFile) {
         ReadingListManager.addToList(file)
         refreshReadingList()
-        Toast.makeText(this, "✓ Đã thêm ${file.name}.pdf", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${LocaleHelper.getString("added_to_list")} ${file.name}.pdf", Toast.LENGTH_SHORT).show()
     }
 
     private fun removeFromReadingList(position: Int) {
@@ -262,7 +321,7 @@ class MainActivity : AppCompatActivity() {
             readingListAdapter.notifyItemRemoved(position)
             updateBadge()
             
-            Toast.makeText(this, "Đã xóa $fileName.pdf khỏi danh sách", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, LocaleHelper.getString("removed_from_list").replace("%s", "$fileName.pdf"), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -289,6 +348,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateBadge() {
         val unreadCount = readingList.count { !it.isRead }
-        binding.btnTabReadingList.text = if (unreadCount > 0) "Danh sách đọc ($unreadCount)" else "Danh sách đọc"
+        binding.btnTabReadingList.text = if (unreadCount > 0) {
+            "${LocaleHelper.getString("tab_reading_list")} ($unreadCount)"
+        } else {
+            LocaleHelper.getString("tab_reading_list")
+        }
     }
 }

@@ -11,12 +11,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class SyncActivity : AppCompatActivity() {
 
@@ -36,6 +41,20 @@ class SyncActivity : AppCompatActivity() {
     private var tvLastSync: TextView? = null
     private var progressBar: ProgressBar? = null
 
+    // Các TextView cần cập nhật ngôn ngữ
+    private var tvSyncTitle: TextView? = null
+    private var tvLoginTitle: TextView? = null
+    private var tvLoginDesc: TextView? = null
+    private var tvConnected: TextView? = null
+    private var tvFolderLabel: TextView? = null
+    private var tvAutoSyncLabel: TextView? = null
+    private var tvAutoSyncDesc: TextView? = null
+    private var switchAutoSync: SwitchCompat? = null
+
+    companion object {
+        const val AUTO_SYNC_WORK_NAME = "auto_sync_work"
+    }
+
     // =========================================================================
     // 2. CẤU HÌNH BỘ LẮNG NGHE KẾT QUẢ TỪ GOOGLE SIGN-IN NATIVE
     // =========================================================================
@@ -48,23 +67,24 @@ class SyncActivity : AppCompatActivity() {
             val authCode = account?.serverAuthCode
 
             if (authCode != null) {
-                updateUIForSyncing("Đang xác thực tài khoản Google...")
+                updateUIForSyncing(LocaleHelper.getString("auth_progress"))
                 
                 // Thực thi bất đồng bộ trao đổi Auth Code lấy Token
                 lifecycleScope.launch {
                     val success = SyncManager.exchangeCodeForToken(authCode)
                     if (success) {
                         updateUI()
-                        Toast.makeText(this@SyncActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SyncActivity, LocaleHelper.getString("login_success"), Toast.LENGTH_SHORT).show()
                     } else {
-                        updateUIForError("Lỗi: Không thể đổi mã xác thực lấy Token.")
+                        updateUIForError(LocaleHelper.getString("auth_error"))
                     }
                 }
             } else {
-                updateUIForError("Lỗi: Không nhận được mã ủy quyền từ hệ thống.")
+                updateUIForError(LocaleHelper.getString("auth_code_error"))
             }
         } catch (e: ApiException) {
-            updateUIForError("Đăng nhập bị hủy hoặc thất bại (Mã lỗi: ${e.statusCode})")
+            updateUIForError(LocaleHelper.getString("login_cancelled")
+                .replaceFirst("%d", "${e.statusCode}"))
         }
     }
 
@@ -89,10 +109,22 @@ class SyncActivity : AppCompatActivity() {
         tvLastSync = findViewById(R.id.tvLastSync)
         progressBar = findViewById(R.id.progressBar)
 
+        // Các view mới cần cập nhật ngôn ngữ
+        tvSyncTitle = findViewById(R.id.tvSyncTitle)
+        tvLoginTitle = findViewById(R.id.tvLoginTitle)
+        tvLoginDesc = findViewById(R.id.tvLoginDesc)
+        tvConnected = findViewById(R.id.tvConnected)
+        tvFolderLabel = findViewById(R.id.tvFolderLabel)
+        tvAutoSyncLabel = findViewById(R.id.tvAutoSyncLabel)
+        tvAutoSyncDesc = findViewById(R.id.tvAutoSyncDesc)
+        switchAutoSync = findViewById(R.id.switchAutoSync)
+
         // Khởi tạo hệ thống quản lý Sync
         SyncManager.init(this)
         updateUI()
+        applyLanguage()
         setupClickListeners()
+        setupAutoSync()
     }
 
     // =========================================================================
@@ -123,16 +155,21 @@ class SyncActivity : AppCompatActivity() {
 
         // Sự kiện Đăng xuất
         btnLogout?.setOnClickListener {
+            // Tắt auto-sync khi đăng xuất
+            SyncManager.setAutoSyncEnabled(false)
+            cancelAutoSync()
+
             SyncManager.logout()
             updateUI()
-            Toast.makeText(this, "Đã đăng xuất tài khoản Google.", Toast.LENGTH_SHORT).show()
+            applyLanguage()
+            Toast.makeText(this, LocaleHelper.getString("logged_out"), Toast.LENGTH_SHORT).show()
         }
 
         // Sự kiện Đồng bộ ngay
         btnSync?.setOnClickListener {
             val driveFolder = tvDriveFolder?.text?.toString()?.trim() ?: ""
             if (driveFolder.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập tên thư mục trên Drive", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, LocaleHelper.getString("enter_folder"), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -140,7 +177,7 @@ class SyncActivity : AppCompatActivity() {
             btnSync?.isEnabled = false
             progressBar?.visibility = View.VISIBLE
             tvSyncStatus?.visibility = View.VISIBLE
-            tvSyncStatus?.text = "Bắt đầu đồng bộ dữ liệu..."
+            tvSyncStatus?.text = LocaleHelper.getString("sync_start")
 
             // Chạy luồng đồng bộ file
             lifecycleScope.launch {
@@ -153,8 +190,9 @@ class SyncActivity : AppCompatActivity() {
 
                 when (result) {
                     is SyncManager.SyncResult.Success -> {
-                        Toast.makeText(this@SyncActivity, "Đồng bộ thành công!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@SyncActivity, LocaleHelper.getString("sync_success"), Toast.LENGTH_LONG).show()
                         updateUI()
+                        applyLanguage()
                     }
                     is SyncManager.SyncResult.Error -> {
                         tvSyncStatus?.text = result.message
@@ -166,7 +204,46 @@ class SyncActivity : AppCompatActivity() {
     }
 
     // =========================================================================
-    // 5. CÁC HÀM CẬP NHẬT GIAO DIỆN (UI UPDATES)
+    // 5. AUTO-SYNC: SCHEDULE / CANCEL WORKMANAGER
+    // =========================================================================
+    private fun setupAutoSync() {
+        switchAutoSync?.isChecked = SyncManager.isAutoSyncEnabled()
+
+        switchAutoSync?.setOnCheckedChangeListener { _, isChecked ->
+            SyncManager.setAutoSyncEnabled(isChecked)
+            if (isChecked) {
+                // Lưu folder name hiện tại cho Worker sử dụng
+                val folder = tvDriveFolder?.text?.toString()?.trim() ?: ""
+                if (folder.isNotEmpty()) {
+                    SyncManager.saveDriveFolder(folder)
+                }
+                scheduleAutoSync()
+                Toast.makeText(this, LocaleHelper.getString("auto_sync_on"), Toast.LENGTH_SHORT).show()
+            } else {
+                cancelAutoSync()
+                Toast.makeText(this, LocaleHelper.getString("auto_sync_off"), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun scheduleAutoSync() {
+        val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(
+            15, TimeUnit.MINUTES // Minimum interval cho WorkManager
+        ).build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            AUTO_SYNC_WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
+    }
+
+    private fun cancelAutoSync() {
+        WorkManager.getInstance(this).cancelUniqueWork(AUTO_SYNC_WORK_NAME)
+    }
+
+    // =========================================================================
+    // 6. CÁC HÀM CẬP NHẬT GIAO DIỆN (UI UPDATES)
     // =========================================================================
     private fun updateUI() {
         val loggedIn = SyncManager.isLoggedIn()
@@ -176,9 +253,31 @@ class SyncActivity : AppCompatActivity() {
         layoutLoggedIn?.visibility = if (loggedIn) View.VISIBLE else View.GONE
         
         // Cập nhật text trạng thái
-        tvLastSync?.text = "Đồng bộ lần cuối: ${SyncManager.getLastSync()}"
+        tvLastSync?.text = "${LocaleHelper.getString("last_sync")} ${SyncManager.getLastSync()}"
         tvSyncStatus?.visibility = View.GONE
         progressBar?.visibility = View.GONE
+
+        // Khôi phục folder name đã lưu
+        val savedFolder = SyncManager.getDriveFolder()
+        if (tvDriveFolder?.text.isNullOrEmpty() && savedFolder.isNotEmpty()) {
+            tvDriveFolder?.setText(savedFolder)
+        }
+    }
+
+    private fun applyLanguage() {
+        // Cập nhật tất cả text theo ngôn ngữ hiện tại
+        tvSyncTitle?.text = LocaleHelper.getString("sync_title")
+        tvLoginTitle?.text = LocaleHelper.getString("login_title")
+        tvLoginDesc?.text = LocaleHelper.getString("login_desc")
+        btnLogin?.text = LocaleHelper.getString("login_button")
+        tvConnected?.text = LocaleHelper.getString("connected")
+        tvFolderLabel?.text = LocaleHelper.getString("folder_label")
+        tvDriveFolder?.hint = LocaleHelper.getString("folder_hint")
+        btnSync?.text = LocaleHelper.getString("sync_now")
+        tvAutoSyncLabel?.text = LocaleHelper.getString("auto_sync_label")
+        tvAutoSyncDesc?.text = LocaleHelper.getString("auto_sync_desc")
+        btnLogout?.text = LocaleHelper.getString("logout")
+        tvLastSync?.text = "${LocaleHelper.getString("last_sync")} ${SyncManager.getLastSync()}"
     }
 
     private fun updateUIForSyncing(message: String) {

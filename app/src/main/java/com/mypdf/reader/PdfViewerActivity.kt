@@ -136,10 +136,10 @@ class PdfViewerActivity : AppCompatActivity() {
                 if (absDy > absDx && absDy > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
                     if (dy < 0) {
                         if (currentPageIndex < totalPages - 1) renderPage(currentPageIndex + 1)
-                        else Toast.makeText(this@PdfViewerActivity, "Trang cuối", Toast.LENGTH_SHORT).show()
+                        else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("last_page"), Toast.LENGTH_SHORT).show()
                     } else {
                         if (currentPageIndex > 0) renderPage(currentPageIndex - 1)
-                        else Toast.makeText(this@PdfViewerActivity, "Trang đầu", Toast.LENGTH_SHORT).show()
+                        else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("first_page"), Toast.LENGTH_SHORT).show()
                     }
                     return true
                 }
@@ -193,16 +193,16 @@ class PdfViewerActivity : AppCompatActivity() {
 
     private fun switchFile(direction: Int) {
         if (fileList.size <= 1) {
-            Toast.makeText(this, "Không có file khác", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, LocaleHelper.getString("no_other_file"), Toast.LENGTH_SHORT).show()
             return
         }
         val newIndex = fileIndex + direction
         if (newIndex < 0) {
-            Toast.makeText(this, "Đây là file đầu", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, LocaleHelper.getString("first_file"), Toast.LENGTH_SHORT).show()
             return
         }
         if (newIndex >= fileList.size) {
-            Toast.makeText(this, "Đây là file cuối", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, LocaleHelper.getString("last_file"), Toast.LENGTH_SHORT).show()
             return
         }
         try {
@@ -210,7 +210,7 @@ class PdfViewerActivity : AppCompatActivity() {
             val newPath = fileList[fileIndex]
             val newFile = File(newPath)
             if (!newFile.exists()) {
-                Toast.makeText(this, "File không tồn tại", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, LocaleHelper.getString("file_not_found"), Toast.LENGTH_SHORT).show()
                 return
             }
             binding.tvTitle.text = newFile.nameWithoutExtension + ".pdf"
@@ -218,7 +218,7 @@ class PdfViewerActivity : AppCompatActivity() {
             openPdf(newPath)
             showUI()
         } catch (e: Exception) {
-            Toast.makeText(this, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${LocaleHelper.getString("error_prefix")}: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -246,7 +246,7 @@ class PdfViewerActivity : AppCompatActivity() {
             totalPages = pdfRenderer!!.pageCount
             renderPage(0)
         } catch (e: Exception) {
-            Toast.makeText(this, "Không thể mở file: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${LocaleHelper.getString("cannot_open")}: ${e.message}", Toast.LENGTH_SHORT).show()
             finish()
         }
     }

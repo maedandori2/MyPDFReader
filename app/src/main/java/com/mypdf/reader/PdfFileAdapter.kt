@@ -51,7 +51,7 @@ class PdfFileAdapter(
                 if (file.isRead) Color.parseColor("#999999") else Color.parseColor("#212121")
             )
             holder.tvStatus.visibility = View.VISIBLE
-            holder.tvStatus.text = if (file.isRead) "✓ Đã đọc" else "Chưa đọc"
+            holder.tvStatus.text = if (file.isRead) LocaleHelper.getString("status_read") else LocaleHelper.getString("status_unread")
             holder.tvStatus.setTextColor(
                 if (file.isRead) Color.parseColor("#4CAF50") else Color.parseColor("#FF9800")
             )

@@ -17,6 +17,8 @@ object SyncManager {
     private const val KEY_ACCESS_TOKEN = "access_token"
     private const val KEY_REFRESH_TOKEN = "refresh_token"
     private const val KEY_LAST_SYNC = "last_sync"
+    private const val KEY_AUTO_SYNC = "auto_sync_enabled"
+    private const val KEY_DRIVE_FOLDER = "drive_folder"
 
     // 1. SỬ DỤNG WEB CLIENT ID (Bắt buộc đối với luồng cấp đổi Token)
     private const val CLIENT_ID = "663951043914-aov077mojt1669dhu1hu7fmp4gog40i4.apps.googleusercontent.com"
@@ -35,11 +37,27 @@ object SyncManager {
 
     fun isLoggedIn(): Boolean = prefs.getString(KEY_REFRESH_TOKEN, null) != null
 
-    fun getLastSync(): String = prefs.getString(KEY_LAST_SYNC, "Chưa sync") ?: "Chưa sync"
+    fun getLastSync(): String = prefs.getString(KEY_LAST_SYNC, null) ?: LocaleHelper.getString("not_synced")
 
     fun logout() {
         prefs.edit().clear().apply()
     }
+
+    // ─── AUTO-SYNC ───
+
+    fun isAutoSyncEnabled(): Boolean = prefs.getBoolean(KEY_AUTO_SYNC, false)
+
+    fun setAutoSyncEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_AUTO_SYNC, enabled).apply()
+    }
+
+    fun saveDriveFolder(folderName: String) {
+        prefs.edit().putString(KEY_DRIVE_FOLDER, folderName).apply()
+    }
+
+    fun getDriveFolder(): String = prefs.getString(KEY_DRIVE_FOLDER, "shiyo") ?: "shiyo"
+
+    // ─── TOKEN ───
 
     suspend fun exchangeCodeForToken(code: String): Boolean = withContext(Dispatchers.IO) {
         try {
@@ -109,27 +127,29 @@ object SyncManager {
 
     fun getAccessToken(): String? = prefs.getString(KEY_ACCESS_TOKEN, null)
 
+    // ─── SYNC ───
+
     suspend fun syncFiles(
         driveFolderName: String,
         localFolder: String,
         onProgress: (String) -> Unit
     ): SyncResult = withContext(Dispatchers.IO) {
         try {
-            onProgress("Đang kết nối Google Drive...")
+            onProgress(LocaleHelper.getString("connecting_drive"))
             refreshAccessToken()
-            val token = getAccessToken() ?: return@withContext SyncResult.Error("Chưa đăng nhập")
+            val token = getAccessToken() ?: return@withContext SyncResult.Error(LocaleHelper.getString("not_logged_in"))
 
-            onProgress("Đang tìm thư mục $driveFolderName...")
+            onProgress(LocaleHelper.getString("searching_folder").replace("%s", driveFolderName))
             val folderId = findFolderId(token, driveFolderName)
-                ?: return@withContext SyncResult.Error("Không tìm thấy thư mục '$driveFolderName'")
+                ?: return@withContext SyncResult.Error(LocaleHelper.getString("folder_not_found").replace("%s", driveFolderName))
 
-            onProgress("Đang lấy danh sách file...")
+            onProgress(LocaleHelper.getString("listing_files"))
             val driveFiles = listPdfFiles(token, folderId)
 
             val localDir = File(localFolder)
             if (!localDir.exists()) {
                 val created = localDir.mkdirs()
-                if (!created) return@withContext SyncResult.Error("Không thể tạo thư mục $localFolder")
+                if (!created) return@withContext SyncResult.Error(LocaleHelper.getString("cannot_create_folder").replace("%s", localFolder))
             }
 
             var downloaded = 0
@@ -137,7 +157,10 @@ object SyncManager {
             driveFiles.forEachIndexed { index, driveFile ->
                 val localFile = File(localDir, driveFile.name)
                 if (!localFile.exists()) {
-                    onProgress("Đang tải (${index + 1}/${driveFiles.size}): ${driveFile.name}")
+                    onProgress(LocaleHelper.getString("downloading")
+                        .replaceFirst("%d", "${index + 1}")
+                        .replaceFirst("%d", "${driveFiles.size}")
+                        .replaceFirst("%s", driveFile.name))
                     downloadFile(token, driveFile.id, localFile)
                     downloaded++
                 } else {
@@ -149,11 +172,71 @@ object SyncManager {
                 .format(java.util.Date())
             prefs.edit().putString(KEY_LAST_SYNC, now).apply()
 
+            // Lưu tên folder để auto-sync sử dụng
+            saveDriveFolder(driveFolderName)
+
             SyncResult.Success(downloaded, skipped)
         } catch (e: Exception) {
-            SyncResult.Error("Lỗi: ${e.message}")
+            SyncResult.Error("${LocaleHelper.getString("error_prefix")}: ${e.message}")
         }
     }
+
+    /**
+     * Kiểm tra và tự động sync file mới từ Drive.
+     * Dùng bởi SyncWorker khi auto-sync bật.
+     * Chỉ tải file chưa có trong local folder.
+     */
+    suspend fun checkAndSyncNewFiles(
+        driveFolderName: String,
+        localFolder: String,
+        onProgress: (String) -> Unit
+    ): SyncResult = withContext(Dispatchers.IO) {
+        try {
+            refreshAccessToken()
+            val token = getAccessToken() ?: return@withContext SyncResult.Error(LocaleHelper.getString("not_logged_in"))
+
+            val folderId = findFolderId(token, driveFolderName) ?: return@withContext SyncResult.Success(0, 0)
+
+            val driveFiles = listPdfFiles(token, folderId)
+            val localDir = File(localFolder)
+            if (!localDir.exists()) localDir.mkdirs()
+
+            // Lấy danh sách tên file local hiện tại
+            val localFileNames = localDir.listFiles { f -> f.extension.lowercase() == "pdf" }
+                ?.map { it.name }?.toSet() ?: emptySet()
+
+            // Tìm file mới (có trên Drive nhưng chưa có local)
+            val newFiles = driveFiles.filter { it.name !in localFileNames }
+
+            if (newFiles.isEmpty()) {
+                return@withContext SyncResult.Success(0, driveFiles.size)
+            }
+
+            onProgress(LocaleHelper.getString("auto_sync_detected")
+                .replaceFirst("%d", "${newFiles.size}"))
+
+            var downloaded = 0
+            newFiles.forEachIndexed { index, driveFile ->
+                val localFile = File(localDir, driveFile.name)
+                try {
+                    downloadFile(token, driveFile.id, localFile)
+                    downloaded++
+                } catch (_: Exception) {
+                    // Bỏ qua file lỗi, tiếp tục file khác
+                }
+            }
+
+            val now = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
+                .format(java.util.Date())
+            prefs.edit().putString(KEY_LAST_SYNC, now).apply()
+
+            SyncResult.Success(downloaded, driveFiles.size - downloaded)
+        } catch (e: Exception) {
+            SyncResult.Error("${LocaleHelper.getString("error_prefix")}: ${e.message}")
+        }
+    }
+
+    // ─── INTERNAL ───
 
     private fun findFolderId(token: String, folderName: String): String? {
         val query = URLEncoder.encode(

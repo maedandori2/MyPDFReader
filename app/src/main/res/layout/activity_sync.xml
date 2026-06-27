@@ -22,6 +22,7 @@
             style="@style/Widget.MaterialComponents.Button.TextButton" />
 
         <TextView
+            android:id="@+id/tvSyncTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -54,6 +55,7 @@
                 android:padding="20dp">
 
                 <TextView
+                    android:id="@+id/tvLoginTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Đăng nhập Google Drive"
@@ -64,6 +66,7 @@
                     android:layout_marginBottom="8dp" />
 
                 <TextView
+                    android:id="@+id/tvLoginDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Nhấn nút bên dưới, đăng nhập Google rồi app sẽ tự động xác thực."
@@ -102,6 +105,7 @@
                     android:layout_marginBottom="12dp">
 
                     <TextView
+                        android:id="@+id/tvConnected"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="✅ Đã kết nối Google Drive"
@@ -128,6 +132,7 @@
                     android:layout_marginBottom="12dp">
 
                     <TextView
+                        android:id="@+id/tvFolderLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tên thư mục trên Google Drive:"
@@ -156,7 +161,7 @@
 
                 </LinearLayout>
 
-                <!-- Auto sync -->
+                <!-- Auto sync (simplified — no interval RadioGroup) -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -170,13 +175,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="8dp">
 
                         <TextView
+                            android:id="@+id/tvAutoSyncLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Tự động sync"
+                            android:text="Tự động sync khi có thay đổi"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             android:textColor="#212121" />
@@ -188,58 +194,12 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvAutoSyncDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tần suất sync:"
-                        android:textSize="14sp"
-                        android:textColor="#666666"
-                        android:layout_marginBottom="8dp" />
-
-                    <RadioGroup
-                        android:id="@+id/rgInterval"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/rb1h"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="1h" />
-
-                        <RadioButton
-                            android:id="@+id/rb2h"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="2h"
-                            android:checked="true" />
-
-                        <RadioButton
-                            android:id="@+id/rb4h"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="4h" />
-
-                        <RadioButton
-                            android:id="@+id/rb8h"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="8h" />
-
-                    </RadioGroup>
-
-                    <TextView
-                        android:id="@+id/tvNextSync"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:text="Khi có file mới trên Drive sẽ tự động tải về"
                         android:textSize="13sp"
-                        android:textColor="#1565C0"
-                        android:layout_marginTop="8dp"
-                        android:visibility="gone" />
+                        android:textColor="#666666" />
 
                 </LinearLayout>
 

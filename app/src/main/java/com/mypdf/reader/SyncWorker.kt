@@ -12,12 +12,14 @@ class SyncWorker(
     override suspend fun doWork(): Result {
         return try {
             SyncManager.init(applicationContext)
+            LocaleHelper.init(applicationContext)
+
             if (!SyncManager.isLoggedIn()) return Result.success()
+            if (!SyncManager.isAutoSyncEnabled()) return Result.success()
 
-            val prefs = applicationContext.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
-            val folderName = prefs.getString("drive_folder", "shiyo") ?: "shiyo"
+            val folderName = SyncManager.getDriveFolder()
 
-            val result = SyncManager.syncFiles(
+            val result = SyncManager.checkAndSyncNewFiles(
                 driveFolderName = folderName,
                 localFolder = MainActivity.PDF_FOLDER,
                 onProgress = {}
