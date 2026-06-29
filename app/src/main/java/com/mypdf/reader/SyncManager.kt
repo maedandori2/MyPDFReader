@@ -74,6 +74,8 @@ object SyncManager {
             if (responseCode != 200) {
                 val err = conn.errorStream?.bufferedReader()?.readText()
                 Log.e(TAG, "Token error $responseCode: $err")
+                // Lưu lỗi vào prefs để hiện lên UI
+                prefs().edit().putString("last_token_error", "HTTP $responseCode: $err").apply()
                 return@withContext null
             }
 
