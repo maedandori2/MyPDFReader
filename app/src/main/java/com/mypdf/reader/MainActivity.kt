@@ -184,7 +184,8 @@ class MainActivity : AppCompatActivity() {
             onOpenFile = { file -> openPdf(file) },
             onMoveUp = { pos -> moveItem(pos, -1) },
             onMoveDown = { pos -> moveItem(pos, 1) },
-            onRemove = { pos -> removeFromReadingList(pos) }
+            onRemove = { pos -> removeFromReadingList(pos) },
+            onSwapPosition = { fromPos, toPos -> swapItems(fromPos, toPos) }
         )
         binding.rvReadingList.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -354,6 +355,15 @@ class MainActivity : AppCompatActivity() {
             readingList[position] = readingList[targetPosition]
             readingList[targetPosition] = temp
             readingListAdapter.notifyItemMoved(position, targetPosition)
+        }
+    }
+
+    private fun swapItems(fromPos: Int, toPos: Int) {
+        if (fromPos in readingList.indices && toPos in readingList.indices) {
+            // Hoán đổi trong ReadingListManager (DB)
+            ReadingListManager.moveToPosition(fromPos, toPos)
+            // Cập nhật lại toàn bộ danh sách
+            refreshReadingList()
         }
     }
 

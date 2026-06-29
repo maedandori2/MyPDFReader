@@ -2,6 +2,23 @@
 
 ---
 
+## [v1.4.2] - 2026-06-30
+
+### ✨ Cải tiến giao diện Danh sách đọc
+- **Tên file lớn hơn**: Tăng kích thước chữ tên file trong danh sách đọc từ 15sp lên 19sp để dễ đọc hơn.
+- **Số thứ tự có thể sửa trực tiếp**: Thay đổi ô số thứ tự (1, 2, 3...) từ `TextView` sang `EditText`, cho phép người dùng bấm vào và nhập số mới.
+- **Hoán đổi vị trí tự động (swap)**: Khi người dùng sửa số thứ tự của một item (ví dụ: sửa item 1 thành 3), item đó sẽ được chuyển đến vị trí 3, và các item khác tự động dịch chuyển theo.
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `item_pdf_file.xml` | Đổi `tvIndex` từ `TextView` → `EditText` với `inputType="number"`, `imeOptions="actionDone"`, `selectAllOnFocus` |
+| `PdfFileAdapter.kt` | Thêm import `EditText`/`EditorInfo`, đổi type `tvIndex`, thêm logic `setupIndexEditor()` và `handleIndexChange()`, tăng text size tên file, thêm callback `onSwapPosition` |
+| `MainActivity.kt` | Thêm callback `onSwapPosition` khi tạo adapter, thêm hàm `swapItems()` gọi `ReadingListManager.moveToPosition()` |
+| `HISTORY.md` | Cập nhật changelog lên `v1.4.2` |
+
+---
+
 ## [v1.4.1] - 2026-06-27
 
 ### ⏪ Hoàn tác (Rollback)

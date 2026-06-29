@@ -4,6 +4,8 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +22,8 @@ class PdfFileAdapter(
     private val onAddToList: ((PdfFile) -> Unit)? = null,
     private val onMoveUp: ((Int) -> Unit)? = null,
     private val onMoveDown: ((Int) -> Unit)? = null,
-    private val onRemove: ((Int) -> Unit)? = null
+    private val onRemove: ((Int) -> Unit)? = null,
+    private val onSwapPosition: ((Int, Int) -> Unit)? = null
 ) : RecyclerView.Adapter<PdfFileAdapter.ViewHolder>() {
 
     private var adapterScope: CoroutineScope? = null
@@ -37,7 +40,7 @@ class PdfFileAdapter(
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvIndex: TextView = view.findViewById(R.id.tvIndex)
+        val tvIndex: EditText = view.findViewById(R.id.tvIndex)
         val ivThumbnail: ImageView = view.findViewById(R.id.ivThumbnail)
         val tvName: TextView = view.findViewById(R.id.tvFileName)
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
@@ -61,10 +64,13 @@ class PdfFileAdapter(
         holder.tvName.text = "${file.name}.pdf"
 
         if (isReadingList) {
-            // Số thứ tự thay thumbnail
+            // Số thứ tự thay thumbnail - có thể sửa trực tiếp
             holder.tvIndex.visibility = View.VISIBLE
             holder.ivThumbnail.visibility = View.GONE
-            holder.tvIndex.text = "${position + 1}"
+            holder.tvIndex.setText("${position + 1}")
+
+            // Tên file lớn hơn trong reading list
+            holder.tvName.textSize = 19f
 
             holder.tvName.setTextColor(
                 if (file.isRead) Color.parseColor("#999999") else Color.parseColor("#212121")
@@ -83,14 +89,20 @@ class PdfFileAdapter(
             holder.btnMoveDown.visibility = if (position < files.size - 1) View.VISIBLE else View.INVISIBLE
 
             holder.btnOpenReading.setOnClickListener { onOpenFile(file) }
-            holder.btnMoveUp.setOnClickListener { onMoveUp?.invoke(position) }
-            holder.btnMoveDown.setOnClickListener { onMoveDown?.invoke(position) }
-            holder.btnRemove.setOnClickListener { onRemove?.invoke(position) }
+            holder.btnMoveUp.setOnClickListener { onMoveUp?.invoke(holder.adapterPosition) }
+            holder.btnMoveDown.setOnClickListener { onMoveDown?.invoke(holder.adapterPosition) }
+            holder.btnRemove.setOnClickListener { onRemove?.invoke(holder.adapterPosition) }
+
+            // Xử lý sửa số thứ tự trực tiếp → swap vị trí
+            setupIndexEditor(holder)
 
         } else {
             holder.tvIndex.visibility = View.GONE
             holder.ivThumbnail.visibility = View.VISIBLE
             
+            // Khôi phục text size mặc định cho tab All
+            holder.tvName.textSize = 15f
+
             // Xử lý load thumbnail
             holder.ivThumbnail.tag = file.path
             holder.ivThumbnail.setImageBitmap(null)
@@ -120,5 +132,51 @@ class PdfFileAdapter(
         }
     }
 
+    /**
+     * Xử lý khi người dùng sửa số thứ tự trong ô EditText.
+     * Ví dụ: item đang ở vị trí 1, người dùng sửa thành 3 → item 1 và item 3 hoán đổi vị trí.
+     */
+    private fun setupIndexEditor(holder: ViewHolder) {
+        // Xử lý khi nhấn Done trên bàn phím
+        holder.tvIndex.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                handleIndexChange(holder)
+                holder.tvIndex.clearFocus()
+                true
+            } else {
+                false
+            }
+        }
+
+        // Xử lý khi mất focus (bấm ra ngoài)
+        holder.tvIndex.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                handleIndexChange(holder)
+            }
+        }
+    }
+
+    /**
+     * Đọc số mới từ EditText, nếu khác vị trí hiện tại thì gọi callback swap.
+     */
+    private fun handleIndexChange(holder: ViewHolder) {
+        val currentPos = holder.adapterPosition
+        if (currentPos == RecyclerView.NO_POSITION) return
+
+        val inputText = holder.tvIndex.text.toString().trim()
+        val newIndex = inputText.toIntOrNull() ?: return
+
+        // Chuyển từ số hiển thị (1-based) sang vị trí mảng (0-based)
+        val targetPos = newIndex - 1
+
+        if (targetPos != currentPos && targetPos in 0 until files.size) {
+            onSwapPosition?.invoke(currentPos, targetPos)
+        } else {
+            // Số không hợp lệ hoặc không thay đổi → khôi phục lại số cũ
+            holder.tvIndex.setText("${currentPos + 1}")
+        }
+    }
+
     override fun getItemCount() = files.size
 }
+

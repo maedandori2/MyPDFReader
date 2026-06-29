@@ -13,16 +13,23 @@
         android:paddingHorizontal="12dp"
         android:gravity="center_vertical">
 
-        <!-- Số thứ tự (chỉ hiện trong reading list) -->
-        <TextView
+        <!-- Số thứ tự (chỉ hiện trong reading list, có thể sửa trực tiếp) -->
+        <EditText
             android:id="@+id/tvIndex"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:gravity="center"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:background="#1565C0"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:maxLength="3"
+            android:padding="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:selectAllOnFocus="true"
             android:visibility="gone" />
 
         <!-- PDF Thumbnail -->
