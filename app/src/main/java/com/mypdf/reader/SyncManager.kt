@@ -86,6 +86,7 @@ object SyncManager {
 
         } catch (e: Exception) {
             Log.e(TAG, "getAccessToken failed", e)
+            prefs().edit().putString("last_token_error", e.message ?: "Unknown error").apply()
             null
         }
     }
@@ -127,7 +128,10 @@ object SyncManager {
     ): SyncResult = withContext(Dispatchers.IO) {
         try {
             val token = getAccessToken()
-                ?: return@withContext SyncResult.Error("Không lấy được token. Kiểm tra file service_account.json")
+                ?: return@withContext SyncResult.Error(
+                    "Không lấy được token.\n" +
+                    (prefs().getString("last_token_error", "") ?: "")
+                )
 
             onProgress("Đang tìm thư mục '$driveFolderName'...")
 
