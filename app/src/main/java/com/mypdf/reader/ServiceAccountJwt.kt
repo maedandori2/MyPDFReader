@@ -13,23 +13,19 @@ object ServiceAccountJwt {
     private const val TOKEN_URL = "https://oauth2.googleapis.com/token"
 
     fun create(clientEmail: String, privateKeyPem: String): String {
-        // Header
-        val header = base64url("""{"alg":"RS256","typ":"JWT"}""".toByteArray())
+        // Header - phải dùng compact JSON không có space
+        val headerJson = """{"alg":"RS256","typ":"JWT"}"""
+        val header = base64url(headerJson.toByteArray(Charsets.UTF_8))
 
-        // Payload
+        // Payload - compact JSON không có space
         val now = System.currentTimeMillis() / 1000
-        val payloadJson = "{" +
-            "\"iss\":\"$clientEmail\"," +
-            "\"scope\":\"$SCOPE\"," +
-            "\"aud\":\"$TOKEN_URL\"," +
-            "\"exp\":${now + 3600}," +
-            "\"iat\":$now" +
-            "}"
+        val payloadJson = "{\"iss\":\"$clientEmail\",\"scope\":\"$SCOPE\",\"aud\":\"$TOKEN_URL\",\"exp\":${now + 3600},\"iat\":$now}"
         val payload = base64url(payloadJson.toByteArray(Charsets.UTF_8))
 
         val signingInput = "$header.$payload"
+        Log.d(TAG, "Signing input length: ${signingInput.length}")
 
-        // Ký bằng RS256
+        // Load private key và ký
         val privateKey = loadPrivateKey(privateKeyPem)
         val sig = Signature.getInstance("SHA256withRSA")
         sig.initSign(privateKey)
@@ -40,22 +36,38 @@ object ServiceAccountJwt {
     }
 
     private fun loadPrivateKey(pem: String): java.security.PrivateKey {
-        // Bước 1: convert \n literal (từ JSON string) thành newline thật
-        val normalized = pem.replace("\\n", "\n")
+        Log.d(TAG, "Raw PEM first 50 chars: ${pem.take(50)}")
+        Log.d(TAG, "Raw PEM length: ${pem.length}")
 
-        // Bước 2: xóa header/footer PEM
-        val cleaned = normalized
+        // Android JSONObject.getString() KHÔNG tự unescape \n
+        // Phải replace thủ công trước
+        val withRealNewlines = pem
+            .replace("\\n", "\n")  // \n literal → newline thật
+            .replace("\\r", "")    // xóa \r nếu có
+
+        Log.d(TAG, "Contains real newlines: ${withRealNewlines.contains('\n')}")
+
+        // Xóa header/footer và tất cả whitespace
+        val base64Only = withRealNewlines
             .replace("-----BEGIN PRIVATE KEY-----", "")
             .replace("-----END PRIVATE KEY-----", "")
             .replace("-----BEGIN RSA PRIVATE KEY-----", "")
             .replace("-----END RSA PRIVATE KEY-----", "")
             .replace("\n", "")
             .replace("\r", "")
+            .replace(" ", "")
             .trim()
 
-        Log.d(TAG, "Private key length after clean: ${cleaned.length}")
+        Log.d(TAG, "Base64 key length: ${base64Only.length}")
+        Log.d(TAG, "Base64 key first 20: ${base64Only.take(20)}")
 
-        val keyBytes = Base64.decode(cleaned, Base64.DEFAULT)
+        if (base64Only.length < 100) {
+            throw IllegalArgumentException("Private key quá ngắn (${base64Only.length} chars) - file JSON bị lỗi")
+        }
+
+        val keyBytes = Base64.decode(base64Only, Base64.DEFAULT)
+        Log.d(TAG, "Key bytes length: ${keyBytes.size}")
+
         val spec = PKCS8EncodedKeySpec(keyBytes)
         return KeyFactory.getInstance("RSA").generatePrivate(spec)
     }
