@@ -62,6 +62,7 @@ object LocaleHelper {
             "cannot_open" to "Không thể mở file",
             "prev_page" to "◀ Trang trước",
             "next_page" to "Trang sau ▶",
+            "reading_file_number" to "📖 Đang đọc file số %d",
 
             // ── SyncActivity ──
             "sync_title" to "☁ Sync Google Drive",
@@ -132,6 +133,7 @@ object LocaleHelper {
             "cannot_open" to "ファイルを開けません",
             "prev_page" to "◀ 前のページ",
             "next_page" to "次のページ ▶",
+            "reading_file_number" to "📖 ファイル %d を読んでいます",
 
             // ── SyncActivity ──
             "sync_title" to "☁ Google Drive同期",

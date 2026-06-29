@@ -301,7 +301,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun openPdf(file: PdfFile) {
         ReadingListManager.markAsRead(file.path)
-        val currentListPaths = if (binding.layoutReadingList.visibility == View.VISIBLE) {
+        val isFromReadingList = binding.layoutReadingList.visibility == View.VISIBLE
+        val currentListPaths = if (isFromReadingList) {
             readingList.map { it.path }
         } else {
             filteredFiles.map { it.path }
@@ -310,9 +311,17 @@ class MainActivity : AppCompatActivity() {
             putExtra("file_path", file.path)
             putExtra("file_name", "${file.name}.pdf")
             putStringArrayListExtra("file_list", ArrayList(currentListPaths))
+            // Truyền số thứ tự trong reading list (1-based)
+            if (isFromReadingList) {
+                val readingIndex = readingList.indexOfFirst { it.path == file.path }
+                if (readingIndex >= 0) {
+                    putExtra("reading_list_index", readingIndex + 1)
+                }
+            }
         }
         startActivity(intent)
     }
+
 
     private fun addToReadingList(file: PdfFile) {
         ReadingListManager.addToList(file)

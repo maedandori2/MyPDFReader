@@ -1,5 +1,6 @@
 package com.mypdf.reader
 
+import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.pdf.PdfRenderer
@@ -52,6 +53,9 @@ class PdfViewerActivity : AppCompatActivity() {
     private val hideRunnable = Runnable { hideUI() }
     private var uiVisible = true
 
+    // Reading notice
+    private val noticeHandler = Handler(Looper.getMainLooper())
+
     companion object {
         const val NONE = 0
         const val DRAG = 1
@@ -93,6 +97,12 @@ class PdfViewerActivity : AppCompatActivity() {
         setupNavButtons()
         openPdf(filePath)
         scheduleHide()
+
+        // Hiển thị thông báo đang đọc file số mấy (chỉ khi mở từ reading list)
+        val readingListIndex = intent.getIntExtra("reading_list_index", -1)
+        if (readingListIndex > 0) {
+            showReadingNotice(readingListIndex)
+        }
     }
 
     // ─── UI HIDE / SHOW ───
@@ -358,8 +368,34 @@ class PdfViewerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        hideHandler.removeCallbacks(hideRunnable)
+        hideHandler.removeCallbacksAndMessages(null)
+        noticeHandler.removeCallbacksAndMessages(null)
         currentPage?.close()
         pdfRenderer?.close()
+    }
+
+    /**
+     * Hiển thị thông báo "Đang đọc file số X" ở trên cùng, opacity 50%, tự ẩn sau 5 giây.
+     */
+    private fun showReadingNotice(fileNumber: Int) {
+        val template = LocaleHelper.getString("reading_file_number")
+        val message = String.format(template, fileNumber)
+
+        binding.tvReadingNotice.text = message
+        binding.tvReadingNotice.alpha = 0.5f
+        binding.tvReadingNotice.visibility = View.VISIBLE
+
+        // Tự ẩn sau 5 giây với animation fade out
+        noticeHandler.postDelayed({
+            ObjectAnimator.ofFloat(binding.tvReadingNotice, "alpha", 0.5f, 0f).apply {
+                duration = 500
+                addListener(object : android.animation.AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: android.animation.Animator) {
+                        binding.tvReadingNotice.visibility = View.GONE
+                    }
+                })
+                start()
+            }
+        }, 5000)
     }
 }

@@ -2,7 +2,24 @@
 
 ---
 
-## [v1.4.2] - 2026-06-30
+## [v1.4.3] - 2026-06-30
+
+### ✨ Thông báo đang đọc file số mấy
+- **Overlay thông báo**: Khi mở file từ **Danh sách đọc**, trên màn hình PDF sẽ hiện thông báo "📖 Đang đọc file số X" (tiếng Việt) hoặc "📖 ファイル X を読んでいます" (tiếng Nhật) tùy theo ngôn ngữ đang chọn.
+- **Tự động ẩn sau 5 giây**: Thông báo hiển thị ở opacity 50%, sau 5 giây sẽ tự fade out mượt mà rồi biến mất.
+- **Chỉ hiển thị khi mở từ danh sách đọc**: Không hiện khi mở file từ tab "Tất cả file".
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `activity_pdf_viewer.xml` | Thêm `tvReadingNotice` (TextView overlay, background bán trong suốt) |
+| `PdfViewerActivity.kt` | Thêm import `ObjectAnimator`, thêm `noticeHandler`, đọc `reading_list_index` từ intent, thêm hàm `showReadingNotice()` với fade-out animation |
+| `MainActivity.kt` | Truyền thêm `reading_list_index` qua intent khi mở file từ reading list |
+| `LocaleHelper.kt` | Thêm chuỗi dịch `reading_file_number` cho cả tiếng Việt và tiếng Nhật |
+| `HISTORY.md` | Cập nhật changelog lên `v1.4.3` |
+
+---
+
 
 ### ✨ Cải tiến giao diện Danh sách đọc
 - **Tên file lớn hơn**: Tăng kích thước chữ tên file trong danh sách đọc từ 15sp lên 19sp để dễ đọc hơn.
