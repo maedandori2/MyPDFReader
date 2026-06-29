@@ -55,7 +55,11 @@ object SyncManager {
             val json = JSONObject(jsonStr)
 
             val clientEmail = json.getString("client_email")
-            val privateKey  = json.getString("private_key")
+            // Dùng optString để lấy raw string, sau đó ServiceAccountJwt tự xử lý \n
+            val privateKey = json.getString("private_key")
+
+            Log.d(TAG, "client_email: $clientEmail")
+            Log.d(TAG, "private_key length: ${privateKey.length}")
 
             // Tạo JWT
             val jwt = ServiceAccountJwt.create(clientEmail, privateKey)
