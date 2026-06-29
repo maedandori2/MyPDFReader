@@ -33,20 +33,10 @@
             android:name=".PdfViewerActivity"
             android:exported="false" />
 
+        <!-- SyncActivity: xóa intent-filter OAuth callback vì không còn dùng GoogleSignIn -->
         <activity
             android:name=".SyncActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <!-- Deep link OAuth callback -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="com.mypdf.reader"
-                    android:host="oauth2callback" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
