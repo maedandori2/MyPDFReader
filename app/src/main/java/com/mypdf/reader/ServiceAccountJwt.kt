@@ -6,10 +6,6 @@ import java.security.KeyFactory
 import java.security.Signature
 import java.security.spec.PKCS8EncodedKeySpec
 
-/**
- * Tạo JWT để xác thực Google Service Account.
- * Không cần thư viện ngoài — chỉ dùng java.security có sẵn trong Android.
- */
 object ServiceAccountJwt {
 
     private const val TAG = "ServiceAccountJwt"
@@ -22,17 +18,14 @@ object ServiceAccountJwt {
 
         // Payload
         val now = System.currentTimeMillis() / 1000
-        val payload = base64url(
-            """
-            {
-                "iss": "$clientEmail",
-                "scope": "$SCOPE",
-                "aud": "$TOKEN_URL",
-                "exp": ${now + 3600},
-                "iat": $now
-            }
-            """.trimIndent().toByteArray()
-        )
+        val payloadJson = "{" +
+            "\"iss\":\"$clientEmail\"," +
+            "\"scope\":\"$SCOPE\"," +
+            "\"aud\":\"$TOKEN_URL\"," +
+            "\"exp\":${now + 3600}," +
+            "\"iat\":$now" +
+            "}"
+        val payload = base64url(payloadJson.toByteArray(Charsets.UTF_8))
 
         val signingInput = "$header.$payload"
 
@@ -40,23 +33,27 @@ object ServiceAccountJwt {
         val privateKey = loadPrivateKey(privateKeyPem)
         val sig = Signature.getInstance("SHA256withRSA")
         sig.initSign(privateKey)
-        sig.update(signingInput.toByteArray())
+        sig.update(signingInput.toByteArray(Charsets.UTF_8))
         val signature = base64url(sig.sign())
 
         return "$signingInput.$signature"
     }
 
     private fun loadPrivateKey(pem: String): java.security.PrivateKey {
-        // Xóa header/footer PEM và khoảng trắng
-        val cleaned = pem
+        // Bước 1: convert \n literal (từ JSON string) thành newline thật
+        val normalized = pem.replace("\\n", "\n")
+
+        // Bước 2: xóa header/footer PEM
+        val cleaned = normalized
             .replace("-----BEGIN PRIVATE KEY-----", "")
             .replace("-----END PRIVATE KEY-----", "")
             .replace("-----BEGIN RSA PRIVATE KEY-----", "")
             .replace("-----END RSA PRIVATE KEY-----", "")
-            .replace("\\n", "")
             .replace("\n", "")
             .replace("\r", "")
             .trim()
+
+        Log.d(TAG, "Private key length after clean: ${cleaned.length}")
 
         val keyBytes = Base64.decode(cleaned, Base64.DEFAULT)
         val spec = PKCS8EncodedKeySpec(keyBytes)
@@ -64,6 +61,9 @@ object ServiceAccountJwt {
     }
 
     private fun base64url(data: ByteArray): String {
-        return Base64.encodeToString(data, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+        return Base64.encodeToString(
+            data,
+            Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
+        )
     }
 }
