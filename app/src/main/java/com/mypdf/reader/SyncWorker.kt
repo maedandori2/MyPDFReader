@@ -1,34 +1,35 @@
 package com.mypdf.reader
 
 import android.content.Context
+import android.content.Intent
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 
 class SyncWorker(
-    context: Context,
+    private val context: Context,
     params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         return try {
-            SyncManager.init(applicationContext)
-            LocaleHelper.init(applicationContext)
+            SyncManager.init(context)
 
-            if (!SyncManager.isLoggedIn()) return Result.success()
-            if (!SyncManager.isAutoSyncEnabled()) return Result.success()
+            val folder = SyncManager.getDriveFolder()
+            if (folder.isEmpty()) return Result.success()
 
-            val folderName = SyncManager.getDriveFolder()
+            val result = SyncManager.syncFiles(
+                driveFolderName = folder,
+                localFolder = MainActivity.PDF_FOLDER
+            ) { /* background, không cần update UI */ }
 
-            val result = SyncManager.checkAndSyncNewFiles(
-                driveFolderName = folderName,
-                localFolder = MainActivity.PDF_FOLDER,
-                onProgress = {}
-            )
-
-            when (result) {
-                is SyncManager.SyncResult.Success -> Result.success()
-                is SyncManager.SyncResult.Error -> Result.retry()
+            // Sau khi sync xong → gửi broadcast để MainActivity refresh danh sách
+            if (result is SyncManager.SyncResult.Success && result.count > 0) {
+                val intent = Intent(SyncActivity.ACTION_REFRESH_FILES)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             }
+
+            Result.success()
         } catch (e: Exception) {
             Result.retry()
         }
