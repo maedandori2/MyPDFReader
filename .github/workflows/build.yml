@@ -27,6 +27,13 @@ jobs:
             "platforms;android-34" \
             "build-tools;34.0.0"
 
+      - name: Inject Service Account JSON
+        env:
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+        run: |
+          mkdir -p app/src/main/assets
+          echo "$SERVICE_ACCOUNT_JSON" > app/src/main/assets/service_account.json
+
       - name: Decode and Restore Keystore File
         env:
           ENCODED_KEYSTORE: ${{ secrets.KEYSTORE_BASE64 }}
