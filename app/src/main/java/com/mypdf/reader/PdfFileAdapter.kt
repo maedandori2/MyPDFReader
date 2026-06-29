@@ -69,8 +69,8 @@ class PdfFileAdapter(
             holder.ivThumbnail.visibility = View.GONE
             holder.tvIndex.setText("${position + 1}")
 
-            // Tên file lớn hơn trong reading list
-            holder.tvName.textSize = 19f
+            // Tên file lớn hơn trong reading list (cỡ chữ tuỳ chọn)
+            holder.tvName.textSize = SettingsManager.getFileNameSize().toFloat()
 
             holder.tvName.setTextColor(
                 if (file.isRead) Color.parseColor("#999999") else Color.parseColor("#212121")

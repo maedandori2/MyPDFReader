@@ -14,8 +14,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -84,6 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         LocaleHelper.init(this)
         ReadingListManager.init(this)
+        SettingsManager.init(this)
         readingList.addAll(ReadingListManager.getList())
 
         setupRecyclerViews()
@@ -94,6 +99,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSync.setOnClickListener {
             startActivity(Intent(this, SyncActivity::class.java))
+        }
+
+        binding.btnSettings.setOnClickListener {
+            showSettingsDialog()
         }
 
         checkPermissionsAndLoad()
@@ -374,6 +383,93 @@ class MainActivity : AppCompatActivity() {
             // Cập nhật lại toàn bộ danh sách
             refreshReadingList()
         }
+    }
+
+    // ─── SETTINGS DIALOG ───
+
+    private fun showSettingsDialog() {
+        val dp = resources.displayMetrics.density
+        val pad = (20 * dp).toInt()
+        val itemPad = (8 * dp).toInt()
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(pad, pad, pad, itemPad)
+        }
+
+        // ── 1. Cỡ chữ tên file ──
+        val tvSizeLabel = TextView(this).apply {
+            text = "${LocaleHelper.getString("settings_file_name_size")}: ${SettingsManager.getFileNameSize()}"
+            textSize = 15f
+            setPadding(0, 0, 0, itemPad)
+        }
+        val sbSize = SeekBar(this).apply {
+            max = SettingsManager.MAX_FILE_NAME_SIZE - SettingsManager.MIN_FILE_NAME_SIZE
+            progress = SettingsManager.getFileNameSize() - SettingsManager.MIN_FILE_NAME_SIZE
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
+                    tvSizeLabel.text = "${LocaleHelper.getString("settings_file_name_size")}: ${progress + SettingsManager.MIN_FILE_NAME_SIZE}"
+                }
+                override fun onStartTrackingTouch(sb: SeekBar?) {}
+                override fun onStopTrackingTouch(sb: SeekBar?) {}
+            })
+        }
+        layout.addView(tvSizeLabel)
+        layout.addView(sbSize)
+
+        // ── 2. Độ trong suốt thông báo ──
+        val tvOpacityLabel = TextView(this).apply {
+            text = "${LocaleHelper.getString("settings_notice_opacity")}: ${SettingsManager.getNoticeOpacity()}"
+            textSize = 15f
+            setPadding(0, (16 * dp).toInt(), 0, itemPad)
+        }
+        val sbOpacity = SeekBar(this).apply {
+            max = SettingsManager.MAX_NOTICE_OPACITY - SettingsManager.MIN_NOTICE_OPACITY
+            progress = SettingsManager.getNoticeOpacity() - SettingsManager.MIN_NOTICE_OPACITY
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
+                    tvOpacityLabel.text = "${LocaleHelper.getString("settings_notice_opacity")}: ${progress + SettingsManager.MIN_NOTICE_OPACITY}"
+                }
+                override fun onStartTrackingTouch(sb: SeekBar?) {}
+                override fun onStopTrackingTouch(sb: SeekBar?) {}
+            })
+        }
+        layout.addView(tvOpacityLabel)
+        layout.addView(sbOpacity)
+
+        // ── 3. Thời gian hiển thị thông báo ──
+        val tvDurationLabel = TextView(this).apply {
+            text = "${LocaleHelper.getString("settings_notice_duration")}: ${SettingsManager.getNoticeDuration()}"
+            textSize = 15f
+            setPadding(0, (16 * dp).toInt(), 0, itemPad)
+        }
+        val sbDuration = SeekBar(this).apply {
+            max = SettingsManager.MAX_NOTICE_DURATION - SettingsManager.MIN_NOTICE_DURATION
+            progress = SettingsManager.getNoticeDuration() - SettingsManager.MIN_NOTICE_DURATION
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
+                    tvDurationLabel.text = "${LocaleHelper.getString("settings_notice_duration")}: ${progress + SettingsManager.MIN_NOTICE_DURATION}"
+                }
+                override fun onStartTrackingTouch(sb: SeekBar?) {}
+                override fun onStopTrackingTouch(sb: SeekBar?) {}
+            })
+        }
+        layout.addView(tvDurationLabel)
+        layout.addView(sbDuration)
+
+        AlertDialog.Builder(this)
+            .setTitle(LocaleHelper.getString("settings_title"))
+            .setView(layout)
+            .setPositiveButton(LocaleHelper.getString("settings_save")) { _, _ ->
+                SettingsManager.setFileNameSize(sbSize.progress + SettingsManager.MIN_FILE_NAME_SIZE)
+                SettingsManager.setNoticeOpacity(sbOpacity.progress + SettingsManager.MIN_NOTICE_OPACITY)
+                SettingsManager.setNoticeDuration(sbDuration.progress + SettingsManager.MIN_NOTICE_DURATION)
+                // Cập nhật lại adapter để áp dụng cỡ chữ mới
+                readingListAdapter.notifyDataSetChanged()
+                fileAdapter.notifyDataSetChanged()
+            }
+            .setNegativeButton(LocaleHelper.getString("settings_cancel"), null)
+            .show()
     }
 
     private fun updateBadge() {

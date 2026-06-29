@@ -40,7 +40,17 @@
             android:gravity="center"
             android:text="🇯🇵"
             android:textSize="28sp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <TextView
+            android:id="@+id/btnSettings"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="⚙"
+            android:textSize="24sp"
+            android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
         <Button

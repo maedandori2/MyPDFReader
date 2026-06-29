@@ -375,19 +375,23 @@ class PdfViewerActivity : AppCompatActivity() {
     }
 
     /**
-     * Hiển thị thông báo "Đang đọc file số X" ở trên cùng, opacity 50%, tự ẩn sau 5 giây.
+     * Hiển thị thông báo "Đang đọc file số X" ở trên cùng, tự ẩn với fade out.
+     * Opacity và thời gian hiển thị lấy từ SettingsManager.
      */
     private fun showReadingNotice(fileNumber: Int) {
         val template = LocaleHelper.getString("reading_file_number")
         val message = String.format(template, fileNumber)
 
+        val opacity = SettingsManager.getNoticeOpacityFloat()
+        val durationMs = SettingsManager.getNoticeDurationMs()
+
         binding.tvReadingNotice.text = message
-        binding.tvReadingNotice.alpha = 0.5f
+        binding.tvReadingNotice.alpha = opacity
         binding.tvReadingNotice.visibility = View.VISIBLE
 
-        // Tự ẩn sau 5 giây với animation fade out
+        // Tự ẩn sau thời gian cài đặt với animation fade out
         noticeHandler.postDelayed({
-            ObjectAnimator.ofFloat(binding.tvReadingNotice, "alpha", 0.5f, 0f).apply {
+            ObjectAnimator.ofFloat(binding.tvReadingNotice, "alpha", opacity, 0f).apply {
                 duration = 500
                 addListener(object : android.animation.AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: android.animation.Animator) {
@@ -396,6 +400,7 @@ class PdfViewerActivity : AppCompatActivity() {
                 })
                 start()
             }
-        }, 5000)
+        }, durationMs)
     }
 }
+

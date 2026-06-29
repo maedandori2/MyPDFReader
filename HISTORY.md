@@ -2,7 +2,33 @@
 
 ---
 
-## [v1.4.3] - 2026-06-30
+## [v1.4.4] - 2026-06-30
+
+### ✨ Tính năng mới: Nút cài đặt hiển thị (⚙ Settings)
+- **Nút ⚙ trên header**: Thêm nút Settings trên thanh header (giữa cờ 🇯🇵 và nút Sync) để mở hộp thoại cài đặt.
+- **Cỡ chữ tên file tùy chọn**: SeekBar cho phép chỉnh cỡ chữ tên file trong Danh sách đọc từ 12sp → 32sp (mặc định 19sp).
+- **Độ trong suốt thông báo**: SeekBar chỉnh opacity thông báo "Đang đọc file số X" từ 10% → 100% (mặc định 50%).
+- **Thời gian hiển thị thông báo**: SeekBar chỉnh thời gian hiển thị thông báo từ 1s → 30s (mặc định 5s).
+- **Lưu cài đặt**: Tất cả cài đặt được lưu vào SharedPreferences, giữ nguyên khi tắt app.
+- **Đa ngôn ngữ**: Hộp thoại hiển thị đúng ngôn ngữ (Việt/Nhật).
+
+### 📁 File mới
+| File | Mô tả |
+|------|-------|
+| `SettingsManager.kt` | Singleton quản lý cài đặt hiển thị (cỡ chữ, opacity, thời gian) qua SharedPreferences |
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `activity_main.xml` | Thêm nút `btnSettings` (⚙) vào header |
+| `MainActivity.kt` | Thêm import `AlertDialog`, `SeekBar`, `LinearLayout`, `TextView`. Init `SettingsManager`, thêm `showSettingsDialog()` với 3 SeekBar |
+| `PdfFileAdapter.kt` | Đổi `textSize = 19f` → `SettingsManager.getFileNameSize().toFloat()` |
+| `PdfViewerActivity.kt` | Đổi `alpha = 0.5f` → `SettingsManager.getNoticeOpacityFloat()`, `5000` → `SettingsManager.getNoticeDurationMs()` |
+| `LocaleHelper.kt` | Thêm 6 chuỗi dịch settings: `settings_title`, `settings_file_name_size`, `settings_notice_opacity`, `settings_notice_duration`, `settings_save`, `settings_cancel` |
+| `HISTORY.md` | Cập nhật changelog lên `v1.4.4` |
+
+---
+
 
 ### ✨ Thông báo đang đọc file số mấy
 - **Overlay thông báo**: Khi mở file từ **Danh sách đọc**, trên màn hình PDF sẽ hiện thông báo "📖 Đang đọc file số X" (tiếng Việt) hoặc "📖 ファイル X を読んでいます" (tiếng Nhật) tùy theo ngôn ngữ đang chọn.

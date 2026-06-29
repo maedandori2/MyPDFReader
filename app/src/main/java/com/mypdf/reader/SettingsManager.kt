@@ -1,0 +1,72 @@
+package com.mypdf.reader
+
+import android.content.Context
+
+object SettingsManager {
+
+    private const val PREF_NAME = "display_settings"
+    private const val KEY_FILE_NAME_SIZE = "file_name_size"
+    private const val KEY_NOTICE_OPACITY = "notice_opacity"
+    private const val KEY_NOTICE_DURATION = "notice_duration"
+
+    // Giá trị mặc định
+    const val DEFAULT_FILE_NAME_SIZE = 19     // sp
+    const val DEFAULT_NOTICE_OPACITY = 50     // % (0-100)
+    const val DEFAULT_NOTICE_DURATION = 5     // giây
+
+    const val MIN_FILE_NAME_SIZE = 12
+    const val MAX_FILE_NAME_SIZE = 32
+    const val MIN_NOTICE_OPACITY = 10
+    const val MAX_NOTICE_OPACITY = 100
+    const val MIN_NOTICE_DURATION = 1
+    const val MAX_NOTICE_DURATION = 30
+
+    private lateinit var appContext: Context
+
+    fun init(context: Context) {
+        appContext = context.applicationContext
+    }
+
+    private fun prefs() = appContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+
+    // ── File name size (sp) ──
+
+    fun getFileNameSize(): Int {
+        return prefs().getInt(KEY_FILE_NAME_SIZE, DEFAULT_FILE_NAME_SIZE)
+    }
+
+    fun setFileNameSize(size: Int) {
+        val clamped = size.coerceIn(MIN_FILE_NAME_SIZE, MAX_FILE_NAME_SIZE)
+        prefs().edit().putInt(KEY_FILE_NAME_SIZE, clamped).apply()
+    }
+
+    // ── Notice opacity (0-100 → 0.0-1.0) ──
+
+    fun getNoticeOpacity(): Int {
+        return prefs().getInt(KEY_NOTICE_OPACITY, DEFAULT_NOTICE_OPACITY)
+    }
+
+    fun getNoticeOpacityFloat(): Float {
+        return getNoticeOpacity() / 100f
+    }
+
+    fun setNoticeOpacity(percent: Int) {
+        val clamped = percent.coerceIn(MIN_NOTICE_OPACITY, MAX_NOTICE_OPACITY)
+        prefs().edit().putInt(KEY_NOTICE_OPACITY, clamped).apply()
+    }
+
+    // ── Notice duration (giây) ──
+
+    fun getNoticeDuration(): Int {
+        return prefs().getInt(KEY_NOTICE_DURATION, DEFAULT_NOTICE_DURATION)
+    }
+
+    fun getNoticeDurationMs(): Long {
+        return getNoticeDuration() * 1000L
+    }
+
+    fun setNoticeDuration(seconds: Int) {
+        val clamped = seconds.coerceIn(MIN_NOTICE_DURATION, MAX_NOTICE_DURATION)
+        prefs().edit().putInt(KEY_NOTICE_DURATION, clamped).apply()
+    }
+}

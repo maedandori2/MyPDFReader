@@ -47,6 +47,13 @@ object LocaleHelper {
             "added_to_list" to "✓ Đã thêm",
             "removed_from_list" to "Đã xóa %s khỏi danh sách",
 
+            // ── Settings ──
+            "settings_title" to "⚙ Cài đặt hiển thị",
+            "settings_file_name_size" to "Cỡ chữ tên file (sp)",
+            "settings_notice_opacity" to "Độ trong suốt thông báo (%)",
+            "settings_notice_duration" to "Thời gian hiển thị (giây)",
+            "settings_save" to "Lưu",
+            "settings_cancel" to "Hủy",
             // ── PdfFileAdapter ──
             "status_read" to "✓ Đã đọc",
             "status_unread" to "Chưa đọc",
@@ -118,6 +125,13 @@ object LocaleHelper {
             "added_to_list" to "✓ 追加しました",
             "removed_from_list" to "%s をリストから削除しました",
 
+            // ── Settings ──
+            "settings_title" to "⚙ 表示設定",
+            "settings_file_name_size" to "ファイル名の文字サイズ (sp)",
+            "settings_notice_opacity" to "通知の透明度 (%)",
+            "settings_notice_duration" to "表示時間 (秒)",
+            "settings_save" to "保存",
+            "settings_cancel" to "キャンセル",
             // ── PdfFileAdapter ──
             "status_read" to "✓ 既読",
             "status_unread" to "未読",
