@@ -2,7 +2,30 @@
 
 ---
 
-## [v1.4.4] - 2026-06-30
+## [v1.4.5] - 2026-06-30
+
+### 🎨 Cải thiện giao diện Header
+- **Nút Settings đẹp hơn**: Đổi từ emoji ⚙ đơn giản thành nút "⚙ Setting" có background xanh đậm bo tròn, chữ trắng đậm, hiệu ứng ripple khi nhấn.
+- **Cờ ngôn ngữ to hơn**: Tăng kích thước emoji cờ 🇻🇳🇯🇵 từ 28sp → 36sp, dễ bấm hơn trên tablet.
+
+### ✨ Thông báo đọc file khi vuốt chuyển file
+- **Hiện thông báo khi vuốt**: Khi đọc file từ Danh sách đọc và vuốt sang file tiếp theo/trước đó, thông báo "📖 Đang đọc file số X" sẽ tự động hiện lên cho file mới.
+- **Hủy timer cũ khi vuốt nhanh**: Khi vuốt liên tục, timer và animation cũ được hủy trước khi hiển thị thông báo mới, tránh bị overlap.
+
+### 📁 File mới
+| File | Mô tả |
+|------|-------|
+| `bg_settings_btn.xml` | Drawable background cho nút Settings: hình chữ nhật bo tròn 8dp, màu `#0D47A1`, có ripple effect |
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `activity_main.xml` | Tăng `textSize` cờ 28sp→36sp, đổi btnSettings thành nút có text+background đẹp |
+| `PdfViewerActivity.kt` | Thêm field `isFromReadingList`, gọi `showReadingNotice()` trong `switchFile()`, thêm `removeCallbacksAndMessages` + `animate().cancel()` để reset khi vuốt nhanh |
+| `HISTORY.md` | Cập nhật changelog lên `v1.4.5` |
+
+---
+
 
 ### ✨ Tính năng mới: Nút cài đặt hiển thị (⚙ Settings)
 - **Nút ⚙ trên header**: Thêm nút Settings trên thanh header (giữa cờ 🇯🇵 và nút Sync) để mở hộp thoại cài đặt.

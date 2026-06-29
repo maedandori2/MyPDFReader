@@ -29,8 +29,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="🇻🇳"
-            android:textSize="28sp"
-            android:layout_marginEnd="16dp"
+            android:textSize="36sp"
+            android:layout_marginEnd="12dp"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
         <TextView
@@ -39,19 +39,22 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="🇯🇵"
-            android:textSize="28sp"
+            android:textSize="36sp"
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
         <TextView
             android:id="@+id/btnSettings"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
             android:gravity="center"
-            android:text="⚙"
-            android:textSize="24sp"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:text="⚙ Setting"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:paddingHorizontal="14dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_settings_btn" />
 
         <Button
             android:id="@+id/btnSync"

@@ -44,6 +44,7 @@ class PdfViewerActivity : AppCompatActivity() {
     private var filePath = ""
     private var fileList = listOf<String>()
     private var fileIndex = 0
+    private var isFromReadingList = false
 
     // Gesture
     private lateinit var gestureDetector: GestureDetector
@@ -101,6 +102,7 @@ class PdfViewerActivity : AppCompatActivity() {
         // Hiển thị thông báo đang đọc file số mấy (chỉ khi mở từ reading list)
         val readingListIndex = intent.getIntExtra("reading_list_index", -1)
         if (readingListIndex > 0) {
+            isFromReadingList = true
             showReadingNotice(readingListIndex)
         }
     }
@@ -263,6 +265,11 @@ class PdfViewerActivity : AppCompatActivity() {
             ReadingListManager.markAsRead(newPath)
             openPdf(newPath)
             showUI()
+
+            // Hiển thị thông báo đang đọc file số mấy khi chuyển file trong reading list
+            if (isFromReadingList) {
+                showReadingNotice(fileIndex + 1)
+            }
         } catch (e: Exception) {
             Toast.makeText(this, "${LocaleHelper.getString("error_prefix")}: ${e.message}", Toast.LENGTH_SHORT).show()
         } finally {
@@ -379,6 +386,10 @@ class PdfViewerActivity : AppCompatActivity() {
      * Opacity và thời gian hiển thị lấy từ SettingsManager.
      */
     private fun showReadingNotice(fileNumber: Int) {
+        // Hủy timer/animation cũ nếu đang chạy (khi vuốt nhanh liên tục)
+        noticeHandler.removeCallbacksAndMessages(null)
+        binding.tvReadingNotice.animate().cancel()
+
         val template = LocaleHelper.getString("reading_file_number")
         val message = String.format(template, fileNumber)
 
