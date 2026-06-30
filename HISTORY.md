@@ -1,5 +1,12 @@
 # 📋 Lịch sử thay đổi — MyPDFReader
 
+## [v1.4.6] - 2026-07-01
+
+### 🔄 Tách biệt gesture vuốt dọc/ngang
+- **Vuốt lên/xuống**: Chỉ chuyển trang trong file PDF đang mở. Hiện toast khi đã ở trang đầu/cuối.
+- **Vuốt trái/phải**: Chỉ chuyển qua lại giữa các file khác nhau (không còn chuyển trang).
+- Trước đây cả hai hướng vuốt đều có thể chuyển trang + file, gây nhầm lẫn.
+
 ---
 
 ## [v1.4.5] - 2026-06-30

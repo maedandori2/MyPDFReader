@@ -151,35 +151,27 @@ class PdfViewerActivity : AppCompatActivity() {
                 val absDx = abs(dx)
                 val absDy = abs(dy)
 
-                // Vuốt trái/phải: chuyển trang, trang cuối/đầu thì chuyển file
+                // Vuốt trái/phải: chỉ chuyển file
                 if (absDx > absDy && absDx > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
                     if (dx < 0) {
-                        // Vuốt trái → trang tiếp theo, nếu trang cuối → file tiếp theo
-                        if (currentPageIndex < totalPages - 1) {
-                            renderPage(currentPageIndex + 1)
-                        } else {
-                            switchFile(1)
-                        }
+                        // Vuốt trái → file tiếp theo
+                        switchFile(1)
                     } else {
-                        // Vuốt phải → trang trước, nếu trang đầu → file trước
-                        if (currentPageIndex > 0) {
-                            renderPage(currentPageIndex - 1)
-                        } else {
-                            switchFile(-1)
-                        }
+                        // Vuốt phải → file trước
+                        switchFile(-1)
                     }
                     return true
                 }
 
-                // Vuốt lên/xuống: cũng chuyển trang (backup gesture)
+                // Vuốt lên/xuống: chỉ chuyển trang trong file hiện tại
                 if (absDy > absDx && absDy > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
                     if (dy < 0) {
+                        // Vuốt lên → trang tiếp theo
                         if (currentPageIndex < totalPages - 1) renderPage(currentPageIndex + 1)
-                        else if (fileList.size > 1) switchFile(1)
                         else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("last_page"), Toast.LENGTH_SHORT).show()
                     } else {
+                        // Vuốt xuống → trang trước
                         if (currentPageIndex > 0) renderPage(currentPageIndex - 1)
-                        else if (fileList.size > 1) switchFile(-1)
                         else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("first_page"), Toast.LENGTH_SHORT).show()
                     }
                     return true
