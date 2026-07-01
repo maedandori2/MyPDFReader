@@ -21,7 +21,7 @@ class SyncWorker(
             val result = SyncManager.syncFiles(
                 driveFolderName = folder,
                 localFolder = MainActivity.PDF_FOLDER
-            ) { /* background, không cần update UI */ }
+            )
 
             // Sau khi sync xong → gửi broadcast để MainActivity refresh danh sách
             if (result is SyncManager.SyncResult.Success && result.count > 0) {
