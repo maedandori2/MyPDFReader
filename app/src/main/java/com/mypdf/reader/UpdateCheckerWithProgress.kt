@@ -151,7 +151,7 @@ object UpdateCheckerWithProgress {
                 }
             }
         }
-        progressThread.daemon = true
+        progressThread.isDaemon = true
         progressThread.start()
     }
 
