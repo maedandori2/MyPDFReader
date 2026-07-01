@@ -16,6 +16,8 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocaleHelper.init(this)
+        SettingsManager.init(this)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

@@ -11,6 +11,7 @@
 - **`PdfViewerActivity` — Matrix không reset**: Khi chuyển trang, `matrix` không được `reset()` trước khi `fitToScreen()` → ảnh có thể render sai vị trí. Đã thêm `matrix.reset()`.
 - **`UpdateChecker` — BroadcastReceiver leak**: Receiver chỉ unregister khi download thành công; nếu download bị hủy hoặc thất bại → leak vĩnh viễn. Đã thêm `Handler.postDelayed` tự unregister sau 5 phút.
 - **`PdfTextExtractor` — TextRecognizer không close**: Mỗi lần OCR tạo instance mới mà không đóng → resource leak. Đã chuyển sang `lazy` singleton.
+- **`SettingsActivity` — Crash khi mở Setting**: `SettingsManager.init(context)` chưa từng được gọi ở bất cứ đâu trong codebase → truy cập `SharedPreferences` gây ngoại lệ `UninitializedPropertyAccessException`. Đã thêm `SettingsManager.init(this)` vào `MainActivity` và `SettingsActivity`.
 
 #### 🟡 Hiệu năng đã cải thiện
 - **`MainActivity.loadPdfFiles()`**: Chuyển scan file system từ **Main Thread đồng bộ** sang `Dispatchers.IO` trong coroutine → không còn block UI khi `onResume()`.

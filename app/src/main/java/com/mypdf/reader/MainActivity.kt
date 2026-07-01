@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         LocaleHelper.init(this)
         ReadingListManager.init(this)
+        SettingsManager.init(this)
         readingList.addAll(ReadingListManager.getList())
 
         setupRecyclerViews()
