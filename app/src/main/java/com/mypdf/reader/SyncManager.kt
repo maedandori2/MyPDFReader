@@ -32,39 +32,39 @@ object SyncManager {
     }
 
     // =========================================================================
-    // 1. KHỞI TẠO
+    // 1. KHá»I Táº O
     // =========================================================================
     fun init(context: Context) {
         appContext = context.applicationContext
     }
 
     // =========================================================================
-    // 2. SERVICE ACCOUNT - LẤY ACCESS TOKEN
-    // Đọc file service_account.json từ assets, dùng JWT để lấy token
+    // 2. SERVICE ACCOUNT - Láº¤Y ACCESS TOKEN
+    // Äá»c file service_account.json tá»« assets, dÃ¹ng JWT Äá» láº¥y token
     // =========================================================================
     private suspend fun getAccessToken(): String? = withContext(Dispatchers.IO) {
-        // Dùng lại token nếu còn hạn (còn hơn 5 phút)
+        // DÃ¹ng láº¡i token náº¿u cÃ²n háº¡n (cÃ²n hÆ¡n 5 phÃºt)
         if (accessToken != null && System.currentTimeMillis() < tokenExpiry - 300_000) {
             return@withContext accessToken
         }
 
         try {
-            // Đọc service_account.json từ assets
+            // Äá»c service_account.json tá»« assets
             val jsonStr = appContext.assets.open("service_account.json")
                 .bufferedReader().readText()
             val json = JSONObject(jsonStr)
 
             val clientEmail = json.getString("client_email")
-            // Dùng optString để lấy raw string, sau đó ServiceAccountJwt tự xử lý \n
+            // DÃ¹ng optString Äá» láº¥y raw string, sau ÄÃ³ ServiceAccountJwt tá»± xá»­ lÃ½ \n
             val privateKey = json.getString("private_key")
 
             Log.d(TAG, "client_email: $clientEmail")
             Log.d(TAG, "private_key length: ${privateKey.length}")
 
-            // Tạo JWT
+            // Táº¡o JWT
             val jwt = ServiceAccountJwt.create(clientEmail, privateKey)
 
-            // Đổi JWT lấy Access Token
+            // Äá»i JWT láº¥y Access Token
             val url = URL("https://oauth2.googleapis.com/token")
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -78,7 +78,7 @@ object SyncManager {
             if (responseCode != 200) {
                 val err = conn.errorStream?.bufferedReader()?.readText()
                 Log.e(TAG, "Token error $responseCode: $err")
-                // Lưu lỗi vào prefs để hiện lên UI
+                // LÆ°u lá»i vÃ o prefs Äá» hiá»n lÃªn UI
                 prefs().edit().putString("last_token_error", "HTTP $responseCode: $err").apply()
                 return@withContext null
             }
@@ -96,7 +96,7 @@ object SyncManager {
     }
 
     // =========================================================================
-    // 3. LIỆT KÊ THƯ MỤC TRÊN DRIVE
+    // 3. LIá»T KÃ THÆ¯ Má»¤C TRÃN DRIVE
     // =========================================================================
     suspend fun listAllFolders(): Result<List<String>> = withContext(Dispatchers.IO) {
         try {
@@ -123,7 +123,7 @@ object SyncManager {
     }
 
     // =========================================================================
-    // 4. ĐỒNG BỘ FILE PDF TỪ DRIVE VỀ MÁY
+    // 4. Äá»NG Bá» FILE PDF Tá»ª DRIVE Vá» MÃY
     // =========================================================================
     suspend fun syncFiles(
         driveFolderName: String,
@@ -133,27 +133,27 @@ object SyncManager {
         try {
             val token = getAccessToken()
                 ?: return@withContext SyncResult.Error(
-                    "Không lấy được token.\n" +
+                    "KhÃ´ng láº¥y ÄÆ°á»£c token.\n" +
                     (prefs().getString("last_token_error", "") ?: "")
                 )
 
-            onProgress("Đang tìm thư mục '$driveFolderName'...")
+            onProgress("Äang tÃ¬m thÆ° má»¥c '$driveFolderName'...")
 
-            // Bước 1: Tìm folder ID theo tên
+            // BÆ°á»c 1: TÃ¬m folder ID theo tÃªn
             val folderId = findFolderId(token, driveFolderName)
-                ?: return@withContext SyncResult.Error("Không tìm thấy thư mục '$driveFolderName' trên Drive")
+                ?: return@withContext SyncResult.Error("KhÃ´ng tÃ¬m tháº¥y thÆ° má»¥c '$driveFolderName' trÃªn Drive")
 
-            onProgress("Đang lấy danh sách file PDF...")
+            onProgress("Äang láº¥y danh sÃ¡ch file PDF...")
 
-            // Bước 2: Lấy danh sách file PDF trong folder
+            // BÆ°á»c 2: Láº¥y danh sÃ¡ch file PDF trong folder
             val files = listPdfFiles(token, folderId)
             if (files.isEmpty()) {
-                return@withContext SyncResult.Error("Không có file PDF nào trong thư mục '$driveFolderName'")
+                return@withContext SyncResult.Error("KhÃ´ng cÃ³ file PDF nÃ o trong thÆ° má»¥c '$driveFolderName'")
             }
 
-            onProgress("Tìm thấy ${files.size} file PDF. Đang tải...")
+            onProgress("TÃ¬m tháº¥y ${files.size} file PDF. Äang táº£i...")
 
-            // Bước 3: Tạo thư mục local nếu chưa có
+            // BÆ°á»c 3: Táº¡o thÆ° má»¥c local náº¿u chÆ°a cÃ³
             if (!localFolder.exists()) localFolder.mkdirs()
 
             var downloaded = 0
@@ -166,38 +166,30 @@ object SyncManager {
 
                 onProgress("(${index + 1}/${files.size}) $fileName")
 
-                // Bỏ qua nếu file đã tồn tại
+                // Bá» qua náº¿u file ÄÃ£ tá»n táº¡i
                 if (localFile.exists()) {
                     skipped++
                     continue
                 }
 
-                // Tải file về
+                // Táº£i file vá»
                 val success = downloadFile(token, fileId, localFile)
                 if (success) downloaded++ else localFile.delete()
             }
 
-            // Bước 4: Đồng bộ metadata JSON
-            onProgress("Đang đồng bộ metadata...")
-            syncMetadata(token, folderId, localFolder)
-
-            // Bước 5: Cập nhật description cho các file PDF trên Drive
-            onProgress("Đang cập nhật description...")
-            updatePdfDescriptions(token, files)
-
-            // Lưu thời gian sync
+            // LÆ°u thá»i gian sync
             saveLastSync()
 
             SyncResult.Success(downloaded)
 
         } catch (e: Exception) {
             Log.e(TAG, "syncFiles failed", e)
-            SyncResult.Error("Lỗi: ${e.message}")
+            SyncResult.Error("Lá»i: ${e.message}")
         }
     }
 
     // =========================================================================
-    // 5. CÁC HÀM HỖ TRỢ DRIVE API
+    // 5. CÃC HÃM Há» TRá»¢ DRIVE API
     // =========================================================================
     private fun findFolderId(token: String, folderName: String): String? {
         return try {
@@ -259,174 +251,17 @@ object SyncManager {
     }
 
     // =========================================================================
-    // 5b. METADATA SYNC (upload/download pdf_metadata.json)
-    // =========================================================================
-
-    /**
-     * Đồng bộ file metadata:
-     * 1. Download metadata từ Drive (nếu có) → merge với local
-     * 2. Upload file merged lên Drive
-     */
-    private fun syncMetadata(token: String, folderId: String, localFolder: File) {
-        try {
-            val metadataFileName = PdfMetadataManager.METADATA_FILE_NAME
-
-            // Tìm file metadata trên Drive
-            val remoteFileId = findFileInFolder(token, folderId, metadataFileName)
-
-            // Download và merge nếu có trên Drive
-            if (remoteFileId != null) {
-                val tempFile = File(localFolder, "${metadataFileName}.tmp")
-                val downloaded = downloadFile(token, remoteFileId, tempFile)
-                if (downloaded && tempFile.exists()) {
-                    val remoteJson = tempFile.readText()
-                    PdfMetadataManager.mergeFromRemote(remoteJson)
-                    tempFile.delete()
-                    Log.d(TAG, "Merged remote metadata")
-                }
-            }
-
-            // Upload file metadata local lên Drive
-            val localMetaFile = PdfMetadataManager.getMetadataFile()
-            if (localMetaFile.exists()) {
-                if (remoteFileId != null) {
-                    // Update file đã tồn tại
-                    updateFileContent(token, remoteFileId, localMetaFile)
-                } else {
-                    // Tạo file mới trong folder
-                    uploadNewFile(token, folderId, localMetaFile, metadataFileName)
-                }
-                Log.d(TAG, "Uploaded metadata to Drive")
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "syncMetadata failed", e)
-        }
-    }
-
-    /**
-     * Tìm file theo tên trong folder
-     */
-    private fun findFileInFolder(token: String, folderId: String, fileName: String): String? {
-        return try {
-            val query = "'$folderId' in parents and name='$fileName' and trashed=false"
-            val encoded = java.net.URLEncoder.encode(query, "UTF-8")
-            val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id)&pageSize=1")
-
-            val conn = url.openConnection() as HttpURLConnection
-            conn.setRequestProperty("Authorization", "Bearer $token")
-
-            val resp = JSONObject(conn.inputStream.bufferedReader().readText())
-            val files = resp.getJSONArray("files")
-            if (files.length() > 0) files.getJSONObject(0).getString("id") else null
-        } catch (e: Exception) {
-            Log.e(TAG, "findFileInFolder failed: $fileName", e)
-            null
-        }
-    }
-
-    /**
-     * Upload file mới vào folder Drive (multipart upload)
-     */
-    private fun uploadNewFile(token: String, folderId: String, localFile: File, fileName: String) {
-        try {
-            val boundary = "===boundary==="
-            val metadata = JSONObject().apply {
-                put("name", fileName)
-                put("parents", org.json.JSONArray().put(folderId))
-            }
-
-            val url = URL("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart")
-            val conn = url.openConnection() as HttpURLConnection
-            conn.requestMethod = "POST"
-            conn.doOutput = true
-            conn.setRequestProperty("Authorization", "Bearer $token")
-            conn.setRequestProperty("Content-Type", "multipart/related; boundary=$boundary")
-
-            val content = localFile.readBytes()
-            val body = buildString {
-                append("--$boundary\r\n")
-                append("Content-Type: application/json; charset=UTF-8\r\n\r\n")
-                append(metadata.toString())
-                append("\r\n--$boundary\r\n")
-                append("Content-Type: application/json\r\n\r\n")
-            }.toByteArray() + content + "\r\n--$boundary--".toByteArray()
-
-            conn.outputStream.write(body)
-            val responseCode = conn.responseCode
-            Log.d(TAG, "uploadNewFile response: $responseCode")
-        } catch (e: Exception) {
-            Log.e(TAG, "uploadNewFile failed", e)
-        }
-    }
-
-    /**
-     * Update nội dung file đã tồn tại trên Drive
-     */
-    private fun updateFileContent(token: String, fileId: String, localFile: File) {
-        try {
-            val url = URL("https://www.googleapis.com/upload/drive/v3/files/$fileId?uploadType=media")
-            val conn = url.openConnection() as HttpURLConnection
-            conn.requestMethod = "PATCH"
-            conn.doOutput = true
-            conn.setRequestProperty("Authorization", "Bearer $token")
-            conn.setRequestProperty("Content-Type", "application/json")
-
-            conn.outputStream.write(localFile.readBytes())
-            val responseCode = conn.responseCode
-            Log.d(TAG, "updateFileContent response: $responseCode")
-        } catch (e: Exception) {
-            Log.e(TAG, "updateFileContent failed", e)
-        }
-    }
-
-    /**
-     * Cập nhật description cho các file PDF trên Drive
-     * với thông tin metadata (品名, 自社品番, 自社品名)
-     */
-    private fun updatePdfDescriptions(token: String, files: List<Pair<String, String>>) {
-        for ((fileId, fileName) in files) {
-            val description = PdfMetadataManager.formatForDescription(fileName)
-            if (description != null) {
-                updateFileDescription(token, fileId, description)
-            }
-        }
-    }
-
-    /**
-     * Cập nhật description cho 1 file trên Drive
-     */
-    private fun updateFileDescription(token: String, fileId: String, description: String) {
-        try {
-            val url = URL("https://www.googleapis.com/drive/v3/files/$fileId")
-            val conn = url.openConnection() as HttpURLConnection
-            conn.requestMethod = "PATCH"
-            conn.doOutput = true
-            conn.setRequestProperty("Authorization", "Bearer $token")
-            conn.setRequestProperty("Content-Type", "application/json")
-
-            val body = JSONObject().apply {
-                put("description", description)
-            }
-            conn.outputStream.write(body.toString().toByteArray())
-            val responseCode = conn.responseCode
-            Log.d(TAG, "updateFileDescription $fileId: $responseCode")
-        } catch (e: Exception) {
-            Log.e(TAG, "updateFileDescription failed: $fileId", e)
-        }
-    }
-
-    // =========================================================================
-    // 6. CÁC HÀM TRẠNG THÁI (tương thích với code cũ)
-    //    Service Account: luôn "đã đăng nhập"
+    // 6. CÃC HÃM TRáº NG THÃI (tÆ°Æ¡ng thÃ­ch vá»i code cÅ©)
+    //    Service Account: luÃ´n "ÄÃ£ ÄÄng nháº­p"
     // =========================================================================
     fun isLoggedIn(): Boolean = true
 
     fun logout() {
-        // Không cần làm gì với Service Account
-        // Giữ lại để tương thích với code cũ
+        // KhÃ´ng cáº§n lÃ m gÃ¬ vá»i Service Account
+        // Giá»¯ láº¡i Äá» tÆ°Æ¡ng thÃ­ch vá»i code cÅ©
     }
 
-    // exchangeCodeForToken không còn dùng, giữ để tránh compile error nếu còn tham chiếu
+    // exchangeCodeForToken khÃ´ng cÃ²n dÃ¹ng, giá»¯ Äá» trÃ¡nh compile error náº¿u cÃ²n tham chiáº¿u
     suspend fun exchangeCodeForToken(authCode: String): Boolean = true
 
     // =========================================================================
@@ -441,7 +276,7 @@ object SyncManager {
     }
 
     fun getLastSync(): String {
-        return prefs().getString(KEY_LAST_SYNC, "—") ?: "—"
+        return prefs().getString(KEY_LAST_SYNC, "â") ?: "â"
     }
 
     private fun saveLastSync() {
