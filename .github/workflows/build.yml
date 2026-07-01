@@ -43,14 +43,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build Release APK
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease --stacktrace
-      
-      - name: Update version.json
+      - name: Update version.json BEFORE build
         run: |
           cat > version.json << EOF
           {
@@ -60,11 +53,21 @@ jobs:
             "releaseNote": "Build tự động #${{ github.run_number }}"
           }
           EOF
+
+      - name: Build Release APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --stacktrace
+      
+      - name: Commit version.json
+        run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git add version.json
-          git commit -m "Update version.json [skip ci]"
-          git push
+          git commit -m "Update version.json [skip ci]" || echo "No changes to commit"
+          git push || echo "Nothing to push"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
