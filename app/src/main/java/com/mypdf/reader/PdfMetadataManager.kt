@@ -27,8 +27,10 @@ object PdfMetadataManager {
     private lateinit var metadataFile: File
     private val metadataMap = mutableMapOf<String, Map<String, String>>()
 
-    // Các key metadata cần tìm
-    val METADATA_KEYS = listOf("品名", "自社品番", "自社品名")
+    // Các key metadata cần tìm — key DÀI trước để tránh nhầm lẫn chuỗi con
+    // (VD: tìm "自社品名" trước "品名", vì "品名" là chuỗi con của "自社品名")
+    // Có file ghi 品名/品番, có file ghi 自社品名/自社品番
+    val METADATA_KEYS = listOf("自社品番", "自社品名", "品番", "品名")
 
     fun init(context: Context) {
         appContext = context.applicationContext

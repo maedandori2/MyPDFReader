@@ -231,31 +231,45 @@ object PdfTextExtractor {
      * Xử lý trường hợp "自社品番"/"自社品名" có thể bị tách.
      */
     private fun findKeyElement(key: String, elements: List<OcrElement>): OcrElement? {
-        // Ưu tiên 1: Element có text chính xác bằng key
-        elements.find { it.text == key }?.let { return it }
+        // Danh sách key dài hơn chứa key hiện tại (để loại trừ)
+        // VD: key="品名" → longerKeys=["自社品名"]  key="品番" → longerKeys=["自社品番"]
+        val longerKeys = PdfMetadataManager.METADATA_KEYS.filter { it != key && it.contains(key) }
 
-        // Ưu tiên 2: Element có text chứa key (nhưng không phải chỉ là giá trị)
-        elements.find { it.text.contains(key) && it.text.length <= key.length + 5 }?.let { return it }
+        // Ưu tiên 1: Element có text chính xác bằng key (Lấy cái trên cùng)
+        val exactMatches = elements.filter { it.text == key }
+        if (exactMatches.isNotEmpty()) {
+            return exactMatches.minByOrNull { it.box.top }
+        }
+
+        // Ưu tiên 2: Element có text chứa key, NHƯNG không chứa key dài hơn (Lấy cái trên cùng)
+        // VD: tìm "品名" → match "品名" nhưng KHÔNG match "自社品名"
+        val partialMatches = elements.filter { elem ->
+            elem.text.contains(key) &&
+            elem.text.length <= key.length + 5 &&
+            longerKeys.none { longer -> elem.text.contains(longer) }
+        }
+        if (partialMatches.isNotEmpty()) {
+            return partialMatches.minByOrNull { it.box.top }
+        }
 
         // Ưu tiên 3: Cho key dài (自社品番, 自社品名), tìm element chứa phần đầu "自社"
         // rồi kiểm tra element kế bên có chứa phần còn lại không
         if (key.length >= 4) {
-            val prefix = key.substring(0, 2) // "自社" hoặc "品名" etc.
-            val suffix = key.substring(2)    // "品番" hoặc "品名" etc.
+            val prefix = key.substring(0, 2) // "自社"
+            val suffix = key.substring(2)    // "品番" hoặc "品名"
 
-            for ((index, elem) in elements.withIndex()) {
-                if (elem.text.contains(prefix)) {
-                    // Tìm element kế tiếp (gần bên phải)
-                    val nearby = elements.filter { other ->
-                        other !== elem &&
-                        other.box.left >= elem.box.left &&
-                        abs((other.box.top + other.box.bottom) / 2 - (elem.box.top + elem.box.bottom) / 2) < (elem.box.bottom - elem.box.top) &&
-                        other.text.contains(suffix)
-                    }
-                    if (nearby.isNotEmpty()) {
-                        // Trả về element cuối cùng (phần suffix) vì giá trị nằm sau suffix
-                        return nearby.minByOrNull { it.box.left }
-                    }
+            val prefixMatches = elements.filter { it.text.contains(prefix) }
+            // Sắp xếp các chữ "自社" từ trên xuống dưới
+            for (elem in prefixMatches.sortedBy { it.box.top }) {
+                // Tìm element kế tiếp (gần bên phải)
+                val nearby = elements.filter { other ->
+                    other !== elem &&
+                    other.box.left >= elem.box.left &&
+                    abs((other.box.top + other.box.bottom) / 2 - (elem.box.top + elem.box.bottom) / 2) < (elem.box.bottom - elem.box.top) &&
+                    other.text.contains(suffix)
+                }
+                if (nearby.isNotEmpty()) {
+                    return nearby.minByOrNull { it.box.left }
                 }
             }
         }
@@ -269,7 +283,7 @@ object PdfTextExtractor {
     private fun isMetadataKey(text: String): Boolean {
         return PdfMetadataManager.METADATA_KEYS.any { key ->
             text == key || text.contains(key)
-        } || text in listOf("カラー", "入数", "作成者", "作成日", "改訂日", "品番")
+        } || text in listOf("カラー", "入数", "作成者", "作成日", "改訂日")
     }
 
     /**
