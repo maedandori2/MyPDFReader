@@ -14,10 +14,14 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.mypdf.reader.databinding.ActivityPdfViewerBinding
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.min
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PdfViewerActivity : AppCompatActivity() {
 
@@ -312,20 +316,27 @@ class PdfViewerActivity : AppCompatActivity() {
             val scaleH = dm.heightPixels.toFloat() / page.height
             val scale = min(scaleW, scaleH) * dm.density
 
-            val bmp = Bitmap.createBitmap(
-                (page.width * scale).toInt(),
-                (page.height * scale).toInt(),
-                Bitmap.Config.ARGB_8888
-            )
-            bmp.eraseColor(android.graphics.Color.WHITE)
-            page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+            val bmpWidth = (page.width * scale).toInt()
+            val bmpHeight = (page.height * scale).toInt()
 
-            currentBitmap = bmp
-            isZoomed = false
-            binding.ivPage.scaleType = android.widget.ImageView.ScaleType.MATRIX
-            binding.ivPage.setImageBitmap(bmp)
-            binding.ivPage.post { fitToScreen(bmp) }
-            updatePageInfo()
+            lifecycleScope.launch {
+                val bmp = withContext(Dispatchers.IO) {
+                    val b = Bitmap.createBitmap(bmpWidth, bmpHeight, Bitmap.Config.ARGB_8888)
+                    b.eraseColor(android.graphics.Color.WHITE)
+                    page.render(b, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                    b
+                }
+                // Recycle bitmap cũ để tránh OOM
+                val oldBitmap = currentBitmap
+                currentBitmap = bmp
+                isZoomed = false
+                matrix.reset()
+                binding.ivPage.scaleType = android.widget.ImageView.ScaleType.MATRIX
+                binding.ivPage.setImageBitmap(bmp)
+                binding.ivPage.post { fitToScreen(bmp) }
+                updatePageInfo()
+                oldBitmap?.recycle()
+            }
         } catch (e: Exception) {
             Toast.makeText(this, "Error rendering page: ${e.message}", Toast.LENGTH_SHORT).show()
         }

@@ -23,7 +23,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mypdf.reader.databinding.ActivityMainBinding
 import java.io.File
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -98,26 +100,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SyncActivity::class.java))
         }
 
-        checkPermissionsAndLoad()
-
-        // Kiá»m tra cáº­p nháº­t sau 2 giÃ¢y Äá» khÃ´ng lÃ m cháº­m khá»i Äá»ng app
-        binding.root.postDelayed({ checkForUpdate() }, 2000)
-    }
-
-    // =========================================================================
-    // KIá»M TRA Cáº¬P NHáº¬T
-    // =========================================================================
-    private fun checkForUpdate() {
-        lifecycleScope.launch {
-            val info = UpdateChecker.checkForUpdate(this@MainActivity)
-            if (info != null) {
-                UpdateChecker.showUpdateDialog(this@MainActivity, info)
-            }
+        binding.btnSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
+
+        checkPermissionsAndLoad()
     }
 
     // =========================================================================
-    // ÄÄNG KÃ / Há»¦Y BROADCAST RECEIVER THEO VÃNG Äá»I ACTIVITY
+    // Ä Ä‚NG KÃ  / Há»¦Y BROADCAST RECEIVER THEO VÃ’NG Ä á»œI ACTIVITY
     // =========================================================================
     override fun onStart() {
         super.onStart()
@@ -289,30 +280,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadPdfFiles() {
-        val folder = File(PDF_FOLDER)
-        if (!folder.exists()) {
-            folder.mkdirs()
-            Toast.makeText(this, "${LocaleHelper.getString("created_folder")} $PDF_FOLDER", Toast.LENGTH_LONG).show()
-        }
-        
-        allFiles.clear()
-        folder.listFiles { file -> file.extension.lowercase() == "pdf" }
-            ?.sortedWith(compareBy<File> {
-                it.nameWithoutExtension.toIntOrNull() ?: Int.MAX_VALUE
-            }.thenBy { it.name })
-            ?.forEach { allFiles.add(PdfFile(name = it.nameWithoutExtension, path = it.absolutePath)) }
+        lifecycleScope.launch {
+            val folder = File(PDF_FOLDER)
+            if (!folder.exists()) {
+                withContext(Dispatchers.IO) { folder.mkdirs() }
+                Toast.makeText(this@MainActivity, "${LocaleHelper.getString("created_folder")} $PDF_FOLDER", Toast.LENGTH_LONG).show()
+            }
 
-        filteredFiles.clear()
-        filteredFiles.addAll(allFiles)
-        
-        binding.tvFileCount.text = "${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
-        fileAdapter.notifyDataSetChanged()
-        
-        if (allFiles.isEmpty()) {
-            binding.tvEmpty.visibility = View.VISIBLE
-            binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} $PDF_FOLDER"
-        } else {
-            binding.tvEmpty.visibility = View.GONE
+            // Scan file trên IO thread để không block UI
+            val files = withContext(Dispatchers.IO) {
+                folder.listFiles { file -> file.extension.lowercase() == "pdf" }
+                    ?.sortedWith(compareBy<File> {
+                        it.nameWithoutExtension.toIntOrNull() ?: Int.MAX_VALUE
+                    }.thenBy { it.name })
+                    ?.map { PdfFile(name = it.nameWithoutExtension, path = it.absolutePath) }
+                    ?: emptyList()
+            }
+
+            allFiles.clear()
+            allFiles.addAll(files)
+            filteredFiles.clear()
+            filteredFiles.addAll(allFiles)
+
+            binding.tvFileCount.text = "${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
+            fileAdapter.notifyDataSetChanged()
+
+            if (allFiles.isEmpty()) {
+                binding.tvEmpty.visibility = View.VISIBLE
+                binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} $PDF_FOLDER"
+            } else {
+                binding.tvEmpty.visibility = View.GONE
+            }
         }
     }
 

@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import kotlinx.coroutines.Dispatchers
@@ -111,7 +113,7 @@ object UpdateChecker {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                 if (id == downloadId) {
-                    context.unregisterReceiver(this)
+                    try { context.unregisterReceiver(this) } catch (_: Exception) {}
                     installApk(context, fileName)
                 }
             }
@@ -120,6 +122,10 @@ object UpdateChecker {
             receiver,
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         )
+        // Tự unregister sau 5 phút phòng download thất bại / bị hủy
+        Handler(Looper.getMainLooper()).postDelayed({
+            try { context.unregisterReceiver(receiver) } catch (_: Exception) {}
+        }, 5 * 60 * 1000L)
     }
 
     private fun installApk(context: Context, fileName: String) {

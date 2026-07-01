@@ -32,6 +32,11 @@ object PdfTextExtractor {
     // Ngưỡng để coi 2 element cùng dòng (sai lệch Y cho phép, tính bằng pixel)
     private const val SAME_ROW_THRESHOLD_RATIO = 0.6  // 60% chiều cao element
 
+    // Singleton recognizer — tái sử dụng để tránh resource leak
+    private val recognizer by lazy {
+        TextRecognition.getClient(JapaneseTextRecognizerOptions.Builder().build())
+    }
+
     /**
      * Trích xuất metadata từ trang đầu của file PDF.
      * @return Map<String, String> với các key tìm thấy (品名, 自社品番, 自社品名)
@@ -98,9 +103,7 @@ object PdfTextExtractor {
      * Trả về Text object có chứa bounding box cho từng element
      */
     private suspend fun runOcr(bitmap: Bitmap): Text? = suspendCancellableCoroutine { cont ->
-        val recognizer = TextRecognition.getClient(JapaneseTextRecognizerOptions.Builder().build())
         val image = InputImage.fromBitmap(bitmap, 0)
-
         recognizer.process(image)
             .addOnSuccessListener { result ->
                 cont.resume(result)

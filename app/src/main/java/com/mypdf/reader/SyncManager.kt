@@ -251,6 +251,8 @@ object SyncManager {
             val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id,name)&pageSize=1")
 
             val conn = url.openConnection() as HttpURLConnection
+            conn.connectTimeout = 15_000
+            conn.readTimeout = 30_000
             conn.setRequestProperty("Authorization", "Bearer $token")
 
             val resp = JSONObject(conn.inputStream.bufferedReader().readText())
@@ -272,6 +274,8 @@ object SyncManager {
             val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id,name,modifiedTime,mimeType)&pageSize=1000")
 
             val conn = url.openConnection() as HttpURLConnection
+            conn.connectTimeout = 15_000
+            conn.readTimeout = 60_000
             conn.setRequestProperty("Authorization", "Bearer $token")
 
             val resp = JSONObject(conn.inputStream.bufferedReader().readText())

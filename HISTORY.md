@@ -1,5 +1,38 @@
 # 📋 Lịch sử thay đổi — MyPDFReader
 
+## [v1.5.1] - 2026-07-02
+
+### 🐛 Rà soát & Sửa lỗi toàn dự án
+
+#### 🔴 Lỗi nghiêm trọng đã fix
+- **`SyncActivity` — Sai path sync**: `localFolderFile` bị tạo sai bằng cách ghép `filesDir` + `"/sdcard/MyPDF"` → file tải về nhưng không thấy trên màn hình. Đã sửa thành `File(MainActivity.PDF_FOLDER)` trực tiếp, đồng bộ với `SyncWorker`.
+- **`PdfViewerActivity` — OOM crash**: Bitmap trang cũ không được `recycle()` trước khi render trang mới → leak bộ nhớ tích lũy → `OutOfMemoryError` sau nhiều lần chuyển trang. Đã thêm `oldBitmap?.recycle()`.
+- **`PdfViewerActivity` — UI đóng băng**: `Bitmap.createBitmap()` + `page.render()` chạy trên **Main Thread** → UI đóng băng khi chuyển trang. Đã chuyển sang `Dispatchers.IO` trong `lifecycleScope.launch{}`.
+- **`PdfViewerActivity` — Matrix không reset**: Khi chuyển trang, `matrix` không được `reset()` trước khi `fitToScreen()` → ảnh có thể render sai vị trí. Đã thêm `matrix.reset()`.
+- **`UpdateChecker` — BroadcastReceiver leak**: Receiver chỉ unregister khi download thành công; nếu download bị hủy hoặc thất bại → leak vĩnh viễn. Đã thêm `Handler.postDelayed` tự unregister sau 5 phút.
+- **`PdfTextExtractor` — TextRecognizer không close**: Mỗi lần OCR tạo instance mới mà không đóng → resource leak. Đã chuyển sang `lazy` singleton.
+
+#### 🟡 Hiệu năng đã cải thiện
+- **`MainActivity.loadPdfFiles()`**: Chuyển scan file system từ **Main Thread đồng bộ** sang `Dispatchers.IO` trong coroutine → không còn block UI khi `onResume()`.
+- **`SyncManager`**: Thêm `connectTimeout = 15s` và `readTimeout = 30–60s` cho tất cả HTTP connections (`findFolderId`, `listDriveFiles`) → app không treo vô thời hạn khi mạng kém.
+
+### ✨ Tính năng mới & UI
+- **Cập nhật ứng dụng**: Chuyển logic kiểm tra và tải cập nhật (UpdateChecker) từ popup tự động ở trang chủ vào màn hình **⚙ Setting**.
+  - Có thanh progress (tiến trình tải % real-time).
+  - Tách `SettingsActivity` ra khỏi dialog cũ để có đủ không gian hiển thị, quản lý tốt hơn.
+
+#### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `SyncActivity.kt` | Fix sai path localFolderFile |
+| `PdfViewerActivity.kt` | Render IO thread, recycle bitmap cũ, reset matrix, thêm coroutine imports |
+| `UpdateChecker.kt` | Fix BroadcastReceiver leak, thêm Handler/Looper imports |
+| `PdfTextExtractor.kt` | TextRecognizer lazy singleton |
+| `MainActivity.kt` | loadPdfFiles() chạy trên IO thread |
+| `SyncManager.kt` | Thêm HTTP timeout cho findFolderId và listDriveFiles |
+
+---
+
 ## [v1.5.0] - 2026-07-01
 
 ### 🔍 Trích xuất thông tin PDF (品名, 自社品番, 自社品名)
