@@ -286,9 +286,15 @@ object PdfTextExtractor {
      * Kiểm tra text có phải là key metadata không
      */
     private fun isMetadataKey(text: String): Boolean {
-        return PdfMetadataManager.METADATA_KEYS.any { key ->
-            text == key || text.contains(key)
-        } || text in listOf("カラー", "入数", "作成者", "作成日", "改訂日")
+        // Xóa khoảng trắng để check chính xác hơn
+        val cleanText = text.replace("\\s+".toRegex(), "")
+        
+        if (PdfMetadataManager.METADATA_KEYS.any { key -> cleanText == key || cleanText.contains(key) }) {
+            return true
+        }
+        
+        val skipKeys = listOf("カラー", "入数", "作成者", "作成日", "改訂日", "色")
+        return skipKeys.any { skip -> cleanText == skip || cleanText.startsWith("$skip:") || cleanText.startsWith("$skip：") }
     }
 
     /**
