@@ -14,20 +14,16 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
-import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mypdf.reader.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
 import java.io.File
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private val readingList = mutableListOf<PdfFile>()
 
     // =========================================================================
-    // BROADCAST RECEIVER: Nhận tín hiệu từ SyncActivity/SyncWorker để refresh
+    // BROADCAST RECEIVER: Nháº­n tÃ­n hiá»u tá»« SyncActivity/SyncWorker Äá» refresh
     // =========================================================================
     private val refreshReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -49,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                     loadPdfFiles()
                     Toast.makeText(
                         this@MainActivity,
-                        "Danh sách file đã được cập nhật",
+                        "Danh sÃ¡ch file ÄÃ£ ÄÆ°á»£c cáº­p nháº­t",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -78,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        val PDF_FOLDER = File(Environment.getExternalStorageDirectory(), "MyPDF")
+        const val PDF_FOLDER = "/sdcard/MyPDF"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,8 +86,6 @@ class MainActivity : AppCompatActivity() {
 
         LocaleHelper.init(this)
         ReadingListManager.init(this)
-        SettingsManager.init(this)
-        PdfMetadataManager.init(this)
         readingList.addAll(ReadingListManager.getList())
 
         setupRecyclerViews()
@@ -104,19 +98,26 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SyncActivity::class.java))
         }
 
-        binding.btnSettings.setOnClickListener {
-            showSettingsDialog()
-        }
-
-        binding.btnScanMetadata.setOnClickListener {
-            startMetadataScan()
-        }
-
         checkPermissionsAndLoad()
+
+        // Kiá»m tra cáº­p nháº­t sau 2 giÃ¢y Äá» khÃ´ng lÃ m cháº­m khá»i Äá»ng app
+        binding.root.postDelayed({ checkForUpdate() }, 2000)
     }
 
     // =========================================================================
-    // ĐĂNG KÝ / HỦY BROADCAST RECEIVER THEO VÒNG ĐỜI ACTIVITY
+    // KIá»M TRA Cáº¬P NHáº¬T
+    // =========================================================================
+    private fun checkForUpdate() {
+        lifecycleScope.launch {
+            val info = UpdateChecker.checkForUpdate(this@MainActivity)
+            if (info != null) {
+                UpdateChecker.showUpdateDialog(this@MainActivity, info)
+            }
+        }
+    }
+
+    // =========================================================================
+    // ÄÄNG KÃ / Há»¦Y BROADCAST RECEIVER THEO VÃNG Äá»I ACTIVITY
     // =========================================================================
     override fun onStart() {
         super.onStart()
@@ -138,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         applyLanguage()
     }
 
-    // ─── LANGUAGE ───
+    // âââ LANGUAGE âââ
 
     private fun setupLanguageButtons() {
         binding.btnLangVi.setOnClickListener {
@@ -168,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             binding.tvFileCount.text = "${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
         }
         if (binding.tvEmpty.visibility == View.VISIBLE) {
-            binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} ${PDF_FOLDER.absolutePath}"
+            binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} $PDF_FOLDER"
         }
         fileAdapter.notifyDataSetChanged()
         readingListAdapter.notifyDataSetChanged()
@@ -180,7 +181,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnLangJa.alpha = if (isVi) 0.4f else 1.0f
     }
 
-    // ─── RECYCLER VIEWS ───
+    // âââ RECYCLER VIEWS âââ
 
     private fun setupRecyclerViews() {
         fileAdapter = PdfFileAdapter(
@@ -200,8 +201,7 @@ class MainActivity : AppCompatActivity() {
             onOpenFile = { file -> openPdf(file) },
             onMoveUp = { pos -> moveItem(pos, -1) },
             onMoveDown = { pos -> moveItem(pos, 1) },
-            onRemove = { pos -> removeFromReadingList(pos) },
-            onSwapPosition = { fromPos, toPos -> swapItems(fromPos, toPos) }
+            onRemove = { pos -> removeFromReadingList(pos) }
         )
         binding.rvReadingList.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -289,13 +289,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadPdfFiles() {
-        if (!PDF_FOLDER.exists()) {
-            PDF_FOLDER.mkdirs()
-            Toast.makeText(this, "${LocaleHelper.getString("created_folder")} ${PDF_FOLDER.absolutePath}", Toast.LENGTH_LONG).show()
+        val folder = File(PDF_FOLDER)
+        if (!folder.exists()) {
+            folder.mkdirs()
+            Toast.makeText(this, "${LocaleHelper.getString("created_folder")} $PDF_FOLDER", Toast.LENGTH_LONG).show()
         }
         
         allFiles.clear()
-        PDF_FOLDER.listFiles { file -> file.extension.lowercase() == "pdf" }
+        folder.listFiles { file -> file.extension.lowercase() == "pdf" }
             ?.sortedWith(compareBy<File> {
                 it.nameWithoutExtension.toIntOrNull() ?: Int.MAX_VALUE
             }.thenBy { it.name })
@@ -309,7 +310,7 @@ class MainActivity : AppCompatActivity() {
         
         if (allFiles.isEmpty()) {
             binding.tvEmpty.visibility = View.VISIBLE
-            binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} ${PDF_FOLDER.absolutePath}"
+            binding.tvEmpty.text = "${LocaleHelper.getString("no_pdf")}\n${LocaleHelper.getString("copy_to")} $PDF_FOLDER"
         } else {
             binding.tvEmpty.visibility = View.GONE
         }
@@ -317,8 +318,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openPdf(file: PdfFile) {
         ReadingListManager.markAsRead(file.path)
-        val isFromReadingList = binding.layoutReadingList.visibility == View.VISIBLE
-        val currentListPaths = if (isFromReadingList) {
+        val currentListPaths = if (binding.layoutReadingList.visibility == View.VISIBLE) {
             readingList.map { it.path }
         } else {
             filteredFiles.map { it.path }
@@ -327,17 +327,9 @@ class MainActivity : AppCompatActivity() {
             putExtra("file_path", file.path)
             putExtra("file_name", "${file.name}.pdf")
             putStringArrayListExtra("file_list", ArrayList(currentListPaths))
-            // Truyền số thứ tự trong reading list (1-based)
-            if (isFromReadingList) {
-                val readingIndex = readingList.indexOfFirst { it.path == file.path }
-                if (readingIndex >= 0) {
-                    putExtra("reading_list_index", readingIndex + 1)
-                }
-            }
         }
         startActivity(intent)
     }
-
 
     private fun addToReadingList(file: PdfFile) {
         ReadingListManager.addToList(file)
@@ -365,11 +357,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateReadingListEmptyState() {
         val nextFile = readingList.firstOrNull { !it.isRead }
-        if (nextFile != null) {
-            binding.fabReadNext.visibility = View.VISIBLE
-        } else {
-            binding.fabReadNext.visibility = View.GONE
-        }
+        binding.fabReadNext.visibility = if (nextFile != null) View.VISIBLE else View.GONE
     }
 
     private fun moveItem(position: Int, direction: Int) {
@@ -383,168 +371,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun swapItems(fromPos: Int, toPos: Int) {
-        if (fromPos in readingList.indices && toPos in readingList.indices) {
-            // Hoán đổi trong ReadingListManager (DB)
-            ReadingListManager.moveToPosition(fromPos, toPos)
-            // Cập nhật lại toàn bộ danh sách
-            refreshReadingList()
-        }
-    }
-
-    // ─── SETTINGS DIALOG ───
-
-    private fun showSettingsDialog() {
-        val dp = resources.displayMetrics.density
-        val pad = (20 * dp).toInt()
-        val itemPad = (8 * dp).toInt()
-
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(pad, pad, pad, itemPad)
-        }
-
-        // ── 1. Cỡ chữ tên file ──
-        val tvSizeLabel = TextView(this).apply {
-            text = "${LocaleHelper.getString("settings_file_name_size")}: ${SettingsManager.getFileNameSize()}"
-            textSize = 15f
-            setPadding(0, 0, 0, itemPad)
-        }
-        val sbSize = SeekBar(this).apply {
-            max = SettingsManager.MAX_FILE_NAME_SIZE - SettingsManager.MIN_FILE_NAME_SIZE
-            progress = SettingsManager.getFileNameSize() - SettingsManager.MIN_FILE_NAME_SIZE
-            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
-                    tvSizeLabel.text = "${LocaleHelper.getString("settings_file_name_size")}: ${progress + SettingsManager.MIN_FILE_NAME_SIZE}"
-                }
-                override fun onStartTrackingTouch(sb: SeekBar?) {}
-                override fun onStopTrackingTouch(sb: SeekBar?) {}
-            })
-        }
-        layout.addView(tvSizeLabel)
-        layout.addView(sbSize)
-
-        // ── 2. Độ trong suốt thông báo ──
-        val tvOpacityLabel = TextView(this).apply {
-            text = "${LocaleHelper.getString("settings_notice_opacity")}: ${SettingsManager.getNoticeOpacity()}"
-            textSize = 15f
-            setPadding(0, (16 * dp).toInt(), 0, itemPad)
-        }
-        val sbOpacity = SeekBar(this).apply {
-            max = SettingsManager.MAX_NOTICE_OPACITY - SettingsManager.MIN_NOTICE_OPACITY
-            progress = SettingsManager.getNoticeOpacity() - SettingsManager.MIN_NOTICE_OPACITY
-            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
-                    tvOpacityLabel.text = "${LocaleHelper.getString("settings_notice_opacity")}: ${progress + SettingsManager.MIN_NOTICE_OPACITY}"
-                }
-                override fun onStartTrackingTouch(sb: SeekBar?) {}
-                override fun onStopTrackingTouch(sb: SeekBar?) {}
-            })
-        }
-        layout.addView(tvOpacityLabel)
-        layout.addView(sbOpacity)
-
-        // ── 3. Thời gian hiển thị thông báo ──
-        val tvDurationLabel = TextView(this).apply {
-            text = "${LocaleHelper.getString("settings_notice_duration")}: ${SettingsManager.getNoticeDuration()}"
-            textSize = 15f
-            setPadding(0, (16 * dp).toInt(), 0, itemPad)
-        }
-        val sbDuration = SeekBar(this).apply {
-            max = SettingsManager.MAX_NOTICE_DURATION - SettingsManager.MIN_NOTICE_DURATION
-            progress = SettingsManager.getNoticeDuration() - SettingsManager.MIN_NOTICE_DURATION
-            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
-                    tvDurationLabel.text = "${LocaleHelper.getString("settings_notice_duration")}: ${progress + SettingsManager.MIN_NOTICE_DURATION}"
-                }
-                override fun onStartTrackingTouch(sb: SeekBar?) {}
-                override fun onStopTrackingTouch(sb: SeekBar?) {}
-            })
-        }
-        layout.addView(tvDurationLabel)
-        layout.addView(sbDuration)
-
-        AlertDialog.Builder(this)
-            .setTitle(LocaleHelper.getString("settings_title"))
-            .setView(layout)
-            .setPositiveButton(LocaleHelper.getString("settings_save")) { _, _ ->
-                SettingsManager.setFileNameSize(sbSize.progress + SettingsManager.MIN_FILE_NAME_SIZE)
-                SettingsManager.setNoticeOpacity(sbOpacity.progress + SettingsManager.MIN_NOTICE_OPACITY)
-                SettingsManager.setNoticeDuration(sbDuration.progress + SettingsManager.MIN_NOTICE_DURATION)
-                // Cập nhật lại adapter để áp dụng cỡ chữ mới
-                readingListAdapter.notifyDataSetChanged()
-                fileAdapter.notifyDataSetChanged()
-            }
-            .setNegativeButton(LocaleHelper.getString("settings_cancel"), null)
-            .show()
-    }
-
     private fun updateBadge() {
         val unreadCount = readingList.count { !it.isRead }
         binding.btnTabReadingList.text = if (unreadCount > 0) {
             "${LocaleHelper.getString("tab_reading_list")} ($unreadCount)"
         } else {
             LocaleHelper.getString("tab_reading_list")
-        }
-    }
-
-    // ─── METADATA SCAN ───
-
-    private fun startMetadataScan() {
-        if (allFiles.isEmpty()) {
-            Toast.makeText(this, LocaleHelper.getString("no_pdf"), Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Tìm file chưa có metadata
-        val allFileNames = allFiles.map { "${it.name}.pdf" }
-        val filesWithoutMeta = PdfMetadataManager.getFilesWithoutMetadata(allFileNames)
-
-        if (filesWithoutMeta.isEmpty()) {
-            Toast.makeText(this, "✅ ${LocaleHelper.getString("all_scanned")}", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Tìm đường dẫn đầy đủ cho các file cần scan
-        val pathsToScan = allFiles
-            .filter { "${it.name}.pdf" in filesWithoutMeta }
-            .map { it.path }
-
-        // Tạo dialog hiện progress
-        val progressView = TextView(this).apply {
-            textSize = 14f
-            setPadding(48, 32, 48, 32)
-            text = "${LocaleHelper.getString("scan_preparing")}..."
-        }
-
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("🔍 ${LocaleHelper.getString("scan_title")}")
-            .setView(progressView)
-            .setCancelable(false)
-            .setNegativeButton(LocaleHelper.getString("settings_cancel")) { d, _ ->
-                d.dismiss()
-            }
-            .create()
-        dialog.show()
-
-        lifecycleScope.launch {
-            val extracted = PdfTextExtractor.extractBatch(pathsToScan) { current, total, fileName ->
-                runOnUiThread {
-                    progressView.text = "($current/$total) $fileName"
-                }
-            }
-
-            dialog.dismiss()
-
-            // Refresh adapter để hiển thị metadata mới
-            fileAdapter.notifyDataSetChanged()
-            readingListAdapter.notifyDataSetChanged()
-
-            Toast.makeText(
-                this@MainActivity,
-                "✅ ${LocaleHelper.getString("scan_complete")}: $extracted/${pathsToScan.size}",
-                Toast.LENGTH_LONG
-            ).show()
         }
     }
 }
