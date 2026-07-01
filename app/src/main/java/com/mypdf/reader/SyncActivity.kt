@@ -19,6 +19,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import java.io.File
 
 class SyncActivity : AppCompatActivity() {
 
@@ -165,8 +166,11 @@ class SyncActivity : AppCompatActivity() {
             tvSyncStatus?.text = LocaleHelper.getString("sync_start")
 
             lifecycleScope.launch {
+                // Dòng 168: Tạo đối tượng File trong bộ nhớ ẩn của App
                 val localFolderFile = File(this@SyncActivity.filesDir, MainActivity.PDF_FOLDER)
-                val result = SyncManager.syncFiles(driveFolder, MainActivity.PDF_FOLDER) { progress ->
+                
+                // Dòng 169: Thay thế MainActivity.PDF_FOLDER bằng biến localFolderFile
+                val result = SyncManager.syncFiles(driveFolder, localFolderFile) { progress ->
                     runOnUiThread { tvSyncStatus?.text = progress }
                 }
 
