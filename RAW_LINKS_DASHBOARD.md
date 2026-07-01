@@ -8,43 +8,43 @@ Tự động cập nhật lúc: $(date)
 
 #### 📄 app/src/main/AndroidManifest.xml
 ```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/AndroidManifest.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/AndroidManifest.xml)
+https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/AndroidManifest.xml
 ```
 
 
 #### 📄 app/src/main/java/com/mypdf/reader/LocaleHelper.kt
 ```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/LocaleHelper.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/LocaleHelper.kt)
+https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/LocaleHelper.kt
 ```
 
 
 #### 📄 app/src/main/java/com/mypdf/reader/MainActivity.kt
 ```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/MainActivity.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/MainActivity.kt)
+https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/MainActivity.kt
 ```
 
 
 #### 📄 app/src/main/java/com/mypdf/reader/PdfFile.kt
 ```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfFile.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfFile.kt)
+https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfFile.kt
 ```
 
 
 #### 📄 app/src/main/java/com/mypdf/reader/PdfFileAdapter.kt
 ```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfFileAdapter.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfFileAdapter.kt)
+https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfFileAdapter.kt
 ```
 
 
 #### 📄 app/src/main/java/com/mypdf/reader/PdfMetadataManager.kt
 ```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfMetadataManager.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfMetadataManager.kt)
+https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfMetadataManager.kt
 ```
 
 
 #### 📄 app/src/main/java/com/mypdf/reader/PdfTextExtractor.kt
 ```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfTextExtractor.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfTextExtractor.kt)
+https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/PdfTextExtractor.kt
 ```
 
 
