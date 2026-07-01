@@ -10,8 +10,11 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.format.DateTimeParseException
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object SyncManager {
 
@@ -32,39 +35,39 @@ object SyncManager {
     }
 
     // =========================================================================
-    // 1. KHá»I Táº O
+    // 1. KHAI TẠO
     // =========================================================================
     fun init(context: Context) {
         appContext = context.applicationContext
     }
 
     // =========================================================================
-    // 2. SERVICE ACCOUNT - Láº¤Y ACCESS TOKEN
-    // Äá»c file service_account.json tá»« assets, dÃ¹ng JWT Äá» láº¥y token
+    // 2. SERVICE ACCOUNT - LẤY ACCESS TOKEN
+    // Đọc file service_account.json từ assets, dùng JWT để lấy token
     // =========================================================================
     private suspend fun getAccessToken(): String? = withContext(Dispatchers.IO) {
-        // DÃ¹ng láº¡i token náº¿u cÃ²n háº¡n (cÃ²n hÆ¡n 5 phÃºt)
+        // Dùng lại token nếu còn hạn (còn hơn 5 phút)
         if (accessToken != null && System.currentTimeMillis() < tokenExpiry - 300_000) {
             return@withContext accessToken
         }
 
         try {
-            // Äá»c service_account.json tá»« assets
+            // Đọc service_account.json từ assets
             val jsonStr = appContext.assets.open("service_account.json")
                 .bufferedReader().readText()
             val json = JSONObject(jsonStr)
 
             val clientEmail = json.getString("client_email")
-            // DÃ¹ng optString Äá» láº¥y raw string, sau ÄÃ³ ServiceAccountJwt tá»± xá»­ lÃ½ \n
+            // Dùng optString để lấy raw string, sau đó ServiceAccountJwt tự xử lý \n
             val privateKey = json.getString("private_key")
 
             Log.d(TAG, "client_email: $clientEmail")
             Log.d(TAG, "private_key length: ${privateKey.length}")
 
-            // Táº¡o JWT
+            // Tạo JWT
             val jwt = ServiceAccountJwt.create(clientEmail, privateKey)
 
-            // Äá»i JWT láº¥y Access Token
+            // Đổi JWT lấy Access Token
             val url = URL("https://oauth2.googleapis.com/token")
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -78,7 +81,7 @@ object SyncManager {
             if (responseCode != 200) {
                 val err = conn.errorStream?.bufferedReader()?.readText()
                 Log.e(TAG, "Token error $responseCode: $err")
-                // LÆ°u lá»i vÃ o prefs Äá» hiá»n lÃªn UI
+                // Lưu lỗi vào prefs để hiện lên UI
                 prefs().edit().putString("last_token_error", "HTTP $responseCode: $err").apply()
                 return@withContext null
             }
@@ -96,7 +99,7 @@ object SyncManager {
     }
 
     // =========================================================================
-    // 3. LIá»T KÃ THÆ¯ Má»¤C TRÃN DRIVE
+    // 3. LIỆT KÊ THƯ MỤC TRÊN DRIVE
     // =========================================================================
     suspend fun listAllFolders(): Result<List<String>> = withContext(Dispatchers.IO) {
         try {
@@ -123,7 +126,10 @@ object SyncManager {
     }
 
     // =========================================================================
-    // 4. Äá»NG Bá» FILE PDF Tá»ª DRIVE Vá» MÃY
+    // 4. ĐỒNG BỘ FILE TỪ DRIVE VỀ MÁY (ONE-WAY)
+    //    - So sánh modifiedTime từ Drive với lastModified local
+    //    - Chỉ cho phép .pdf và .json
+    //    - Ghi đè local nếu remote mới hơn
     // =========================================================================
     suspend fun syncFiles(
         driveFolderName: String,
@@ -133,63 +139,79 @@ object SyncManager {
         try {
             val token = getAccessToken()
                 ?: return@withContext SyncResult.Error(
-                    "KhÃ´ng láº¥y ÄÆ°á»£c token.\n" +
+                    "Không lấy được token.\n" +
                     (prefs().getString("last_token_error", "") ?: "")
                 )
 
-            onProgress("Äang tÃ¬m thÆ° má»¥c '$driveFolderName'...")
+            onProgress("Đang tìm thư mục '$driveFolderName'...")
 
-            // BÆ°á»c 1: TÃ¬m folder ID theo tÃªn
+            // Bước 1: Tìm folder ID theo tên
             val folderId = findFolderId(token, driveFolderName)
-                ?: return@withContext SyncResult.Error("KhÃ´ng tÃ¬m tháº¥y thÆ° má»¥c '$driveFolderName' trÃªn Drive")
+                ?: return@withContext SyncResult.Error("Không tìm thấy thư mục '$driveFolderName' trên Drive")
 
-            onProgress("Äang láº¥y danh sÃ¡ch file PDF...")
+            onProgress("Đang lấy danh sách file (pdf/json)...")
 
-            // BÆ°á»c 2: Láº¥y danh sÃ¡ch file PDF trong folder
-            val files = listPdfFiles(token, folderId)
+            // Bước 2: Lấy danh sách file pdf/json trong folder
+            val files = listDriveFiles(token, folderId)
             if (files.isEmpty()) {
-                return@withContext SyncResult.Error("KhÃ´ng cÃ³ file PDF nÃ o trong thÆ° má»¥c '$driveFolderName'")
+                return@withContext SyncResult.Error("Không có file PDF/JSON trong thư mục '$driveFolderName'")
             }
 
-            onProgress("TÃ¬m tháº¥y ${files.size} file PDF. Äang táº£i...")
+            onProgress("Tìm thấy ${files.size} file. Đang xử lý...")
 
-            // BÆ°á»c 3: Táº¡o thÆ° má»¥c local náº¿u chÆ°a cÃ³
+            // Bước 3: Tạo thư mục local nếu chưa có
             if (!localFolder.exists()) localFolder.mkdirs()
 
             var downloaded = 0
             var skipped = 0
 
             for ((index, file) in files.withIndex()) {
-                val fileId   = file.first
-                val fileName = file.second
+                val fileId   = file.id
+                val fileName = file.name
+                val remoteModified = file.modifiedTime // RFC3339 string
                 val localFile = File(localFolder, fileName)
 
                 onProgress("(${index + 1}/${files.size}) $fileName")
 
-                // Bá» qua náº¿u file ÄÃ£ tá»n táº¡i
-                if (localFile.exists()) {
+                // Nếu file chưa tồn tại -> download
+                if (!localFile.exists()) {
+                    val success = downloadFile(token, fileId, localFile)
+                    if (success) downloaded++ else localFile.delete()
+                    continue
+                }
+
+                // Nếu tồn tại -> so sánh modifiedTime (Drive) với lastModified local
+                val remoteEpoch = parseRfc3339ToEpoch(remoteModified)
+                val localEpoch = localFile.lastModified()
+
+                // Nếu không có remoteModified thì bỏ qua (skip)
+                if (remoteEpoch == null) {
                     skipped++
                     continue
                 }
 
-                // Táº£i file vá»
-                val success = downloadFile(token, fileId, localFile)
-                if (success) downloaded++ else localFile.delete()
+                // Nếu remote mới hơn local (ví dụ remoteEpoch > localEpoch + 500ms) thì tải lại (overwrite)
+                if (remoteEpoch > localEpoch + 500) {
+                    val success = downloadFile(token, fileId, localFile)
+                    if (success) downloaded++ else localFile.delete()
+                } else {
+                    skipped++
+                }
             }
 
-            // LÆ°u thá»i gian sync
+            // Lưu thời gian sync
             saveLastSync()
 
             SyncResult.Success(downloaded)
 
         } catch (e: Exception) {
             Log.e(TAG, "syncFiles failed", e)
-            SyncResult.Error("Lá»i: ${e.message}")
+            SyncResult.Error("Lỗi: ${e.message}")
         }
     }
 
     // =========================================================================
-    // 5. CÃC HÃM Há» TRá»¢ DRIVE API
+    // 5. CÁC HÀM HỖ TRỢ DRIVE API
     // =========================================================================
     private fun findFolderId(token: String, folderName: String): String? {
         return try {
@@ -209,27 +231,68 @@ object SyncManager {
         }
     }
 
-    private fun listPdfFiles(token: String, folderId: String): List<Pair<String, String>> {
+    private data class DriveFile(val id: String, val name: String, val modifiedTime: String?, val mimeType: String?)
+
+    private fun listDriveFiles(token: String, folderId: String): List<DriveFile> {
         return try {
-            val query = "'$folderId' in parents and mimeType='application/pdf' and trashed=false"
+            // query: trong folder và là pdf hoặc json
+            val query = "'$folderId' in parents and trashed=false and (mimeType='application/pdf' or mimeType='application/json' or name contains '.json')"
             val encoded = java.net.URLEncoder.encode(query, "UTF-8")
-            val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id,name)&pageSize=1000")
+            val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id,name,modifiedTime,mimeType)&pageSize=1000")
 
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty("Authorization", "Bearer $token")
 
             val resp = JSONObject(conn.inputStream.bufferedReader().readText())
             val files = resp.getJSONArray("files")
-            val result = mutableListOf<Pair<String, String>>()
+            val result = mutableListOf<DriveFile>()
             for (i in 0 until files.length()) {
                 val obj = files.getJSONObject(i)
-                result.add(Pair(obj.getString("id"), obj.getString("name")))
+                val id = obj.getString("id")
+                val name = obj.getString("name")
+                val modified = if (obj.has("modifiedTime")) obj.getString("modifiedTime") else null
+                val mime = if (obj.has("mimeType")) obj.getString("mimeType") else null
+                // extra guard: accept only .pdf or .json by name/mime
+                val nameLower = name.lowercase(Locale.getDefault())
+                if (nameLower.endsWith(".pdf") || nameLower.endsWith(".json") ||
+                    mime == "application/pdf" || mime == "application/json") {
+                    result.add(DriveFile(id, name, modified, mime))
+                }
             }
             result
         } catch (e: Exception) {
-            Log.e(TAG, "listPdfFiles failed", e)
+            Log.e(TAG, "listDriveFiles failed", e)
             emptyList()
         }
+    }
+
+    private fun parseRfc3339ToEpoch(s: String?): Long? {
+        if (s.isNullOrEmpty()) return null
+        try {
+            // Try java.time first (API 26+)
+            return Instant.parse(s).toEpochMilli()
+        } catch (e: DateTimeParseException) {
+            try {
+                // Fallback for some variations (with millis)
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+                sdf.timeZone = TimeZone.getTimeZone("UTC")
+                val d = sdf.parse(s)
+                if (d != null) return d.time
+            } catch (e2: Exception) {
+                try {
+                    // Fallback without millis
+                    val sdf2 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+                    sdf2.timeZone = TimeZone.getTimeZone("UTC")
+                    val d2 = sdf2.parse(s)
+                    if (d2 != null) return d2.time
+                } catch (e3: Exception) {
+                    Log.w(TAG, "parseRfc3339ToEpoch failed for: $s", e3)
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "parseRfc3339ToEpoch unexpected error for: $s", e)
+        }
+        return null
     }
 
     private fun downloadFile(token: String, fileId: String, dest: File): Boolean {
@@ -245,23 +308,23 @@ object SyncManager {
             }
             true
         } catch (e: Exception) {
-            Log.e(TAG, "downloadFile failed: ${dest.name}", e)
+            Log.e(TAG, "downloadFile failed: ${'$'}{dest.name}", e)
             false
         }
     }
 
     // =========================================================================
-    // 6. CÃC HÃM TRáº NG THÃI (tÆ°Æ¡ng thÃ­ch vá»i code cÅ©)
-    //    Service Account: luÃ´n "ÄÃ£ ÄÄng nháº­p"
+    // 6. CÁC HÀM TRẠNG THÁI (tương thích với code cũ)
+    //    Service Account: luôn "đã đăng nhập"
     // =========================================================================
     fun isLoggedIn(): Boolean = true
 
     fun logout() {
-        // KhÃ´ng cáº§n lÃ m gÃ¬ vá»i Service Account
-        // Giá»¯ láº¡i Äá» tÆ°Æ¡ng thÃ­ch vá»i code cÅ©
+        // Không cần làm gì với Service Account
+        // Giữ lại để tương thích với code cũ
     }
 
-    // exchangeCodeForToken khÃ´ng cÃ²n dÃ¹ng, giá»¯ Äá» trÃ¡nh compile error náº¿u cÃ²n tham chiáº¿u
+    // exchangeCodeForToken không còn dùng, giữ để tránh compile error nếu còn tham chiếu
     suspend fun exchangeCodeForToken(authCode: String): Boolean = true
 
     // =========================================================================
@@ -276,7 +339,7 @@ object SyncManager {
     }
 
     fun getLastSync(): String {
-        return prefs().getString(KEY_LAST_SYNC, "â") ?: "â"
+        return prefs().getString(KEY_LAST_SYNC, "—") ?: "—"
     }
 
     private fun saveLastSync() {
