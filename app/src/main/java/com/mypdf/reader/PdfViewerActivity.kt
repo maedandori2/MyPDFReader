@@ -44,7 +44,6 @@ class PdfViewerActivity : AppCompatActivity() {
     private var filePath = ""
     private var fileList = listOf<String>()
     private var fileIndex = 0
-    private var isFromReadingList = false
 
     // Gesture
     private lateinit var gestureDetector: GestureDetector
@@ -53,9 +52,6 @@ class PdfViewerActivity : AppCompatActivity() {
     private val hideHandler = Handler(Looper.getMainLooper())
     private val hideRunnable = Runnable { hideUI() }
     private var uiVisible = true
-
-    // Reading notice
-    private val noticeHandler = Handler(Looper.getMainLooper())
 
     companion object {
         const val NONE = 0
@@ -98,13 +94,6 @@ class PdfViewerActivity : AppCompatActivity() {
         setupNavButtons()
         openPdf(filePath)
         scheduleHide()
-
-        // Hiển thị thông báo đang đọc file số mấy (chỉ khi mở từ reading list)
-        val readingListIndex = intent.getIntExtra("reading_list_index", -1)
-        if (readingListIndex > 0) {
-            isFromReadingList = true
-            showReadingNotice(readingListIndex)
-        }
     }
 
     // ─── UI HIDE / SHOW ───
@@ -242,8 +231,7 @@ class PdfViewerActivity : AppCompatActivity() {
         isNavigating = true
         try {
             // Đóng page hiện tại trước khi chuyển file
-            currentPage?.close()
-            currentPage = null
+            closePdfSafely()
 
             fileIndex = newIndex
             val newPath = fileList[fileIndex]
@@ -257,11 +245,6 @@ class PdfViewerActivity : AppCompatActivity() {
             ReadingListManager.markAsRead(newPath)
             openPdf(newPath)
             showUI()
-
-            // Hiển thị thông báo đang đọc file số mấy khi chuyển file trong reading list
-            if (isFromReadingList) {
-                showReadingNotice(fileIndex + 1)
-            }
         } catch (e: Exception) {
             Toast.makeText(this, "${LocaleHelper.getString("error_prefix")}: ${e.message}", Toast.LENGTH_SHORT).show()
         } finally {
@@ -292,10 +275,20 @@ class PdfViewerActivity : AppCompatActivity() {
 
     // ─── PDF OPEN / RENDER ───
 
-    private fun openPdf(path: String) {
+    private fun closePdfSafely() {
         try {
             currentPage?.close()
+            currentPage = null
             pdfRenderer?.close()
+            pdfRenderer = null
+        } catch (e: Exception) {
+            // Ignore exceptions during cleanup
+        }
+    }
+
+    private fun openPdf(path: String) {
+        try {
+            closePdfSafely()
             val fd = ParcelFileDescriptor.open(File(path), ParcelFileDescriptor.MODE_READ_ONLY)
             pdfRenderer = PdfRenderer(fd)
             totalPages = pdfRenderer!!.pageCount
@@ -307,31 +300,35 @@ class PdfViewerActivity : AppCompatActivity() {
     }
 
     private fun renderPage(index: Int) {
-        if (index < 0 || index >= totalPages) return
-        currentPage?.close()
-        val page = pdfRenderer!!.openPage(index)
-        currentPage = page
-        currentPageIndex = index
+        if (index < 0 || index >= totalPages || pdfRenderer == null) return
+        try {
+            currentPage?.close()
+            val page = pdfRenderer!!.openPage(index)
+            currentPage = page
+            currentPageIndex = index
 
-        val dm = resources.displayMetrics
-        val scaleW = dm.widthPixels.toFloat() / page.width
-        val scaleH = dm.heightPixels.toFloat() / page.height
-        val scale = min(scaleW, scaleH) * dm.density
+            val dm = resources.displayMetrics
+            val scaleW = dm.widthPixels.toFloat() / page.width
+            val scaleH = dm.heightPixels.toFloat() / page.height
+            val scale = min(scaleW, scaleH) * dm.density
 
-        val bmp = Bitmap.createBitmap(
-            (page.width * scale).toInt(),
-            (page.height * scale).toInt(),
-            Bitmap.Config.ARGB_8888
-        )
-        bmp.eraseColor(android.graphics.Color.WHITE)
-        page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+            val bmp = Bitmap.createBitmap(
+                (page.width * scale).toInt(),
+                (page.height * scale).toInt(),
+                Bitmap.Config.ARGB_8888
+            )
+            bmp.eraseColor(android.graphics.Color.WHITE)
+            page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
 
-        currentBitmap = bmp
-        isZoomed = false
-        binding.ivPage.scaleType = android.widget.ImageView.ScaleType.MATRIX
-        binding.ivPage.setImageBitmap(bmp)
-        binding.ivPage.post { fitToScreen(bmp) }
-        updatePageInfo()
+            currentBitmap = bmp
+            isZoomed = false
+            binding.ivPage.scaleType = android.widget.ImageView.ScaleType.MATRIX
+            binding.ivPage.setImageBitmap(bmp)
+            binding.ivPage.post { fitToScreen(bmp) }
+            updatePageInfo()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error rendering page: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun fitToScreen(bmp: Bitmap) {
@@ -368,42 +365,6 @@ class PdfViewerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         hideHandler.removeCallbacksAndMessages(null)
-        noticeHandler.removeCallbacksAndMessages(null)
-        currentPage?.close()
-        pdfRenderer?.close()
-    }
-
-    /**
-     * Hiển thị thông báo "Đang đọc file số X" ở trên cùng, tự ẩn với fade out.
-     * Opacity và thời gian hiển thị lấy từ SettingsManager.
-     */
-    private fun showReadingNotice(fileNumber: Int) {
-        // Hủy timer/animation cũ nếu đang chạy (khi vuốt nhanh liên tục)
-        noticeHandler.removeCallbacksAndMessages(null)
-        binding.tvReadingNotice.animate().cancel()
-
-        val template = LocaleHelper.getString("reading_file_number")
-        val message = String.format(template, fileNumber)
-
-        val opacity = SettingsManager.getNoticeOpacityFloat()
-        val durationMs = SettingsManager.getNoticeDurationMs()
-
-        binding.tvReadingNotice.text = message
-        binding.tvReadingNotice.alpha = opacity
-        binding.tvReadingNotice.visibility = View.VISIBLE
-
-        // Tự ẩn sau thời gian cài đặt với animation fade out
-        noticeHandler.postDelayed({
-            ObjectAnimator.ofFloat(binding.tvReadingNotice, "alpha", opacity, 0f).apply {
-                duration = 500
-                addListener(object : android.animation.AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: android.animation.Animator) {
-                        binding.tvReadingNotice.visibility = View.GONE
-                    }
-                })
-                start()
-            }
-        }, durationMs)
+        closePdfSafely()
     }
 }
-
