@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import java.io.File
 
 class SyncWorker(
     private val context: Context,
@@ -17,19 +18,20 @@ class SyncWorker(
     
             val folder = SyncManager.getDriveFolder()
             if (folder.isEmpty()) return Result.success()
-    
-            // 1. Chuyển String sang File bằng context.filesDir
-            val localFolderFile = File(context.filesDir, MainActivity.PDF_FOLDER)
-            // HOẶC: val localFolderFile = File(MainActivity.PDF_FOLDER) nếu là đường dẫn tuyệt đối
-    
-            // 2. Bổ sung lambda trống cho onProgress vì đây là tác vụ chạy ngầm
+            
+            // Tạo đối tượng File
+            val externalStorage = android.os.Environment.getExternalStorageDirectory()
+            val localFolderFile = File(externalStorage, MainActivity.PDF_FOLDER)
+            
+            if (!localFolderFile.exists()) {
+                localFolderFile.mkdirs()
+            }
+            
+            // CHÚ Ý: Truyền localFolderFile vào tham số localFolder
             val result = SyncManager.syncFiles(
                 driveFolderName = folder,
-                localFolder = localFolderFile,
-                onProgress = { progress ->
-                    // Bạn có thể để trống hoặc ghi log hệ thống nếu muốn:
-                    // println("Sync progress: $progress")
-                }
+                localFolder = localFolderFile, // Phải là localFolderFile
+                onProgress = {}
             )
     
             // Sau khi sync xong → gửi broadcast để MainActivity refresh danh sách
