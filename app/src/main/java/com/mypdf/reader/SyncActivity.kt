@@ -165,6 +165,7 @@ class SyncActivity : AppCompatActivity() {
             tvSyncStatus?.text = LocaleHelper.getString("sync_start")
 
             lifecycleScope.launch {
+                val localFolderFile = File(this@SyncActivity.filesDir, MainActivity.PDF_FOLDER)
                 val result = SyncManager.syncFiles(driveFolder, MainActivity.PDF_FOLDER) { progress ->
                     runOnUiThread { tvSyncStatus?.text = progress }
                 }
