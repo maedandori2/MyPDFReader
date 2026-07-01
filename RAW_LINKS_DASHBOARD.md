@@ -102,6 +102,12 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
+#### 📄 app/src/main/java/com/mypdf/reader/UpdateCheckerWithProgress.kt
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/UpdateCheckerWithProgress.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/UpdateCheckerWithProgress.kt)
+```
+
+
 #### 📄 app/src/main/java/com/mypdf/reader/db/AppDatabase.kt
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/db/AppDatabase.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/db/AppDatabase.kt)
