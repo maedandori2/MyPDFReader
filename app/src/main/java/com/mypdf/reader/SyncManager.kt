@@ -130,6 +130,7 @@ object SyncManager {
     //    - So sánh modifiedTime từ Drive với lastModified local
     //    - Chỉ cho phép .pdf và .json
     //    - Ghi đè local nếu remote mới hơn
+    //    - Xóa file local nếu file đó đã bị xóa trên Drive
     // =========================================================================
     suspend fun syncFiles(
         driveFolderName: String,
@@ -154,16 +155,21 @@ object SyncManager {
             // Bước 2: Lấy danh sách file pdf/json trong folder
             val files = listDriveFiles(token, folderId)
             if (files.isEmpty()) {
-                return@withContext SyncResult.Error("Không có file PDF/JSON trong thư mục '$driveFolderName'")
+                // Nếu không có file trên Drive, vẫn có thể xóa local file nếu cần
+                onProgress("Không có file PDF/JSON trên Drive. Kiểm tra và xóa local nếu cần...")
+            } else {
+                onProgress("Tìm thấy ${files.size} file trên Drive. Đang xử lý...")
             }
-
-            onProgress("Tìm thấy ${files.size} file. Đang xử lý...")
 
             // Bước 3: Tạo thư mục local nếu chưa có
             if (!localFolder.exists()) localFolder.mkdirs()
 
             var downloaded = 0
             var skipped = 0
+            var deletedLocal = 0
+
+            // Tạo set tên file trên Drive
+            val driveNames = files.map { it.name }.toSet()
 
             for ((index, file) in files.withIndex()) {
                 val fileId   = file.id
@@ -199,8 +205,33 @@ object SyncManager {
                 }
             }
 
+            // Bước 4: Xóa file local không còn trên Drive (chỉ .pdf/.json)
+            onProgress("Kiểm tra xóa các file local không có trên Drive...")
+            val localFiles = localFolder.listFiles() ?: emptyArray()
+            for (f in localFiles) {
+                if (!f.isFile) continue
+                val nameLower = f.name.lowercase(Locale.getDefault())
+                val isPdfOrJson = nameLower.endsWith(".pdf") || nameLower.endsWith(".json")
+                if (!isPdfOrJson) continue
+                if (!driveNames.contains(f.name)) {
+                    try {
+                        if (f.delete()) {
+                            deletedLocal++
+                            Log.d(TAG, "Deleted local file not on Drive: ${f.name}")
+                        } else {
+                            Log.w(TAG, "Failed to delete local file: ${f.name}")
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Exception deleting local file: ${f.name}", e)
+                    }
+                }
+            }
+
             // Lưu thời gian sync
             saveLastSync()
+
+            Log.i(TAG, "Sync complete. downloaded=$downloaded skipped=$skipped deletedLocal=$deletedLocal")
+            onProgress("Hoàn tất: downloaded=$downloaded deletedLocal=$deletedLocal skipped=$skipped")
 
             SyncResult.Success(downloaded)
 
