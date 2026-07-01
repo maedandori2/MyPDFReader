@@ -1,0 +1,30 @@
+name: Generate Raw Links
+
+on:
+  push:
+    branches:
+      - main # Hoặc branch mặc định của bạn
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - os: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Generate links file
+      run: |
+        USER="${{ github.repository_owner }}"
+        REPO="${{ github.event.repository.name }}"
+        BRANCH="main"
+        
+        # Tạo file
+        git ls-files | grep -v ".github/" | sed "s|^|https://raw.githubusercontent.com/$USER/$REPO/$BRANCH/|" > raw_links.txt
+
+    - name: Commit and Push if changed
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add raw_links.txt
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update raw links file" && git push)
