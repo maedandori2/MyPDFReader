@@ -4,6 +4,7 @@
 
 ### 🔍 Trích xuất thông tin PDF (品名, 自社品番, 自社品名)
 - **OCR trang đầu PDF**: Dùng ML Kit Text Recognition (Japanese) để trích xuất 品名, 自社品番, 自社品名 từ trang đầu.
+- **Bounding box parsing**: Dùng vị trí pixel (bounding box) của từng element OCR thay vì parse text thuần. Tìm key (品名) → lấy element ngay bên phải cùng dòng = giá trị. Đảm bảo đọc đúng bảng dù OCR trả text không theo thứ tự.
 - **Nút "🔍 Scan"**: Trên header, bấm để scan tất cả file chưa có metadata. Hiện dialog progress (1/20, 2/20...).
 - **Hiển thị metadata**: Dưới tên file PDF (cả tab All và Reading List), hiện metadata màu xanh teal (11sp).
 - **Lưu file JSON**: Kết quả OCR lưu vào `pdf_metadata.json` trong thư mục MyPDF.

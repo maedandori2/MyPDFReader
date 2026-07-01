@@ -2,10 +2,12 @@ package com.mypdf.reader
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.japanese.JapaneseTextRecognizerOptions
 import kotlinx.coroutines.Dispatchers
@@ -13,16 +15,22 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.coroutines.resume
-import kotlin.math.min
+import kotlin.math.abs
 
 /**
  * Trích xuất thông tin từ trang đầu PDF bằng ML Kit OCR (Japanese).
  * Tìm các trường: 品名, 自社品番, 自社品名
+ *
+ * Sử dụng bounding box (vị trí pixel) để xác định giá trị nằm
+ * ở ô bên phải của key trong bảng, thay vì parse text thuần.
  */
 object PdfTextExtractor {
 
     private const val TAG = "PdfTextExtractor"
-    private const val RENDER_WIDTH = 1500  // Resolution vừa đủ cho OCR, không quá nặng
+    private const val RENDER_WIDTH = 1500  // Resolution vừa đủ cho OCR
+
+    // Ngưỡng để coi 2 element cùng dòng (sai lệch Y cho phép, tính bằng pixel)
+    private const val SAME_ROW_THRESHOLD_RATIO = 0.6  // 60% chiều cao element
 
     /**
      * Trích xuất metadata từ trang đầu của file PDF.
@@ -60,16 +68,16 @@ object PdfTextExtractor {
             fileDescriptor.close()
             fileDescriptor = null
 
-            // 2. Chạy OCR
-            val ocrText = runOcr(bitmap)
+            // 2. Chạy OCR — lấy cả text VÀ bounding box
+            val ocrResult = runOcr(bitmap)
             bitmap.recycle()
 
-            if (ocrText.isNullOrBlank()) return@withContext emptyMap()
+            if (ocrResult == null) return@withContext emptyMap()
 
-            Log.d(TAG, "OCR result for ${file.name}:\n$ocrText")
-
-            // 3. Parse kết quả OCR để tìm các trường metadata
-            parseMetadata(ocrText)
+            // 3. Trích xuất metadata dựa trên vị trí bounding box
+            val metadata = extractByBoundingBox(ocrResult)
+            Log.d(TAG, "Extracted from ${file.name}: $metadata")
+            metadata
 
         } catch (e: Exception) {
             Log.e(TAG, "Error extracting from $pdfPath", e)
@@ -87,14 +95,15 @@ object PdfTextExtractor {
 
     /**
      * Chạy ML Kit Text Recognition trên Bitmap
+     * Trả về Text object có chứa bounding box cho từng element
      */
-    private suspend fun runOcr(bitmap: Bitmap): String? = suspendCancellableCoroutine { cont ->
+    private suspend fun runOcr(bitmap: Bitmap): Text? = suspendCancellableCoroutine { cont ->
         val recognizer = TextRecognition.getClient(JapaneseTextRecognizerOptions.Builder().build())
         val image = InputImage.fromBitmap(bitmap, 0)
 
         recognizer.process(image)
             .addOnSuccessListener { result ->
-                cont.resume(result.text)
+                cont.resume(result)
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "OCR failed", e)
@@ -103,21 +112,48 @@ object PdfTextExtractor {
     }
 
     /**
-     * Parse kết quả OCR text để tìm giá trị của 品名, 自社品番, 自社品名.
+     * Dữ liệu 1 element OCR với bounding box
+     */
+    private data class OcrElement(
+        val text: String,
+        val box: Rect  // vị trí pixel trên ảnh
+    )
+
+    /**
+     * Trích xuất metadata dựa trên vị trí bounding box.
      *
      * Logic:
-     * - Tìm dòng chứa key (ví dụ "品名")
-     * - Giá trị nằm sau key trên cùng dòng, hoặc ở dòng/ô kế tiếp
-     * - Xử lý nhiều format bảng khác nhau
+     * 1. Thu thập tất cả element OCR với bounding box
+     * 2. Tìm element chứa key (品名, 自社品番, 自社品名)
+     * 3. Tìm element nằm ngay bên PHẢI key, cùng dòng (Y gần nhau)
+     * 4. Element đó là giá trị cần lấy
      */
-    private fun parseMetadata(ocrText: String): Map<String, String> {
+    private fun extractByBoundingBox(ocrResult: Text): Map<String, String> {
+        // Thu thập tất cả element với bounding box
+        val allElements = mutableListOf<OcrElement>()
+
+        for (block in ocrResult.textBlocks) {
+            for (line in block.lines) {
+                for (element in line.elements) {
+                    val box = element.boundingBox ?: continue
+                    allElements.add(OcrElement(element.text, box))
+                }
+            }
+        }
+
+        if (allElements.isEmpty()) return emptyMap()
+
+        // Debug: log tất cả elements
+        for (e in allElements) {
+            Log.d(TAG, "Element: '${e.text}' at (${e.box.left},${e.box.top})-(${e.box.right},${e.box.bottom})")
+        }
+
         val result = mutableMapOf<String, String>()
-        val lines = ocrText.lines().map { it.trim() }.filter { it.isNotEmpty() }
 
         for (key in PdfMetadataManager.METADATA_KEYS) {
-            val value = findValueForKey(key, lines, ocrText)
+            val value = findValueForKey(key, allElements)
             if (!value.isNullOrBlank()) {
-                result[key] = value.trim()
+                result[key] = value
             }
         }
 
@@ -125,35 +161,100 @@ object PdfTextExtractor {
     }
 
     /**
-     * Tìm giá trị cho 1 key cụ thể trong kết quả OCR.
-     * Thử nhiều pattern khác nhau vì bảng PDF có thể được OCR ra theo nhiều cách.
+     * Tìm giá trị cho 1 key:
+     * 1. Tìm element chứa key text
+     * 2. Tìm element nằm bên phải key, cùng hàng (Y center gần nhau)
+     * 3. Chọn element gần nhất bên phải
+     *
+     * Xử lý đặc biệt: "自社品番" và "自社品名" có thể bị OCR tách thành
+     * nhiều element, nên cũng tìm element nào text chứa key.
      */
-    private fun findValueForKey(key: String, lines: List<String>, fullText: String): String? {
-        // Pattern 1: Key và value trên cùng dòng, phân tách bởi khoảng trắng/tab
-        // Ví dụ: "品名 キャリング救急箱" hoặc "自社品番 ST-30"
-        for (line in lines) {
-            if (line.contains(key)) {
-                val afterKey = line.substringAfter(key).trim()
-                // Loại bỏ các ký tự separator phổ biến trong bảng
-                val cleaned = afterKey.trimStart(':', '：', '|', ' ', '\t')
-                if (cleaned.isNotBlank() && cleaned != key) {
-                    // Nếu giá trị chứa key khác, chỉ lấy phần trước
-                    val value = extractCleanValue(cleaned, key)
-                    if (value.isNotBlank()) return value
-                }
+    private fun findValueForKey(key: String, elements: List<OcrElement>): String? {
+        // Tìm element chứa key (có thể key nằm trong 1 element hoặc kết hợp)
+        val keyElement = findKeyElement(key, elements) ?: return null
+
+        val keyBox = keyElement.box
+        val keyCenterY = (keyBox.top + keyBox.bottom) / 2
+        val keyHeight = keyBox.bottom - keyBox.top
+
+        // Ngưỡng cùng dòng: centerY chênh lệch < 60% chiều cao element
+        val sameRowThreshold = (keyHeight * SAME_ROW_THRESHOLD_RATIO).toInt().coerceAtLeast(15)
+
+        // Tìm tất cả element bên PHẢI key, cùng dòng
+        val candidates = elements.filter { elem ->
+            if (elem === keyElement) return@filter false
+            // Element phải nằm bên phải key
+            if (elem.box.left <= keyBox.right - 5) return@filter false
+            // Element phải cùng dòng (centerY gần nhau)
+            val elemCenterY = (elem.box.top + elem.box.bottom) / 2
+            abs(elemCenterY - keyCenterY) <= sameRowThreshold
+        }.sortedBy { it.box.left }  // Sắp xếp theo vị trí X từ trái sang phải
+
+        if (candidates.isEmpty()) return null
+
+        // Lấy element gần nhất bên phải (element đầu tiên sau khi sort)
+        val valueElement = candidates.first()
+
+        // Kiểm tra: nếu giá trị là key khác thì bỏ qua
+        if (isMetadataKey(valueElement.text)) {
+            // Nếu element gần nhất là key khác, thử element tiếp theo
+            return if (candidates.size > 1 && !isMetadataKey(candidates[1].text)) {
+                candidates[1].text.trim()
+            } else {
+                null
             }
         }
 
-        // Pattern 2: Key trên 1 dòng, value trên dòng kế tiếp
-        // (Trong bảng, OCR có thể đọc header và value thành 2 dòng riêng)
-        for ((index, line) in lines.withIndex()) {
-            if (line.contains(key) && line.length <= key.length + 5) {
-                // Dòng gần như chỉ chứa key → value ở dòng kế tiếp
-                if (index + 1 < lines.size) {
-                    val nextLine = lines[index + 1].trim()
-                    // Kiểm tra dòng kế không phải là key khác
-                    if (nextLine.isNotBlank() && !isKeyLine(nextLine)) {
-                        return extractCleanValue(nextLine, key)
+        // Có thể giá trị nằm trên nhiều element liền nhau cùng dòng
+        // (ví dụ: "ストレージカート" + "バスケット3段")
+        // Ghép các element liên tiếp bên phải cho đến khi gặp key khác hoặc khoảng cách quá xa
+        val valueParts = mutableListOf(valueElement.text)
+        var lastRight = valueElement.box.right
+
+        for (i in 1 until candidates.size) {
+            val next = candidates[i]
+            // Khoảng cách giữa element trước và sau
+            val gap = next.box.left - lastRight
+            // Nếu khoảng cách quá xa (> 2x chiều cao) hoặc là key khác → dừng
+            if (gap > keyHeight * 2 || isMetadataKey(next.text)) break
+            valueParts.add(next.text)
+            lastRight = next.box.right
+        }
+
+        val combined = valueParts.joinToString("")
+        return if (combined.isNotBlank()) combined.trim() else null
+    }
+
+    /**
+     * Tìm element chứa key text.
+     * Ưu tiên exact match, sau đó match chứa key.
+     * Xử lý trường hợp "自社品番"/"自社品名" có thể bị tách.
+     */
+    private fun findKeyElement(key: String, elements: List<OcrElement>): OcrElement? {
+        // Ưu tiên 1: Element có text chính xác bằng key
+        elements.find { it.text == key }?.let { return it }
+
+        // Ưu tiên 2: Element có text chứa key (nhưng không phải chỉ là giá trị)
+        elements.find { it.text.contains(key) && it.text.length <= key.length + 5 }?.let { return it }
+
+        // Ưu tiên 3: Cho key dài (自社品番, 自社品名), tìm element chứa phần đầu "自社"
+        // rồi kiểm tra element kế bên có chứa phần còn lại không
+        if (key.length >= 4) {
+            val prefix = key.substring(0, 2) // "自社" hoặc "品名" etc.
+            val suffix = key.substring(2)    // "品番" hoặc "品名" etc.
+
+            for ((index, elem) in elements.withIndex()) {
+                if (elem.text.contains(prefix)) {
+                    // Tìm element kế tiếp (gần bên phải)
+                    val nearby = elements.filter { other ->
+                        other !== elem &&
+                        other.box.left >= elem.box.left &&
+                        abs((other.box.top + other.box.bottom) / 2 - (elem.box.top + elem.box.bottom) / 2) < (elem.box.bottom - elem.box.top) &&
+                        other.text.contains(suffix)
+                    }
+                    if (nearby.isNotEmpty()) {
+                        // Trả về element cuối cùng (phần suffix) vì giá trị nằm sau suffix
+                        return nearby.minByOrNull { it.box.left }
                     }
                 }
             }
@@ -163,29 +264,12 @@ object PdfTextExtractor {
     }
 
     /**
-     * Kiểm tra dòng có phải chỉ là key metadata không
+     * Kiểm tra text có phải là key metadata không
      */
-    private fun isKeyLine(line: String): Boolean {
+    private fun isMetadataKey(text: String): Boolean {
         return PdfMetadataManager.METADATA_KEYS.any { key ->
-            line == key || line.startsWith(key) && line.length <= key.length + 3
-        }
-    }
-
-    /**
-     * Trích xuất giá trị sạch, loại bỏ key khác nếu nằm trên cùng dòng
-     */
-    private fun extractCleanValue(text: String, currentKey: String): String {
-        var value = text
-
-        // Nếu text chứa key metadata khác, chỉ lấy phần trước key đó
-        for (otherKey in PdfMetadataManager.METADATA_KEYS) {
-            if (otherKey != currentKey && value.contains(otherKey)) {
-                value = value.substringBefore(otherKey).trim()
-            }
-        }
-
-        // Loại bỏ ký tự đặc biệt ở đầu/cuối
-        return value.trim(':', '：', '|', ' ', '\t', '　')
+            text == key || text.contains(key)
+        } || text in listOf("カラー", "入数", "作成者", "作成日", "改訂日", "品番")
     }
 
     /**
