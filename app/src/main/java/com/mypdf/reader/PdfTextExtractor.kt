@@ -157,6 +157,14 @@ object PdfTextExtractor {
             }
         }
 
+        // Ưu tiên hiển thị 1 trong 2 dạng: 
+        // Nếu đã tìm thấy "自社品番" hoặc "自社品名" (thường ở góc trên cùng bên trái), 
+        // thì bỏ qua "品番" và "品名" ở các chỗ khác trong trang.
+        if (result.containsKey("自社品番") || result.containsKey("自社品名")) {
+            result.remove("品番")
+            result.remove("品名")
+        }
+
         return result
     }
 
@@ -195,14 +203,11 @@ object PdfTextExtractor {
         // Lấy element gần nhất bên phải (element đầu tiên sau khi sort)
         val valueElement = candidates.first()
 
-        // Kiểm tra: nếu giá trị là key khác thì bỏ qua
+        // Kiểm tra: nếu giá trị là key khác thì chứng tỏ ô hiện tại bị OCR bỏ qua (VD: chứa dấu "-")
+        // và element tiếp theo đã sang cột của key khác. 
+        // Không được phép lấy giá trị của cột tiếp theo!
         if (isMetadataKey(valueElement.text)) {
-            // Nếu element gần nhất là key khác, thử element tiếp theo
-            return if (candidates.size > 1 && !isMetadataKey(candidates[1].text)) {
-                candidates[1].text.trim()
-            } else {
-                null
-            }
+            return null // Trả về null để không hiển thị sai
         }
 
         // Có thể giá trị nằm trên nhiều element liền nhau cùng dòng

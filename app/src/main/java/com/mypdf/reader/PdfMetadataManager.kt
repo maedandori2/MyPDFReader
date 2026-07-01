@@ -116,12 +116,18 @@ object PdfMetadataManager {
 
     /**
      * Format metadata để hiển thị trên UI
-     * Ví dụ: "品名: キャリング救急箱 | 自社品番: ST-30"
+     * Ví dụ: "自社品番: ST-30 | 自社品名: Box | 品番: 123 | 品名: Box 2"
      */
     fun formatForDisplay(fileName: String): String? {
         val data = metadataMap[fileName] ?: return null
         if (data.isEmpty()) return null
-        return data.entries.joinToString(" | ") { "${it.key}: ${it.value}" }
+        
+        // Sắp xếp lại theo đúng thứ tự của METADATA_KEYS để hiển thị đẹp nhất
+        val sortedEntries = METADATA_KEYS.mapNotNull { key ->
+            data[key]?.let { value -> "$key: $value" }
+        }
+        
+        return if (sortedEntries.isNotEmpty()) sortedEntries.joinToString(" | ") else null
     }
 
     /**

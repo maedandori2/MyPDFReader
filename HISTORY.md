@@ -7,8 +7,10 @@
 - **Bounding box parsing**: Dùng vị trí pixel (bounding box) của từng element OCR thay vì parse text thuần. Tìm key (品名) → lấy element ngay bên phải cùng dòng = giá trị. Đảm bảo đọc đúng bảng dù OCR trả text không theo thứ tự.
 - **Chống nhầm key chuỗi con**: Tìm key dài trước (自社品番 → 自社品名 → 品番 → 品名). Khi tìm "品名" loại trừ element chứa "自社品名", tìm "品番" loại trừ "自社品番". Hỗ trợ cả 2 dạng file.
 - **Ưu tiên vị trí**: Nếu từ khóa xuất hiện nhiều lần trong trang, luôn lấy từ khóa nằm ở vị trí cao nhất (trên cùng) của trang PDF để tránh lấy nhầm thông tin ở phần nội dung.
+- **Xử lý ô trống/dấu gạch ngang**: Nếu ô giá trị là dấu gạch ngang (-) và bị OCR bỏ qua, hệ thống sẽ trả về rỗng (null) thay vì nhảy sang lấy giá trị của cột tiếp theo (như カラー).
+- **Ưu tiên từ khóa**: Nếu trên trang PDF có cả cụm `自社品番/自社品名` và `品番/品名`, hệ thống sẽ ưu tiên trích xuất `自社品番/自社品名` (thường ở góc trên bên trái) và bỏ qua cụm còn lại để hiển thị gọn gàng 1 trong 2 dạng.
 - **Nút "🔍 Scan"**: Trên header, bấm để scan tất cả file chưa có metadata. Hiện dialog progress (1/20, 2/20...).
-- **Hiển thị metadata**: Dưới tên file PDF (cả tab All và Reading List), hiện metadata màu xanh teal (11sp).
+- **Hiển thị metadata**: Dưới tên file PDF, hiện metadata màu xanh teal (11sp). Luôn hiển thị theo thứ tự chuẩn: `自社品番 | 自社品名 | 品番 | 品名` (nếu file có đủ cả 4 thông tin, app sẽ lấy và hiện đủ cả 4).
 - **Lưu file JSON**: Kết quả OCR lưu vào `pdf_metadata.json` trong thư mục MyPDF.
 - **Đồng bộ Google Drive**: Khi Sync, upload `pdf_metadata.json` lên Drive. Máy khác sync sẽ download và merge metadata.
 - **Update file description**: Gán metadata vào description của file PDF trên Google Drive.
