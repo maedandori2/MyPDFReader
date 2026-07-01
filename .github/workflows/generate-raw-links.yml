@@ -1,9 +1,9 @@
-name: Generate Raw Links
+name: Generate Raw Links Dashboard
 
 on:
   push:
     branches:
-      - main # Hoặc branch mặc định của bạn
+      - main
 
 jobs:
   build:
@@ -13,18 +13,59 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Generate links file
+    - name: Generate MD Dashboard
       run: |
         USER="${{ github.repository_owner }}"
         REPO="${{ github.event.repository.name }}"
         BRANCH="main"
         
-        # Tạo file
-        git ls-files | grep -v ".github/" | sed "s|^|https://raw.githubusercontent.com/$USER/$REPO/$BRANCH/|" > raw_links.txt
+        OUTPUT_FILE="RAW_LINKS_DASHBOARD.md"
+        
+        # Khởi tạo file với tiêu đề
+        echo "# 📋 Danh Sách Raw Links" > $OUTPUT_FILE
+        echo "Tự động cập nhật lúc: \$(date)" >> $OUTPUT_FILE
+        echo -e "\n---\n" >> $OUTPUT_FILE
+        
+        echo "### 🌟 CÁC FILE QUAN TRỌNG (Có nút Copy)" >> $OUTPUT_FILE
+        echo -e "\n" >> $OUTPUT_FILE
+
+        # Mảng chứa các file thông thường để xử lý sau
+        NORMAL_FILES=()
+
+        # Đọc danh sách file từ git
+        while IFS= read -r file; do
+          # Bỏ qua chính file output và thư mục .github
+          if [[ "$file" == "$OUTPUT_FILE" || "$file" == .github* ]]; then
+            continue
+          fi
+
+          LINK="[https://raw.githubusercontent.com/$USER/$REPO/$BRANCH/$file](https://raw.githubusercontent.com/$USER/$REPO/$BRANCH/$file)"
+
+          # Kiểm tra đuôi file quan trọng
+          if [[ "$file" == *.kt || "$file" == *.xml || "$file" == *.json ]]; then
+            echo "#### 📄 $file" >> $OUTPUT_FILE
+            echo "\`\`\`text" >> $OUTPUT_FILE
+            echo "$LINK" >> $OUTPUT_FILE
+            echo "\`\`\`" >> $OUTPUT_FILE
+            echo -e "\n" >> $OUTPUT_FILE
+          else
+            NORMAL_FILES+=("$file|$LINK")
+          fi
+        done < <(git ls-files)
+
+        echo "---" >> $OUTPUT_FILE
+        echo "### 📁 CÁC FILE KHÁC (Hiển thị bình thường)" >> $OUTPUT_FILE
+        echo -e "\n" >> $OUTPUT_FILE
+
+        # In các file bình thường ra dưới dạng danh sách kèm link
+        for item in "${NORMAL_FILES[@]}"; do
+          IFS='|' read -r name link <<< "$item"
+          echo "* **$name**: [$link]($link)" >> $OUTPUT_FILE
+        done
 
     - name: Commit and Push if changed
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add raw_links.txt
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Update raw links file" && git push)
+        git add RAW_LINKS_DASHBOARD.md
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update raw links dashboard" && git push)
