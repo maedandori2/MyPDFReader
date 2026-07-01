@@ -72,6 +72,12 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
+#### 📄 app/src/main/java/com/mypdf/reader/SettingsActivity.kt
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/SettingsActivity.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/SettingsActivity.kt)
+```
+
+
 #### 📄 app/src/main/java/com/mypdf/reader/SettingsManager.kt
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/SettingsManager.kt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/java/com/mypdf/reader/SettingsManager.kt)
@@ -147,6 +153,12 @@ Tự động cập nhật lúc: $(date)
 #### 📄 app/src/main/res/layout/activity_pdf_viewer.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/layout/activity_pdf_viewer.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/layout/activity_pdf_viewer.xml)
+```
+
+
+#### 📄 app/src/main/res/layout/activity_settings.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/layout/activity_settings.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/layout/activity_settings.xml)
 ```
 
 
