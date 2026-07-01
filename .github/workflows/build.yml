@@ -49,6 +49,24 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease --stacktrace
+      
+      - name: Update version.json
+        run: |
+          cat > version.json << EOF
+          {
+            "versionCode": ${{ github.run_number }},
+            "versionName": "1.${{ github.run_number }}",
+            "downloadUrl": "https://github.com/maedandori2/MyPDFReader/releases/latest/download/app-release.apk",
+            "releaseNote": "Build tự động #${{ github.run_number }}"
+          }
+          EOF
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add version.json
+          git commit -m "Update version.json [skip ci]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
