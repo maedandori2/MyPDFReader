@@ -1,8 +1,21 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
 }
+
+// Đọc phiên bản từ version.json
+def getVersionInfo() {
+    def slurper = new JsonSlurper()
+    def versionFile = file("../version.json")
+    def json = slurper.parse(versionFile)
+    return json
+}
+
+def versionInfo = getVersionInfo()
+
 android {
     compileSdk 34
     namespace 'com.mypdf.reader'
@@ -10,8 +23,8 @@ android {
         applicationId "com.mypdf.reader"
         minSdk 22
         targetSdk 34
-        versionCode 2
-        versionName "1.1"
+        versionCode versionInfo.versionCode
+        versionName versionInfo.versionName
     }
     signingConfigs {
         appSigning {
