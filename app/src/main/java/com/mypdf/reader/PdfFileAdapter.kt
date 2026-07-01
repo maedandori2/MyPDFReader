@@ -44,6 +44,7 @@ class PdfFileAdapter(
         val ivThumbnail: ImageView = view.findViewById(R.id.ivThumbnail)
         val tvName: TextView = view.findViewById(R.id.tvFileName)
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
+        val tvMetadata: TextView = view.findViewById(R.id.tvMetadata)
         val btnOpenFile: TextView = view.findViewById(R.id.btnOpenFile)
         val btnAddToList: TextView = view.findViewById(R.id.btnAddToList)
         val layoutControls: View = view.findViewById(R.id.layoutControls)
@@ -62,6 +63,15 @@ class PdfFileAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val file = files[position]
         holder.tvName.text = "${file.name}.pdf"
+
+        // Hiển thị metadata (品名, 自社品番, 自社品名) cho cả 2 tab
+        val metadataText = PdfMetadataManager.formatForDisplay("${file.name}.pdf")
+        if (metadataText != null) {
+            holder.tvMetadata.text = metadataText
+            holder.tvMetadata.visibility = View.VISIBLE
+        } else {
+            holder.tvMetadata.visibility = View.GONE
+        }
 
         if (isReadingList) {
             // Số thứ tự thay thumbnail - có thể sửa trực tiếp

@@ -177,6 +177,14 @@ object SyncManager {
                 if (success) downloaded++ else localFile.delete()
             }
 
+            // Bước 4: Đồng bộ metadata JSON
+            onProgress("Đang đồng bộ metadata...")
+            syncMetadata(token, folderId, localFolder)
+
+            // Bước 5: Cập nhật description cho các file PDF trên Drive
+            onProgress("Đang cập nhật description...")
+            updatePdfDescriptions(token, files)
+
             // Lưu thời gian sync
             saveLastSync()
 
@@ -247,6 +255,163 @@ object SyncManager {
         } catch (e: Exception) {
             Log.e(TAG, "downloadFile failed: ${dest.name}", e)
             false
+        }
+    }
+
+    // =========================================================================
+    // 5b. METADATA SYNC (upload/download pdf_metadata.json)
+    // =========================================================================
+
+    /**
+     * Đồng bộ file metadata:
+     * 1. Download metadata từ Drive (nếu có) → merge với local
+     * 2. Upload file merged lên Drive
+     */
+    private fun syncMetadata(token: String, folderId: String, localFolder: File) {
+        try {
+            val metadataFileName = PdfMetadataManager.METADATA_FILE_NAME
+
+            // Tìm file metadata trên Drive
+            val remoteFileId = findFileInFolder(token, folderId, metadataFileName)
+
+            // Download và merge nếu có trên Drive
+            if (remoteFileId != null) {
+                val tempFile = File(localFolder, "${metadataFileName}.tmp")
+                val downloaded = downloadFile(token, remoteFileId, tempFile)
+                if (downloaded && tempFile.exists()) {
+                    val remoteJson = tempFile.readText()
+                    PdfMetadataManager.mergeFromRemote(remoteJson)
+                    tempFile.delete()
+                    Log.d(TAG, "Merged remote metadata")
+                }
+            }
+
+            // Upload file metadata local lên Drive
+            val localMetaFile = PdfMetadataManager.getMetadataFile()
+            if (localMetaFile.exists()) {
+                if (remoteFileId != null) {
+                    // Update file đã tồn tại
+                    updateFileContent(token, remoteFileId, localMetaFile)
+                } else {
+                    // Tạo file mới trong folder
+                    uploadNewFile(token, folderId, localMetaFile, metadataFileName)
+                }
+                Log.d(TAG, "Uploaded metadata to Drive")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "syncMetadata failed", e)
+        }
+    }
+
+    /**
+     * Tìm file theo tên trong folder
+     */
+    private fun findFileInFolder(token: String, folderId: String, fileName: String): String? {
+        return try {
+            val query = "'$folderId' in parents and name='$fileName' and trashed=false"
+            val encoded = java.net.URLEncoder.encode(query, "UTF-8")
+            val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id)&pageSize=1")
+
+            val conn = url.openConnection() as HttpURLConnection
+            conn.setRequestProperty("Authorization", "Bearer $token")
+
+            val resp = JSONObject(conn.inputStream.bufferedReader().readText())
+            val files = resp.getJSONArray("files")
+            if (files.length() > 0) files.getJSONObject(0).getString("id") else null
+        } catch (e: Exception) {
+            Log.e(TAG, "findFileInFolder failed: $fileName", e)
+            null
+        }
+    }
+
+    /**
+     * Upload file mới vào folder Drive (multipart upload)
+     */
+    private fun uploadNewFile(token: String, folderId: String, localFile: File, fileName: String) {
+        try {
+            val boundary = "===boundary==="
+            val metadata = JSONObject().apply {
+                put("name", fileName)
+                put("parents", org.json.JSONArray().put(folderId))
+            }
+
+            val url = URL("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart")
+            val conn = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.doOutput = true
+            conn.setRequestProperty("Authorization", "Bearer $token")
+            conn.setRequestProperty("Content-Type", "multipart/related; boundary=$boundary")
+
+            val content = localFile.readBytes()
+            val body = buildString {
+                append("--$boundary\r\n")
+                append("Content-Type: application/json; charset=UTF-8\r\n\r\n")
+                append(metadata.toString())
+                append("\r\n--$boundary\r\n")
+                append("Content-Type: application/json\r\n\r\n")
+            }.toByteArray() + content + "\r\n--$boundary--".toByteArray()
+
+            conn.outputStream.write(body)
+            val responseCode = conn.responseCode
+            Log.d(TAG, "uploadNewFile response: $responseCode")
+        } catch (e: Exception) {
+            Log.e(TAG, "uploadNewFile failed", e)
+        }
+    }
+
+    /**
+     * Update nội dung file đã tồn tại trên Drive
+     */
+    private fun updateFileContent(token: String, fileId: String, localFile: File) {
+        try {
+            val url = URL("https://www.googleapis.com/upload/drive/v3/files/$fileId?uploadType=media")
+            val conn = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "PATCH"
+            conn.doOutput = true
+            conn.setRequestProperty("Authorization", "Bearer $token")
+            conn.setRequestProperty("Content-Type", "application/json")
+
+            conn.outputStream.write(localFile.readBytes())
+            val responseCode = conn.responseCode
+            Log.d(TAG, "updateFileContent response: $responseCode")
+        } catch (e: Exception) {
+            Log.e(TAG, "updateFileContent failed", e)
+        }
+    }
+
+    /**
+     * Cập nhật description cho các file PDF trên Drive
+     * với thông tin metadata (品名, 自社品番, 自社品名)
+     */
+    private fun updatePdfDescriptions(token: String, files: List<Pair<String, String>>) {
+        for ((fileId, fileName) in files) {
+            val description = PdfMetadataManager.formatForDescription(fileName)
+            if (description != null) {
+                updateFileDescription(token, fileId, description)
+            }
+        }
+    }
+
+    /**
+     * Cập nhật description cho 1 file trên Drive
+     */
+    private fun updateFileDescription(token: String, fileId: String, description: String) {
+        try {
+            val url = URL("https://www.googleapis.com/drive/v3/files/$fileId")
+            val conn = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "PATCH"
+            conn.doOutput = true
+            conn.setRequestProperty("Authorization", "Bearer $token")
+            conn.setRequestProperty("Content-Type", "application/json")
+
+            val body = JSONObject().apply {
+                put("description", description)
+            }
+            conn.outputStream.write(body.toString().toByteArray())
+            val responseCode = conn.responseCode
+            Log.d(TAG, "updateFileDescription $fileId: $responseCode")
+        } catch (e: Exception) {
+            Log.e(TAG, "updateFileDescription failed: $fileId", e)
         }
     }
 

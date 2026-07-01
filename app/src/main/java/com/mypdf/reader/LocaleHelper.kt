@@ -106,7 +106,13 @@ object LocaleHelper {
             "cannot_create_folder" to "Không thể tạo thư mục %s",
             "auto_sync_detected" to "Phát hiện %d file mới, đang tải...",
             "sync_frequency" to "Tần suất sync:",
-            "login_cancelled" to "Đăng nhập bị hủy hoặc thất bại (Mã lỗi: %d)"
+            "login_cancelled" to "Đăng nhập bị hủy hoặc thất bại (Mã lỗi: %d)",
+
+            // ── Metadata Scan ──
+            "scan_title" to "Scan thông tin PDF",
+            "scan_preparing" to "Đang chuẩn bị",
+            "scan_complete" to "Scan hoàn tất",
+            "all_scanned" to "Tất cả file đã được scan"
         ),
         "ja" to mapOf(
             // ── MainActivity ──
@@ -184,7 +190,13 @@ object LocaleHelper {
             "cannot_create_folder" to "フォルダ %s を作成できません",
             "auto_sync_detected" to "新しいファイル %d 件を検出、ダウンロード中...",
             "sync_frequency" to "同期頻度:",
-            "login_cancelled" to "ログインがキャンセルまたは失敗しました (エラーコード: %d)"
+            "login_cancelled" to "ログインがキャンセルまたは失敗しました (エラーコード: %d)",
+
+            // ── Metadata Scan ──
+            "scan_title" to "PDF情報スキャン",
+            "scan_preparing" to "準備中",
+            "scan_complete" to "スキャン完了",
+            "all_scanned" to "すべてのファイルはスキャン済みです"
         )
     )
 }

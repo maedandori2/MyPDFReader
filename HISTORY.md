@@ -1,5 +1,35 @@
 # 📋 Lịch sử thay đổi — MyPDFReader
 
+## [v1.5.0] - 2026-07-01
+
+### 🔍 Trích xuất thông tin PDF (品名, 自社品番, 自社品名)
+- **OCR trang đầu PDF**: Dùng ML Kit Text Recognition (Japanese) để trích xuất 品名, 自社品番, 自社品名 từ trang đầu.
+- **Nút "🔍 Scan"**: Trên header, bấm để scan tất cả file chưa có metadata. Hiện dialog progress (1/20, 2/20...).
+- **Hiển thị metadata**: Dưới tên file PDF (cả tab All và Reading List), hiện metadata màu xanh teal (11sp).
+- **Lưu file JSON**: Kết quả OCR lưu vào `pdf_metadata.json` trong thư mục MyPDF.
+- **Đồng bộ Google Drive**: Khi Sync, upload `pdf_metadata.json` lên Drive. Máy khác sync sẽ download và merge metadata.
+- **Update file description**: Gán metadata vào description của file PDF trên Google Drive.
+
+### 📁 File mới
+| File | Mô tả |
+|------|-------|
+| `PdfMetadataManager.kt` | Singleton quản lý file `pdf_metadata.json` — load/save/merge/format |
+| `PdfTextExtractor.kt` | OCR trích xuất thông tin từ trang đầu PDF bằng ML Kit Japanese |
+
+### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `build.gradle` | Thêm dependency `com.google.mlkit:text-recognition-japanese:16.0.1` |
+| `item_pdf_file.xml` | Thêm `tvMetadata` TextView dưới tên file |
+| `PdfFileAdapter.kt` | Hiển thị metadata cho cả 2 tab (All + Reading List) |
+| `activity_main.xml` | Thêm nút `btnScanMetadata` trên header |
+| `MainActivity.kt` | Init PdfMetadataManager, xử lý nút Scan với progress dialog |
+| `SyncManager.kt` | Thêm sync metadata JSON (upload/download/merge) + update file description |
+| `LocaleHelper.kt` | Thêm chuỗi scan_title, scan_preparing, scan_complete, all_scanned (vi+ja) |
+| `HISTORY.md` | Cập nhật changelog v1.5.0 |
+
+---
+
 ## [v1.4.6] - 2026-07-01
 
 ### 🔄 Tách biệt gesture vuốt dọc/ngang

@@ -22,9 +22,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mypdf.reader.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -89,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         LocaleHelper.init(this)
         ReadingListManager.init(this)
         SettingsManager.init(this)
+        PdfMetadataManager.init(this)
         readingList.addAll(ReadingListManager.getList())
 
         setupRecyclerViews()
@@ -103,6 +106,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSettings.setOnClickListener {
             showSettingsDialog()
+        }
+
+        binding.btnScanMetadata.setOnClickListener {
+            startMetadataScan()
         }
 
         checkPermissionsAndLoad()
@@ -478,6 +485,66 @@ class MainActivity : AppCompatActivity() {
             "${LocaleHelper.getString("tab_reading_list")} ($unreadCount)"
         } else {
             LocaleHelper.getString("tab_reading_list")
+        }
+    }
+
+    // ─── METADATA SCAN ───
+
+    private fun startMetadataScan() {
+        if (allFiles.isEmpty()) {
+            Toast.makeText(this, LocaleHelper.getString("no_pdf"), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Tìm file chưa có metadata
+        val allFileNames = allFiles.map { "${it.name}.pdf" }
+        val filesWithoutMeta = PdfMetadataManager.getFilesWithoutMetadata(allFileNames)
+
+        if (filesWithoutMeta.isEmpty()) {
+            Toast.makeText(this, "✅ ${LocaleHelper.getString("all_scanned")}", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Tìm đường dẫn đầy đủ cho các file cần scan
+        val pathsToScan = allFiles
+            .filter { "${it.name}.pdf" in filesWithoutMeta }
+            .map { it.path }
+
+        // Tạo dialog hiện progress
+        val progressView = TextView(this).apply {
+            textSize = 14f
+            setPadding(48, 32, 48, 32)
+            text = "${LocaleHelper.getString("scan_preparing")}..."
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("🔍 ${LocaleHelper.getString("scan_title")}")
+            .setView(progressView)
+            .setCancelable(false)
+            .setNegativeButton(LocaleHelper.getString("settings_cancel")) { d, _ ->
+                d.dismiss()
+            }
+            .create()
+        dialog.show()
+
+        lifecycleScope.launch {
+            val extracted = PdfTextExtractor.extractBatch(pathsToScan) { current, total, fileName ->
+                runOnUiThread {
+                    progressView.text = "($current/$total) $fileName"
+                }
+            }
+
+            dialog.dismiss()
+
+            // Refresh adapter để hiển thị metadata mới
+            fileAdapter.notifyDataSetChanged()
+            readingListAdapter.notifyDataSetChanged()
+
+            Toast.makeText(
+                this@MainActivity,
+                "✅ ${LocaleHelper.getString("scan_complete")}: $extracted/${pathsToScan.size}",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 }

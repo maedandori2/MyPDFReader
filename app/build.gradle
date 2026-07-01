@@ -73,5 +73,8 @@ dependencies {
     // LocalBroadcastManager để thông báo refresh danh sách file sau sync
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 
+    // ML Kit Text Recognition (Japanese) - OCR trích xuất thông tin từ PDF
+    implementation 'com.google.mlkit:text-recognition-japanese:16.0.1'
+
     // KHÔNG CẦN play-services-auth nữa vì dùng Service Account + java.security
 }
