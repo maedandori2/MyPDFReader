@@ -29,6 +29,7 @@
     - Nếu file trên máy mới hơn Drive (do người dùng vừa bấm nút Scan OCR tạo dữ liệu mới): tự động tải lên Google Drive (ghi đè file cũ hoặc tạo file mới nếu Drive chưa có) để chia sẻ kết quả quét cho các thiết bị khác.
 
 - **`UpdateCheckerWithProgress` — Fix lỗi tải xuống thất bại**: Chuyển từ `DownloadManager` của hệ thống (hay bị từ chối quyền trên Android 10+ và lỗi khi gặp 302 Redirect từ GitHub Releases) sang tải trực tiếp bằng `HttpURLConnection` trong Coroutine (`Dispatchers.IO`), tự động xử lý chuyển hướng (redirect) và lưu vào vùng nhớ an toàn `getExternalFilesDir`, đảm bảo cài đặt APK thành công 100%.
+- **Fix lỗi 404 khi bấm tải bản cập nhật mới (`build.yml`)**: Phát hiện quy trình tự động trên GitHub Actions trước đây chỉ tải file APK lên mục *Artifacts* tạm thời (phải đăng nhập GitHub mới tải được) mà quên không tạo bản phát hành *GitHub Release*, dẫn đến đường link tải `releases/latest/download/app-release.apk` bị báo lỗi 404. Đã bổ sung bước tự động tạo GitHub Release và đính kèm file `app-release.apk` vào workflow `build.yml`.
 - **Tối ưu hóa siêu nhẹ & Thay đổi giao diện icon PDF**:
   - **Thay ảnh bìa PDF bằng Icon vector tĩnh (`@drawable/ic_pdf`)**: Loại bỏ hoàn toàn quy trình mở luồng file (`ParcelFileDescriptor`), render trang đầu (`PdfRenderer`) và cache Bitmap mỗi khi cuộn danh sách. Giúp danh sách cuộn mượt mà tức thì ở 60/120 FPS, giải phóng hàng chục MB RAM và không gây hao pin.
   - **Kích hoạt R8 Minification & Resource Shrinking (`build.gradle`)**: Bật `minifyEnabled true` và `shrinkResources true` cho bản release kèm bộ quy tắc ProGuard chuẩn cho Gson/Room/ML Kit. Quá trình này tự động cắt bỏ code và tài nguyên dư thừa của các thư viện Google Material, AppCompat, Coroutines... giúp giảm đáng kể dung lượng file APK (gọn nhẹ hơn ~40-60%) và khởi động app nhanh hơn.
@@ -40,6 +41,7 @@
 | `PdfViewerActivity.kt` | Render IO thread, recycle bitmap cũ, reset matrix, thêm coroutine imports |
 | `UpdateCheckerWithProgress.kt` | Thay thế `DownloadManager` bằng Coroutine HTTP download để fix lỗi tải thất bại |
 | `file_paths.xml` | Thêm `<external-files-path>` cho FileProvider |
+| `.github/workflows/build.yml` | Thêm bước tự động tạo GitHub Release đính kèm APK để fix lỗi tải 404 |
 | `item_pdf_file.xml` & `ic_pdf.xml` | Thay hiển thị ảnh bìa PDF bằng icon vector tĩnh siêu nhẹ |
 | `build.gradle` & `proguard-rules.pro` | Bật R8 minification & shrinkResources tối ưu hóa dung lượng APK |
 | `PdfTextExtractor.kt` | TextRecognizer lazy singleton |
