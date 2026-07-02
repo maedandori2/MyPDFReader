@@ -144,6 +144,12 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
+#### 📄 app/src/main/res/drawable/ic_pdf.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/drawable/ic_pdf.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/drawable/ic_pdf.xml)
+```
+
+
 #### 📄 app/src/main/res/layout/activity_main.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/layout/activity_main.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/layout/activity_main.xml)
@@ -212,6 +218,7 @@ Tự động cập nhật lúc: $(date)
 * **HISTORY.md**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md))
 * **README.md**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md))
 * **app/build.gradle**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle))
+* **app/proguard-rules.pro**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/proguard-rules.pro](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/proguard-rules.pro)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/proguard-rules.pro](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/proguard-rules.pro))
 * **build.gradle**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/build.gradle](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/build.gradle)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/build.gradle](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/build.gradle))
 * **gradle.properties**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle.properties)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle.properties))
 * **gradle/wrapper/gradle-wrapper.properties**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle/wrapper/gradle-wrapper.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle/wrapper/gradle-wrapper.properties)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle/wrapper/gradle-wrapper.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/gradle/wrapper/gradle-wrapper.properties))
