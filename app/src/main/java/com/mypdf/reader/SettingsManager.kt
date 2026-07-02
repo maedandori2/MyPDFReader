@@ -8,11 +8,13 @@ object SettingsManager {
     private const val KEY_FILE_NAME_SIZE = "file_name_size"
     private const val KEY_NOTICE_OPACITY = "notice_opacity"
     private const val KEY_NOTICE_DURATION = "notice_duration"
+    private const val KEY_KEEP_SCREEN_ON = "keep_screen_on"
 
     // Giá trị mặc định
     const val DEFAULT_FILE_NAME_SIZE = 19     // sp
     const val DEFAULT_NOTICE_OPACITY = 50     // % (0-100)
     const val DEFAULT_NOTICE_DURATION = 5     // giây
+    const val DEFAULT_KEEP_SCREEN_ON = true
 
     const val MIN_FILE_NAME_SIZE = 12
     const val MAX_FILE_NAME_SIZE = 32
@@ -68,5 +70,15 @@ object SettingsManager {
     fun setNoticeDuration(seconds: Int) {
         val clamped = seconds.coerceIn(MIN_NOTICE_DURATION, MAX_NOTICE_DURATION)
         prefs().edit().putInt(KEY_NOTICE_DURATION, clamped).apply()
+    }
+
+    // ── Keep screen on ──
+
+    fun isKeepScreenOn(): Boolean {
+        return prefs().getBoolean(KEY_KEEP_SCREEN_ON, DEFAULT_KEEP_SCREEN_ON)
+    }
+
+    fun setKeepScreenOn(keep: Boolean) {
+        prefs().edit().putBoolean(KEY_KEEP_SCREEN_ON, keep).apply()
     }
 }

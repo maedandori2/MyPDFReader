@@ -131,6 +131,29 @@ object PdfMetadataManager {
     }
 
     /**
+     * Format metadata với làm nổi bật tự động cho UI (sử dụng HTML formatting)
+     * Làm nổi bật 自社品名 và 品名 màu cam đỏ đậm & in đậm giá trị
+     */
+    fun formatForHighlightedDisplay(fileName: String): CharSequence? {
+        val data = metadataMap[fileName] ?: return null
+        if (data.isEmpty()) return null
+        
+        val sortedEntries = METADATA_KEYS.mapNotNull { key ->
+            data[key]?.let { value ->
+                if (key == "自社品名" || key == "品名") {
+                    "<font color=\"#D84315\"><b>$key:</b></font> <font color=\"#B71C1C\"><b>$value</b></font>"
+                } else {
+                    "<font color=\"#1565C0\"><b>$key:</b></font> <font color=\"#212121\">$value</font>"
+                }
+            }
+        }
+        
+        if (sortedEntries.isEmpty()) return null
+        val htmlString = sortedEntries.joinToString(" &nbsp;|&nbsp; ")
+        return androidx.core.text.HtmlCompat.fromHtml(htmlString, androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY)
+    }
+
+    /**
      * Format metadata để làm description trên Drive
      */
     fun formatForDescription(fileName: String): String? {

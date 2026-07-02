@@ -30,10 +30,17 @@ class SettingsActivity : AppCompatActivity() {
         binding.tvCurrentVersion.text = LocaleHelper.getString("current_version").replace("%s", currentVersion)
         binding.btnCheckUpdate.text = LocaleHelper.getString("check_update")
         binding.btnDownloadUpdate.text = LocaleHelper.getString("download")
+        binding.tvReadingSectionTitle.text = LocaleHelper.getString("reading_section")
+        binding.switchKeepScreenOn.text = LocaleHelper.getString("keep_screen_on")
+        binding.switchKeepScreenOn.isChecked = SettingsManager.isKeepScreenOn()
     }
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener { finish() }
+
+        binding.switchKeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
+            SettingsManager.setKeepScreenOn(isChecked)
+        }
 
         binding.btnCheckUpdate.setOnClickListener {
             checkUpdate()

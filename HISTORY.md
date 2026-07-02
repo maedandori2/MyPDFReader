@@ -2,6 +2,14 @@
 
 ## [v1.5.1] - 2026-07-02
 
+### ✨ Tính năng mới & Cải tiến UI
+- **Tùy chọn "Luôn giữ sáng màn hình khi đọc" (`SettingsActivity` & `PdfViewerActivity`)**:
+  - Thêm công tắc tùy chọn trong màn hình Cài đặt (`💡 Luôn giữ sáng màn hình khi đọc` / `💡 読書中は常に画面をオンにする`) cho phép người dùng bật/tắt tính năng giữ sáng màn hình.
+  - Khi đọc tài liệu PDF trong `PdfViewerActivity`, ứng dụng tự động kiểm tra thiết lập trong `SettingsManager` và áp dụng/gỡ bỏ cờ `FLAG_KEEP_SCREEN_ON` một cách linh hoạt, hỗ trợ tối đa cho công nhân/kỹ thuật viên khi làm việc lâu với tài liệu.
+- **Làm nổi bật thông tin `自社品名` và `品名` (`PdfMetadataManager` & `PdfFileAdapter`)**:
+  - Thiết kế mới cho khung hiển thị metadata trong danh sách file: Sử dụng background badge ấm áp màu Amber (`@drawable/bg_metadata_badge`), tăng kích thước chữ từ `11sp` lên `13sp` rõ nét, bổ sung padding và khoảng cách dòng thoáng đãng.
+  - Sử dụng định dạng HTML (`HtmlCompat.fromHtml`) trong `formatForHighlightedDisplay`: Tự động nhận diện hai từ khóa quan trọng nhất là `自社品名` và `品名` để tô màu cam đỏ nổi bật (`#D84315`) và in đậm phần giá trị (`#B71C1C`), giúp người dùng quét nhanh mắt và tìm đúng sản phẩm chỉ trong tích tắc.
+
 ### 🐛 Sửa lỗi danh sách đọc & Kiểm tra cập nhật
 - **`UpdateChecker` & `UpdateCheckerWithProgress` — Cải tiến kiểm tra và lưu file cập nhật**:
   - Khi tải `version.json` từ `raw.githubusercontent.com`, máy chủ GitHub CDN thường lưu cache từ 5–15 phút khiến app đọc phải bản JSON cũ dù vừa push lên GitHub. Đã bổ sung tham số chống cache timestamp (`?t=currentTimeMillis()`) và thiết lập `useCaches = false`, `Cache-Control: no-cache` để đảm bảo app luôn tải chính xác phiên bản mới nhất từ server.

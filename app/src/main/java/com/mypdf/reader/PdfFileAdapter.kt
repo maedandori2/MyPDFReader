@@ -64,8 +64,8 @@ class PdfFileAdapter(
         val file = files[position]
         holder.tvName.text = "${file.name}.pdf"
 
-        // Hiển thị metadata (品名, 自社品番, 自社品名) cho cả 2 tab
-        val metadataText = PdfMetadataManager.formatForDisplay("${file.name}.pdf")
+        // Hiển thị metadata (品名, 自社品番, 自社品名) cho cả 2 tab với làm nổi bật tự động
+        val metadataText = PdfMetadataManager.formatForHighlightedDisplay("${file.name}.pdf")
         if (metadataText != null) {
             holder.tvMetadata.text = metadataText
             holder.tvMetadata.visibility = View.VISIBLE

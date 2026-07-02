@@ -69,7 +69,7 @@ class PdfViewerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Always On Display + Full screen
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        applyKeepScreenOn()
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         binding = ActivityPdfViewerBinding.inflate(layoutInflater)
@@ -371,6 +371,19 @@ class PdfViewerActivity : AppCompatActivity() {
     private fun midPoint(event: MotionEvent) {
         midX = (event.getX(0) + event.getX(1)) / 2
         midY = (event.getY(0) + event.getY(1)) / 2
+    }
+
+    private fun applyKeepScreenOn() {
+        if (SettingsManager.isKeepScreenOn()) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        applyKeepScreenOn()
     }
 
     override fun onDestroy() {

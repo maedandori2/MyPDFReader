@@ -64,6 +64,8 @@ object LocaleHelper {
             "downloading" to "Đang tải... %d%%",
             "update_done" to "Tải xong, đang mở cài đặt...",
             "update_error" to "Lỗi: %s",
+            "reading_section" to "Tùy chọn đọc tài liệu",
+            "keep_screen_on" to "💡 Luôn giữ sáng màn hình khi đọc",
             // ── PdfFileAdapter ──
             "status_read" to "✓ Đã đọc",
             "status_unread" to "Chưa đọc",
@@ -158,6 +160,8 @@ object LocaleHelper {
             "downloading" to "ダウンロード中... %d%%",
             "update_done" to "完了しました。インストールを開きます...",
             "update_error" to "エラー: %s",
+            "reading_section" to "読書設定",
+            "keep_screen_on" to "💡 読書中は常に画面をオンにする",
             // ── PdfFileAdapter ──
             "status_read" to "✓ 既読",
             "status_unread" to "未読",
