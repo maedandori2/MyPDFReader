@@ -132,6 +132,12 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
+#### 📄 app/src/main/res/drawable/bg_metadata_badge.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/drawable/bg_metadata_badge.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/drawable/bg_metadata_badge.xml)
+```
+
+
 #### 📄 app/src/main/res/drawable/bg_search.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/drawable/bg_search.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/src/main/res/drawable/bg_search.xml)
