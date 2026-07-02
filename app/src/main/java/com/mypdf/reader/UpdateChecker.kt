@@ -35,8 +35,11 @@ object UpdateChecker {
     // =========================================================================
     suspend fun checkForUpdate(context: Context): VersionInfo? = withContext(Dispatchers.IO) {
         try {
-            val url = URL(VERSION_URL)
+            // Thêm timestamp để tránh bị dính CDN cache của GitHub
+            val url = URL("$VERSION_URL?t=${System.currentTimeMillis()}")
             val conn = url.openConnection() as HttpURLConnection
+            conn.useCaches = false
+            conn.setRequestProperty("Cache-Control", "no-cache")
             conn.connectTimeout = 5000
             conn.readTimeout = 5000
 

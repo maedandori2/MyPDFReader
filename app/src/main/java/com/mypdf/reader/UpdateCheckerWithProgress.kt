@@ -38,8 +38,11 @@ object UpdateCheckerWithProgress {
     // =========================================================================
     suspend fun checkForUpdate(context: Context): VersionInfo? = withContext(Dispatchers.IO) {
         try {
-            val url = URL(VERSION_URL)
+            // Thêm timestamp để tránh bị dính CDN cache của GitHub
+            val url = URL("$VERSION_URL?t=${System.currentTimeMillis()}")
             val conn = url.openConnection() as HttpURLConnection
+            conn.useCaches = false
+            conn.setRequestProperty("Cache-Control", "no-cache")
             conn.connectTimeout = 10000
             conn.readTimeout = 10000
 
@@ -116,8 +119,7 @@ object UpdateCheckerWithProgress {
                 }
 
                 val totalSize = conn.contentLengthLong
-                val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                    ?: Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 if (!dir.exists()) dir.mkdirs()
                 val file = File(dir, fileName)
                 if (file.exists()) file.delete()

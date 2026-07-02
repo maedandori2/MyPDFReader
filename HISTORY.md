@@ -2,7 +2,10 @@
 
 ## [v1.5.1] - 2026-07-02
 
-### 🐛 Sửa lỗi danh sách đọc (Reading List)
+### 🐛 Sửa lỗi danh sách đọc & Kiểm tra cập nhật
+- **`UpdateChecker` & `UpdateCheckerWithProgress` — Cải tiến kiểm tra và lưu file cập nhật**:
+  - Khi tải `version.json` từ `raw.githubusercontent.com`, máy chủ GitHub CDN thường lưu cache từ 5–15 phút khiến app đọc phải bản JSON cũ dù vừa push lên GitHub. Đã bổ sung tham số chống cache timestamp (`?t=currentTimeMillis()`) và thiết lập `useCaches = false`, `Cache-Control: no-cache` để đảm bảo app luôn tải chính xác phiên bản mới nhất từ server.
+  - Theo yêu cầu, đã thay đổi thư mục lưu file APK bản cập nhật (`MyPDFReader-update.apk`) khi tải từ màn hình Cài đặt sang **thư mục Download chung của điện thoại (`/storage/emulated/0/Download`)** thay vì thư mục riêng của app. Người dùng có thể dễ dàng tìm thấy file trong các ứng dụng Quản lý tệp.
 - **`MainActivity` & `PdfFileAdapter` — Số thứ tự không tự cập nhật khi sửa**: 
   - Trước đây, khi sửa trực tiếp số thứ tự trong ô nhập liệu (EditText) tại tab Reading List, callback `onSwapPosition` chưa được kết nối vào `MainActivity`, dẫn đến việc các item không chuyển vị trí và các số thứ tự phía sau không tự động cập nhật.
   - Đã kết nối callback `onSwapPosition` vào `MainActivity` (gọi `ReadingListManager.moveToPosition`), giúp khi sửa số thứ tự của một bài đọc, bài đọc sẽ chuyển đến đúng vị trí mới và tất cả số thứ tự phía sau tự động dịch chuyển và cập nhật chính xác.
