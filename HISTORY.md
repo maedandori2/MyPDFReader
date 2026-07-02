@@ -2,6 +2,12 @@
 
 ## [v1.5.1] - 2026-07-02
 
+### 🐛 Sửa lỗi danh sách đọc (Reading List)
+- **`MainActivity` & `PdfFileAdapter` — Số thứ tự không tự cập nhật khi sửa**: 
+  - Trước đây, khi sửa trực tiếp số thứ tự trong ô nhập liệu (EditText) tại tab Reading List, callback `onSwapPosition` chưa được kết nối vào `MainActivity`, dẫn đến việc các item không chuyển vị trí và các số thứ tự phía sau không tự động cập nhật.
+  - Đã kết nối callback `onSwapPosition` vào `MainActivity` (gọi `ReadingListManager.moveToPosition`), giúp khi sửa số thứ tự của một bài đọc, bài đọc sẽ chuyển đến đúng vị trí mới và tất cả số thứ tự phía sau tự động dịch chuyển và cập nhật chính xác.
+  - Bổ sung `notifyItemRangeChanged` trong thao tác di chuyển lên/xuống (`moveItem`) và xoá bài đọc (`removeFromReadingList`) để số thứ tự hiển thị luôn đồng bộ real-time.
+
 ### 🐛 Rà soát & Sửa lỗi toàn dự án
 
 #### 🔴 Lỗi nghiêm trọng đã fix

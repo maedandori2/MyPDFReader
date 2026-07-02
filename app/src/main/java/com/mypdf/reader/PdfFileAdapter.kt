@@ -77,7 +77,10 @@ class PdfFileAdapter(
             // Số thứ tự thay thumbnail - có thể sửa trực tiếp
             holder.tvIndex.visibility = View.VISIBLE
             holder.ivThumbnail.visibility = View.GONE
-            holder.tvIndex.setText("${position + 1}")
+            val expectedText = "${position + 1}"
+            if (holder.tvIndex.text.toString() != expectedText) {
+                holder.tvIndex.setText(expectedText)
+            }
 
             // Tên file lớn hơn trong reading list (cỡ chữ tuỳ chọn)
             holder.tvName.textSize = SettingsManager.getFileNameSize().toFloat()
@@ -150,7 +153,6 @@ class PdfFileAdapter(
         // Xử lý khi nhấn Done trên bàn phím
         holder.tvIndex.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                handleIndexChange(holder)
                 holder.tvIndex.clearFocus()
                 true
             } else {
@@ -183,7 +185,10 @@ class PdfFileAdapter(
             onSwapPosition?.invoke(currentPos, targetPos)
         } else {
             // Số không hợp lệ hoặc không thay đổi → khôi phục lại số cũ
-            holder.tvIndex.setText("${currentPos + 1}")
+            val expectedText = "${currentPos + 1}"
+            if (inputText != expectedText) {
+                holder.tvIndex.setText(expectedText)
+            }
         }
     }
 

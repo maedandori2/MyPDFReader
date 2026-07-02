@@ -198,7 +198,8 @@ class MainActivity : AppCompatActivity() {
             onOpenFile = { file -> openPdf(file) },
             onMoveUp = { pos -> moveItem(pos, -1) },
             onMoveDown = { pos -> moveItem(pos, 1) },
-            onRemove = { pos -> removeFromReadingList(pos) }
+            onRemove = { pos -> removeFromReadingList(pos) },
+            onSwapPosition = { fromPos, toPos -> moveItemToPosition(fromPos, toPos) }
         )
         binding.rvReadingList.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -349,6 +350,7 @@ class MainActivity : AppCompatActivity() {
             ReadingListManager.removeAtPosition(position)
             readingList.removeAt(position)
             readingListAdapter.notifyItemRemoved(position)
+            readingListAdapter.notifyItemRangeChanged(position, readingList.size - position)
             updateBadge()
             Toast.makeText(this, LocaleHelper.getString("removed_from_list").replace("%s", "$fileName.pdf"), Toast.LENGTH_SHORT).show()
         }
@@ -374,6 +376,14 @@ class MainActivity : AppCompatActivity() {
             readingList[position] = readingList[targetPosition]
             readingList[targetPosition] = temp
             readingListAdapter.notifyItemMoved(position, targetPosition)
+            readingListAdapter.notifyItemRangeChanged(minOf(position, targetPosition), 2)
+        }
+    }
+
+    private fun moveItemToPosition(fromPosition: Int, toPosition: Int) {
+        if (fromPosition in readingList.indices && toPosition in readingList.indices && fromPosition != toPosition) {
+            ReadingListManager.moveToPosition(fromPosition, toPosition)
+            refreshReadingList()
         }
     }
 
