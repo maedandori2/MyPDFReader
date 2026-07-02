@@ -81,4 +81,23 @@ object SettingsManager {
     fun setKeepScreenOn(keep: Boolean) {
         prefs().edit().putBoolean(KEY_KEEP_SCREEN_ON, keep).apply()
     }
+
+    // ── Metadata Colors (自社品番, 品番, 自社品名, 品名) ──
+
+    fun getMetadataLabelColor(key: String): String {
+        return prefs().getString("color_label_$key", "#78909C") ?: "#78909C"
+    }
+
+    fun setMetadataLabelColor(key: String, hexColor: String) {
+        prefs().edit().putString("color_label_$key", hexColor).apply()
+    }
+
+    fun getMetadataValueColor(key: String): String {
+        val defaultColor = if (key == "自社品名" || key == "品名") "#C62828" else "#0D47A1"
+        return prefs().getString("color_value_$key", defaultColor) ?: defaultColor
+    }
+
+    fun setMetadataValueColor(key: String, hexColor: String) {
+        prefs().edit().putString("color_value_$key", hexColor).apply()
+    }
 }

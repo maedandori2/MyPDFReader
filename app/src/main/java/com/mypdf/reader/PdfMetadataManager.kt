@@ -141,11 +141,9 @@ object PdfMetadataManager {
         
         val sortedEntries = METADATA_KEYS.mapNotNull { key ->
             data[key]?.let { value ->
-                if (key == "自社品名" || key == "品名") {
-                    "<small><font color=\"#78909C\">$key:</font></small> <font color=\"#C62828\"><b>$value</b></font>"
-                } else {
-                    "<small><font color=\"#78909C\">$key:</font></small> <font color=\"#0D47A1\"><b>$value</b></font>"
-                }
+                val labelColor = SettingsManager.getMetadataLabelColor(key)
+                val valueColor = SettingsManager.getMetadataValueColor(key)
+                "<small><font color=\"$labelColor\">$key:</font></small> <font color=\"$valueColor\"><b>$value</b></font>"
             }
         }
         
