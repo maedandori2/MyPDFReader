@@ -87,7 +87,7 @@ class SettingsActivity : AppCompatActivity() {
             override fun onProgress(progress: Int) {
                 runOnUiThread {
                     binding.pbDownload.progress = progress
-                    binding.tvProgressPercent.text = LocaleHelper.getString("downloading").replace("%d%%", "$progress%")
+                    binding.tvProgressPercent.text = LocaleHelper.getString("update_downloading").replace("%d%%", "$progress%")
                 }
             }
 
