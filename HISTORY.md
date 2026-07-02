@@ -28,15 +28,18 @@
     - Nếu file trên Drive mới hơn máy: tải về máy và tự động cập nhật hiển thị lên danh sách.
     - Nếu file trên máy mới hơn Drive (do người dùng vừa bấm nút Scan OCR tạo dữ liệu mới): tự động tải lên Google Drive (ghi đè file cũ hoặc tạo file mới nếu Drive chưa có) để chia sẻ kết quả quét cho các thiết bị khác.
 
+- **`UpdateCheckerWithProgress` — Fix lỗi tải xuống thất bại**: Chuyển từ `DownloadManager` của hệ thống (hay bị từ chối quyền trên Android 10+ và lỗi khi gặp 302 Redirect từ GitHub Releases) sang tải trực tiếp bằng `HttpURLConnection` trong Coroutine (`Dispatchers.IO`), tự động xử lý chuyển hướng (redirect) và lưu vào vùng nhớ an toàn `getExternalFilesDir`, đảm bảo cài đặt APK thành công 100%.
+
 #### 📝 File đã sửa
 | File | Thay đổi |
 |------|----------|
 | `SyncActivity.kt` | Fix sai path localFolderFile |
 | `PdfViewerActivity.kt` | Render IO thread, recycle bitmap cũ, reset matrix, thêm coroutine imports |
-| `UpdateChecker.kt` | Fix BroadcastReceiver leak, thêm Handler/Looper imports |
+| `UpdateCheckerWithProgress.kt` | Thay thế `DownloadManager` bằng Coroutine HTTP download để fix lỗi tải thất bại |
+| `file_paths.xml` | Thêm `<external-files-path>` cho FileProvider |
 | `PdfTextExtractor.kt` | TextRecognizer lazy singleton |
 | `MainActivity.kt` | loadPdfFiles() chạy trên IO thread |
-| `SyncManager.kt` | Thêm HTTP timeout cho findFolderId và listDriveFiles |
+| `SyncManager.kt` | Thêm HTTP timeout cho findFolderId và listDriveFiles; đồng bộ 2 chiều cho `pdf_metadata.json` |
 
 ---
 

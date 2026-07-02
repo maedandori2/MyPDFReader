@@ -1,17 +1,16 @@
 package com.mypdf.reader
 
-import android.app.DownloadManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.Uri
 import android.os.Environment
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -41,8 +40,8 @@ object UpdateCheckerWithProgress {
         try {
             val url = URL(VERSION_URL)
             val conn = url.openConnection() as HttpURLConnection
-            conn.connectTimeout = 5000
-            conn.readTimeout = 5000
+            conn.connectTimeout = 10000
+            conn.readTimeout = 10000
 
             if (conn.responseCode != 200) return@withContext null
 
@@ -73,7 +72,7 @@ object UpdateCheckerWithProgress {
     }
 
     // =========================================================================
-    // Tải APK với theo dõi tiến trình
+    // Tải APK trực tiếp qua Coroutines (thay thế DownloadManager để tránh lỗi redirect & Quyền)
     // =========================================================================
     fun downloadWithProgress(
         context: Context,
@@ -82,84 +81,86 @@ object UpdateCheckerWithProgress {
     ) {
         val fileName = "MyPDFReader-update.apk"
 
-        // Xóa file cũ nếu có
-        val oldFile = java.io.File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            fileName
-        )
-        if (oldFile.exists()) oldFile.delete()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                var urlStr = downloadUrl
+                var conn: HttpURLConnection
+                var redirects = 0
+                while (true) {
+                    val url = URL(urlStr)
+                    conn = url.openConnection() as HttpURLConnection
+                    conn.instanceFollowRedirects = true
+                    conn.connectTimeout = 15000
+                    conn.readTimeout = 30000
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android; Mobile)")
+                    conn.setRequestProperty("Accept", "*/*")
 
-        // Bắt đầu tải
-        val request = DownloadManager.Request(Uri.parse(downloadUrl))
-            .setTitle("MyPDFReader")
-            .setDescription("Đang tải bản cập nhật...")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-            .setAllowedOverMetered(true)
-            .setAllowedOverRoaming(true)
-
-        val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val downloadId = dm.enqueue(request)
-
-        // Theo dõi tiến trình tải
-        val progressThread = Thread {
-            var isDownloading = true
-            while (isDownloading) {
-                try {
-                    val query = DownloadManager.Query().setFilterById(downloadId)
-                    val cursor = dm.query(query)
-                    
-                    if (cursor.moveToFirst()) {
-                        val statusColumn = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
-                        val totalSizeColumn = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
-                        val downloadedSizeColumn = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
-                        
-                        val status = cursor.getInt(statusColumn)
-                        val totalSize = cursor.getLong(totalSizeColumn)
-                        val downloadedSize = cursor.getLong(downloadedSizeColumn)
-                        
-                        when (status) {
-                            DownloadManager.STATUS_SUCCESSFUL -> {
-                                listener.onProgress(100)
-                                listener.onComplete()
-                                isDownloading = false
-                                installApk(context, fileName)
-                            }
-                            DownloadManager.STATUS_FAILED -> {
-                                listener.onError("Tải xuống thất bại")
-                                isDownloading = false
-                            }
-                            DownloadManager.STATUS_RUNNING -> {
-                                if (totalSize > 0) {
-                                    val progress = (downloadedSize * 100 / totalSize).toInt()
-                                    listener.onProgress(progress)
-                                }
-                            }
-                            else -> {
-                                // STATUS_PAUSED, STATUS_PENDING
-                            }
+                    val code = conn.responseCode
+                    if (code in 300..399) {
+                        val location = conn.getHeaderField("Location")
+                        if (location != null && redirects < 10) {
+                            urlStr = location
+                            redirects++
+                            continue
                         }
                     }
-                    cursor.close()
-                    
-                    if (isDownloading) {
-                        Thread.sleep(500)  // Cập nhật mỗi 500ms
+                    break
+                }
+
+                if (conn.responseCode !in 200..299) {
+                    val code = conn.responseCode
+                    withContext(Dispatchers.Main) {
+                        listener.onError("Lỗi máy chủ (HTTP $code)")
                     }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Progress tracking error", e)
-                    isDownloading = false
+                    return@launch
+                }
+
+                val totalSize = conn.contentLengthLong
+                val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                    ?: Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                if (!dir.exists()) dir.mkdirs()
+                val file = File(dir, fileName)
+                if (file.exists()) file.delete()
+
+                var downloadedSize = 0L
+                var lastProgress = -1
+                conn.inputStream.use { input ->
+                    FileOutputStream(file).use { output ->
+                        val buffer = ByteArray(8192)
+                        var bytesRead = input.read(buffer)
+                        while (bytesRead != -1) {
+                            output.write(buffer, 0, bytesRead)
+                            downloadedSize += bytesRead
+                            if (totalSize > 0) {
+                                val progress = (downloadedSize * 100 / totalSize).toInt()
+                                if (progress != lastProgress) {
+                                    lastProgress = progress
+                                    withContext(Dispatchers.Main) {
+                                        listener.onProgress(progress)
+                                    }
+                                }
+                            }
+                            bytesRead = input.read(buffer)
+                        }
+                        output.flush()
+                    }
+                }
+
+                withContext(Dispatchers.Main) {
+                    listener.onProgress(100)
+                    listener.onComplete()
+                    installApk(context, file)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Download failed", e)
+                withContext(Dispatchers.Main) {
+                    listener.onError("Tải xuống thất bại: ${e.message}")
                 }
             }
         }
-        progressThread.isDaemon = true
-        progressThread.start()
     }
 
-    private fun installApk(context: Context, fileName: String) {
-        val file = java.io.File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            fileName
-        )
+    private fun installApk(context: Context, file: File) {
         if (!file.exists()) return
 
         val uri = androidx.core.content.FileProvider.getUriForFile(
