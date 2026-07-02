@@ -155,7 +155,7 @@ object UpdateCheckerWithProgress {
                 withContext(Dispatchers.Main) {
                     listener.onProgress(100)
                     listener.onComplete()
-                    openDownloadFolder(context)
+                    installApkOrOpenDownloadFolder(context, file)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Download failed", e)
@@ -164,6 +164,40 @@ object UpdateCheckerWithProgress {
                 }
             }
         }
+    }
+
+    private fun installApkOrOpenDownloadFolder(context: Context, file: File) {
+        if (!file.exists()) {
+            openDownloadFolder(context)
+            return
+        }
+
+        var canInstall = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!context.packageManager.canRequestPackageInstalls()) {
+                canInstall = false
+            }
+        }
+
+        if (canInstall) {
+            try {
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    file
+                )
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "application/vnd.android.package-archive")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                context.startActivity(intent)
+                return
+            } catch (e: Exception) {
+                Log.e(TAG, "Tự động cài đặt thất bại, chuyển sang mở thư mục Download", e)
+            }
+        }
+
+        openDownloadFolder(context)
     }
 
     private fun openDownloadFolder(context: Context) {
