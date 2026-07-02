@@ -182,7 +182,14 @@ object SyncManager {
                 // Nếu file chưa tồn tại -> download
                 if (!localFile.exists()) {
                     val success = downloadFile(token, fileId, localFile)
-                    if (success) downloaded++ else localFile.delete()
+                    if (success) {
+                        downloaded++
+                        if (fileName == PdfMetadataManager.METADATA_FILE_NAME) {
+                            PdfMetadataManager.loadAll()
+                        }
+                    } else {
+                        localFile.delete()
+                    }
                     continue
                 }
 
@@ -196,13 +203,41 @@ object SyncManager {
                     continue
                 }
 
-                // Nếu remote mới hơn local (ví dụ remoteEpoch > localEpoch + 500ms) thì tải lại (overwrite)
-                if (remoteEpoch > localEpoch + 500) {
-                    val success = downloadFile(token, fileId, localFile)
-                    if (success) downloaded++ else localFile.delete()
+                if (fileName == PdfMetadataManager.METADATA_FILE_NAME) {
+                    // Riêng pdf_metadata.json: trên Drive mới hơn thì tải về, máy mới hơn thì tải lên
+                    if (remoteEpoch > localEpoch + 500) {
+                        val success = downloadFile(token, fileId, localFile)
+                        if (success) {
+                            downloaded++
+                            PdfMetadataManager.loadAll()
+                        } else {
+                            localFile.delete()
+                        }
+                    } else if (localEpoch > remoteEpoch + 500) {
+                        onProgress("Đang tải lên $fileName (máy mới hơn Drive)...")
+                        val success = uploadFileUpdate(token, fileId, localFile)
+                        if (success) {
+                            Log.i(TAG, "Uploaded updated $fileName to Drive")
+                        }
+                    } else {
+                        skipped++
+                    }
                 } else {
-                    skipped++
+                    // Các file PDF khác: chỉ tải về nếu trên Drive mới hơn
+                    if (remoteEpoch > localEpoch + 500) {
+                        val success = downloadFile(token, fileId, localFile)
+                        if (success) downloaded++ else localFile.delete()
+                    } else {
+                        skipped++
+                    }
                 }
+            }
+
+            // Bước 3.5: Nếu riêng pdf_metadata.json có trên máy nhưng chưa có trên Drive -> tạo mới trên Drive
+            val metadataLocalFile = File(localFolder, PdfMetadataManager.METADATA_FILE_NAME)
+            if (metadataLocalFile.exists() && !driveNames.contains(PdfMetadataManager.METADATA_FILE_NAME)) {
+                onProgress("Đang tạo ${PdfMetadataManager.METADATA_FILE_NAME} lên Drive...")
+                uploadFileCreate(token, folderId, metadataLocalFile)
             }
 
             // Bước 4: Xóa file local không còn trên Drive (chỉ .pdf/.json)
@@ -212,7 +247,7 @@ object SyncManager {
                 if (!f.isFile) continue
                 val nameLower = f.name.lowercase(Locale.getDefault())
                 val isPdfOrJson = nameLower.endsWith(".pdf") || nameLower.endsWith(".json")
-                if (!isPdfOrJson) continue
+                if (!isPdfOrJson || f.name == PdfMetadataManager.METADATA_FILE_NAME) continue
                 if (!driveNames.contains(f.name)) {
                     try {
                         if (f.delete()) {
@@ -344,6 +379,82 @@ object SyncManager {
             true
         } catch (e: Exception) {
             Log.e(TAG, "downloadFile failed: ${'$'}{dest.name}", e)
+            false
+        }
+    }
+
+    private fun uploadFileUpdate(token: String, fileId: String, localFile: File): Boolean {
+        return try {
+            val url = URL("https://www.googleapis.com/upload/drive/v3/files/$fileId?uploadType=media")
+            val conn = url.openConnection() as HttpURLConnection
+            conn.connectTimeout = 15_000
+            conn.readTimeout = 60_000
+            conn.doOutput = true
+            conn.setRequestMethod("POST")
+            conn.setRequestProperty("X-HTTP-Method-Override", "PATCH")
+            conn.setRequestProperty("Authorization", "Bearer $token")
+            conn.setRequestProperty("Content-Type", "application/json")
+
+            localFile.inputStream().use { input ->
+                conn.outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            val code = conn.responseCode
+            if (code in 200..299) {
+                Log.d(TAG, "Updated remote metadata file successfully")
+                true
+            } else {
+                val error = conn.errorStream?.bufferedReader()?.readText() ?: ""
+                Log.e(TAG, "Failed to update metadata file, code $code: $error")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception updating metadata file", e)
+            false
+        }
+    }
+
+    private fun uploadFileCreate(token: String, folderId: String, localFile: File): Boolean {
+        return try {
+            val url = URL("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart")
+            val conn = url.openConnection() as HttpURLConnection
+            conn.connectTimeout = 15_000
+            conn.readTimeout = 60_000
+            conn.doOutput = true
+            conn.setRequestMethod("POST")
+            val boundary = "-------MyPDFReaderBoundary${System.currentTimeMillis()}"
+            conn.setRequestProperty("Authorization", "Bearer $token")
+            conn.setRequestProperty("Content-Type", "multipart/related; boundary=$boundary")
+
+            val metadataJson = """{"name": "${localFile.name}", "parents": ["$folderId"]}"""
+            val bodyStart = "--$boundary\r\n" +
+                    "Content-Type: application/json; charset=UTF-8\r\n\r\n" +
+                    "$metadataJson\r\n" +
+                    "--$boundary\r\n" +
+                    "Content-Type: application/json\r\n\r\n"
+            val bodyEnd = "\r\n--$boundary--\r\n"
+
+            conn.outputStream.use { out ->
+                out.write(bodyStart.toByteArray(Charsets.UTF_8))
+                localFile.inputStream().use { input ->
+                    input.copyTo(out)
+                }
+                out.write(bodyEnd.toByteArray(Charsets.UTF_8))
+                out.flush()
+            }
+
+            val code = conn.responseCode
+            if (code in 200..299) {
+                Log.d(TAG, "Created remote metadata file successfully")
+                true
+            } else {
+                val error = conn.errorStream?.bufferedReader()?.readText() ?: ""
+                Log.e(TAG, "Failed to create metadata file, code $code: $error")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception creating metadata file", e)
             false
         }
     }

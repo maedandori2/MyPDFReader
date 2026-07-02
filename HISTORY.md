@@ -12,15 +12,21 @@
 - **`UpdateChecker` — BroadcastReceiver leak**: Receiver chỉ unregister khi download thành công; nếu download bị hủy hoặc thất bại → leak vĩnh viễn. Đã thêm `Handler.postDelayed` tự unregister sau 5 phút.
 - **`PdfTextExtractor` — TextRecognizer không close**: Mỗi lần OCR tạo instance mới mà không đóng → resource leak. Đã chuyển sang `lazy` singleton.
 - **`SettingsActivity` — Crash khi mở Setting**: `SettingsManager.init(context)` chưa từng được gọi ở bất cứ đâu trong codebase → truy cập `SharedPreferences` gây ngoại lệ `UninitializedPropertyAccessException`. Đã thêm `SettingsManager.init(this)` vào `MainActivity` và `SettingsActivity`.
+- **`MainActivity` — Mất kết nối tính năng đọc metadata PDF**: `PdfMetadataManager.init(this)` và sự kiện cho nút `"🔍 Scan"` (`btnScanMetadata`) chưa từng được gán vào `MainActivity` từ phiên bản trước → ứng dụng không tải hoặc không cho phép scan hiển thị thông tin 品名, 自社品番, 自社品名. Đã kết nối đầy đủ khởi tạo, load JSON và dialog hiển thị tiến trình scan metadata.
 
 #### 🟡 Hiệu năng đã cải thiện
 - **`MainActivity.loadPdfFiles()`**: Chuyển scan file system từ **Main Thread đồng bộ** sang `Dispatchers.IO` trong coroutine → không còn block UI khi `onResume()`.
 - **`SyncManager`**: Thêm `connectTimeout = 15s` và `readTimeout = 30–60s` cho tất cả HTTP connections (`findFolderId`, `listDriveFiles`) → app không treo vô thời hạn khi mạng kém.
 
 ### ✨ Tính năng mới & UI
-- **Cập nhật ứng dụng**: Chuyển logic kiểm tra và tải cập nhật (UpdateChecker) từ popup tự động ở trang chủ vào màn hình **⚙ Setting**.
-  - Có thanh progress (tiến trình tải % real-time).
-  - Tách `SettingsActivity` ra khỏi dialog cũ để có đủ không gian hiển thị, quản lý tốt hơn.
+- **Cập nhật ứng dụng & Tinh gọn Setting**: 
+  - Chuyển logic kiểm tra và tải cập nhật (UpdateChecker) từ popup tự động ở trang chủ vào màn hình **⚙ Setting** với thanh progress (tiến trình tải % real-time).
+  - Bỏ phần "Cài đặt hiển thị" (cỡ chữ, độ trong suốt, thời gian thông báo) khỏi màn hình Setting theo yêu cầu để giao diện tinh gọn, chỉ tập trung vào kiểm tra cập nhật.
+- **Đồng bộ 2 chiều riêng cho file `pdf_metadata.json` (`SyncManager`)**:
+  - Các file PDF tài liệu giữ nguyên cơ chế **chỉ tải về từ Drive (1 chiều)** nếu bản trên Drive mới hơn.
+  - Riêng file thông tin OCR `pdf_metadata.json` áp dụng cơ chế **đồng bộ 2 chiều thông minh**:
+    - Nếu file trên Drive mới hơn máy: tải về máy và tự động cập nhật hiển thị lên danh sách.
+    - Nếu file trên máy mới hơn Drive (do người dùng vừa bấm nút Scan OCR tạo dữ liệu mới): tự động tải lên Google Drive (ghi đè file cũ hoặc tạo file mới nếu Drive chưa có) để chia sẻ kết quả quét cho các thiết bị khác.
 
 #### 📝 File đã sửa
 | File | Thay đổi |

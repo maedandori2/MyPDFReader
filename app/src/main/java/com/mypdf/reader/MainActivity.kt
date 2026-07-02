@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         LocaleHelper.init(this)
         ReadingListManager.init(this)
         SettingsManager.init(this)
+        PdfMetadataManager.init(this)
         readingList.addAll(ReadingListManager.getList())
 
         setupRecyclerViews()
@@ -103,6 +104,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
+        binding.btnScanMetadata.setOnClickListener {
+            startMetadataScan()
         }
 
         checkPermissionsAndLoad()
@@ -290,6 +295,7 @@ class MainActivity : AppCompatActivity() {
 
             // Scan file trên IO thread để không block UI
             val files = withContext(Dispatchers.IO) {
+                PdfMetadataManager.loadAll()
                 folder.listFiles { file -> file.extension.lowercase() == "pdf" }
                     ?.sortedWith(compareBy<File> {
                         it.nameWithoutExtension.toIntOrNull() ?: Int.MAX_VALUE
@@ -305,6 +311,7 @@ class MainActivity : AppCompatActivity() {
 
             binding.tvFileCount.text = "${allFiles.size} ${LocaleHelper.getString("file_count_suffix")}"
             fileAdapter.notifyDataSetChanged()
+            readingListAdapter.notifyDataSetChanged()
 
             if (allFiles.isEmpty()) {
                 binding.tvEmpty.visibility = View.VISIBLE
@@ -376,6 +383,58 @@ class MainActivity : AppCompatActivity() {
             "${LocaleHelper.getString("tab_reading_list")} ($unreadCount)"
         } else {
             LocaleHelper.getString("tab_reading_list")
+        }
+    }
+
+    private fun startMetadataScan() {
+        val unscannedFiles = allFiles.filter { !PdfMetadataManager.hasMetadata("${it.name}.pdf") }
+        if (unscannedFiles.isEmpty()) {
+            Toast.makeText(this, LocaleHelper.getString("all_scanned"), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val dialogView = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(60, 40, 60, 40)
+        }
+        val progressBar = android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
+            max = unscannedFiles.size
+            progress = 0
+            layoutParams = android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = 24
+                bottomMargin = 24
+            }
+        }
+        val tvProgress = android.widget.TextView(this).apply {
+            text = "${LocaleHelper.getString("scan_preparing")} (0/${unscannedFiles.size})"
+            textSize = 14f
+            gravity = android.view.Gravity.CENTER
+        }
+        dialogView.addView(tvProgress)
+        dialogView.addView(progressBar)
+
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(LocaleHelper.getString("scan_title"))
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        dialog.show()
+
+        lifecycleScope.launch {
+            val paths = unscannedFiles.map { it.path }
+            val count = PdfTextExtractor.extractBatch(paths) { current, total, fileName ->
+                runOnUiThread {
+                    progressBar.progress = current
+                    tvProgress.text = "$current / $total : $fileName"
+                }
+            }
+            dialog.dismiss()
+            fileAdapter.notifyDataSetChanged()
+            readingListAdapter.notifyDataSetChanged()
+            Toast.makeText(this@MainActivity, "${LocaleHelper.getString("scan_complete")} ($count/${unscannedFiles.size})", Toast.LENGTH_SHORT).show()
         }
     }
 }
