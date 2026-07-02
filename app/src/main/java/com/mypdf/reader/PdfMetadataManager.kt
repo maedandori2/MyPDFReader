@@ -131,8 +131,9 @@ object PdfMetadataManager {
     }
 
     /**
-     * Format metadata với làm nổi bật tự động cho UI (sử dụng HTML formatting)
-     * Làm nổi bật 自社品名 và 品名 màu cam đỏ đậm & in đậm giá trị
+     * Format metadata cho UI:
+     * - Tên nhãn (key) thu nhỏ và làm dịu màu bằng thẻ <small> màu xám (#78909C)
+     * - Giá trị (value) được in đậm nổi bật: màu đỏ đậm (#C62828) cho tên sản phẩm, xanh đậm (#0D47A1) cho mã sản phẩm
      */
     fun formatForHighlightedDisplay(fileName: String): CharSequence? {
         val data = metadataMap[fileName] ?: return null
@@ -141,9 +142,9 @@ object PdfMetadataManager {
         val sortedEntries = METADATA_KEYS.mapNotNull { key ->
             data[key]?.let { value ->
                 if (key == "自社品名" || key == "品名") {
-                    "<font color=\"#D84315\"><b>$key:</b></font> <font color=\"#B71C1C\"><b>$value</b></font>"
+                    "<small><font color=\"#78909C\">$key:</font></small> <font color=\"#C62828\"><b>$value</b></font>"
                 } else {
-                    "<font color=\"#1565C0\"><b>$key:</b></font> <font color=\"#212121\">$value</font>"
+                    "<small><font color=\"#78909C\">$key:</font></small> <font color=\"#0D47A1\"><b>$value</b></font>"
                 }
             }
         }
