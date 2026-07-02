@@ -119,7 +119,7 @@ object UpdateChecker {
                 val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                 if (id == downloadId) {
                     try { context.unregisterReceiver(this) } catch (_: Exception) {}
-                    installApk(context, fileName)
+                    openDownloadFolder(context)
                 }
             }
         }
@@ -133,44 +133,45 @@ object UpdateChecker {
         }, 5 * 60 * 1000L)
     }
 
-    private fun installApk(context: Context, fileName: String) {
-        val file = java.io.File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            fileName
-        )
-        if (!file.exists()) return
-
+    private fun openDownloadFolder(context: Context) {
+        Toast.makeText(
+            context,
+            "Đã tải xong! Vui lòng bấm vào file MyPDFReader-update.apk trong thư mục Download để cài đặt",
+            Toast.LENGTH_LONG
+        ).show()
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (!context.packageManager.canRequestPackageInstalls()) {
-                    Toast.makeText(
-                        context,
-                        "Vui lòng bật quyền 'Cài đặt ứng dụng không xác định' cho MyPDFReader để cài đặt bản cập nhật",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    val settingsIntent = Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
-                        data = Uri.parse("package:${context.packageName}")
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    }
-                    context.startActivity(settingsIntent)
-                    return
-                }
-            }
-
-            val uri = androidx.core.content.FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.fileprovider",
-                file
-            )
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "application/vnd.android.package-archive")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            // Cách 1: Mở ứng dụng Quản lý tải xuống / thư mục Download mặc định của hệ thống
+            val downloadIntent = Intent(DownloadManager.ACTION_VIEW_DOWNLOADS).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            Log.e(TAG, "Install APK failed", e)
-            Toast.makeText(context, "Lỗi cài đặt: ${e.message}", Toast.LENGTH_LONG).show()
+            context.startActivity(downloadIntent)
+        } catch (e1: Exception) {
+            try {
+                // Cách 2: Mở bằng URI thư mục Download qua ACTION_VIEW
+                val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    downloadDir
+                )
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "resource/folder")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                context.startActivity(intent)
+            } catch (e2: Exception) {
+                try {
+                    // Cách 3: Mở trình chọn file chung của hệ thống (File Manager)
+                    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "*/*"
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    context.startActivity(intent)
+                } catch (e3: Exception) {
+                    Log.e(TAG, "Không thể mở trình quản lý file", e3)
+                }
+            }
         }
     }
 }
