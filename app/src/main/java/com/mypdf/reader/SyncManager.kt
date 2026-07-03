@@ -305,8 +305,8 @@ object SyncManager {
 
     private fun listDriveFiles(token: String, folderId: String): List<DriveFile> {
         return try {
-            // query: trong folder và không phải thư mục con (lấy tất cả file để lọc ở client, đảm bảo không bỏ sót .xdw hay file sai mimeType)
-            val query = "'$folderId' in parents and trashed=false and mimeType!='application/vnd.google-apps.folder'"
+            // query: trong folder, lấy tất cả để lọc ở client (100% an toàn không bị lỗi cú pháp API)
+            val query = "'$folderId' in parents and trashed=false"
             val encoded = java.net.URLEncoder.encode(query, "UTF-8")
             val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id,name,modifiedTime,mimeType)&pageSize=1000")
 
@@ -324,12 +324,23 @@ object SyncManager {
                 val name = obj.getString("name")
                 val modified = if (obj.has("modifiedTime")) obj.getString("modifiedTime") else null
                 val mime = if (obj.has("mimeType")) obj.getString("mimeType") else null
-                // extra guard: accept only .pdf, .xdw or .json by name/mime
+                
+                if (mime == "application/vnd.google-apps.folder") continue
+
+                var finalName = name
                 val nameLower = name.lowercase(Locale.getDefault())
                 val isDocuWorksMime = mime != null && (mime.contains("docuworks", ignoreCase = true) || mime.contains("xdw", ignoreCase = true))
-                if (nameLower.endsWith(".pdf") || nameLower.endsWith(".xdw") || nameLower.endsWith(".json") ||
-                    mime == "application/pdf" || isDocuWorksMime || mime == "application/json") {
-                    result.add(DriveFile(id, name, modified, mime))
+                
+                // Nếu Drive không trả về đuôi file, ta tự thêm vào để app nhận diện được
+                if (isDocuWorksMime && !nameLower.endsWith(".xdw")) {
+                    finalName += ".xdw"
+                } else if (mime == "application/pdf" && !nameLower.endsWith(".pdf")) {
+                    finalName += ".pdf"
+                }
+
+                val finalNameLower = finalName.lowercase(Locale.getDefault())
+                if (finalNameLower.endsWith(".pdf") || finalNameLower.endsWith(".xdw") || finalNameLower.endsWith(".json")) {
+                    result.add(DriveFile(id, finalName, modified, mime))
                 }
             }
             result
