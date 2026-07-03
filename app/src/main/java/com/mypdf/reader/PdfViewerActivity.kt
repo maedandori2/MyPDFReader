@@ -1,6 +1,7 @@
 package com.mypdf.reader
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.pdf.PdfRenderer
@@ -245,8 +246,18 @@ class PdfViewerActivity : AppCompatActivity() {
                 isNavigating = false
                 return
             }
-            binding.tvTitle.text = "[${fileIndex + 1}/${fileList.size}] ${newFile.nameWithoutExtension}.pdf"
             ReadingListManager.markAsRead(newPath)
+            if (newFile.extension.equals("xdw", ignoreCase = true)) {
+                val intent = Intent(this, XdwViewerActivity::class.java).apply {
+                    putExtra("file_path", newPath)
+                    putExtra("file_name", newFile.name)
+                    putStringArrayListExtra("file_list", ArrayList(fileList))
+                }
+                startActivity(intent)
+                finish()
+                return
+            }
+            binding.tvTitle.text = "[${fileIndex + 1}/${fileList.size}] ${newFile.name}"
             openPdf(newPath)
             showUI()
         } catch (e: Exception) {

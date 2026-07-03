@@ -34,6 +34,10 @@
             android:name=".PdfViewerActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".XdwViewerActivity"
+            android:exported="false" />
+
         <!-- SyncActivity: xóa intent-filter OAuth callback vì không còn dùng GoogleSignIn -->
         <activity
             android:name=".SyncActivity"

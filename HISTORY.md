@@ -1,6 +1,22 @@
 # 📋 Lịch sử thay đổi — MyPDFReader
 
+## [v1.5.2] - 2026-07-03
+
+### ✨ Hỗ trợ đồng bộ và đọc file DocuWorks (`.xdw`)
+- 2026-07-03, 00:02: **Tích hợp toàn diện khả năng đồng bộ từ Google Drive và mở tài liệu `.xdw` (`SyncManager`, `MainActivity`, `PdfFileAdapter`, `XdwViewerActivity`, `PdfViewerActivity`)**:
+  - **Đồng bộ trên Google Drive (`SyncManager`)**: Bổ sung hỗ trợ mở rộng đuôi tệp `.xdw` và các MIME type chính thức của Fuji Xerox / Fujifilm DocuWorks (`application/vnd.fujixerox.docuworks`, `application/vnd.fujifilm.docuworks`, `application/x-xdw`). Cho phép tải xuống, liệt kê, xóa và giữ đồng bộ các tệp `.xdw` ngang hàng với `.pdf` trong thư mục `MyPDF/`.
+  - **Nhận diện giao diện danh sách (`PdfFileAdapter` & `MainActivity`)**: Tạo mới biểu tượng riêng biệt cho tệp DocuWorks (`@drawable/ic_xdw` màu xanh lam đặc trưng). Khi quét danh sách tài liệu, ứng dụng tự động phân loại: hiển thị đúng đuôi `.xdw` cùng biểu tượng DocuWorks, trong khi các tệp PDF tiếp tục sử dụng biểu tượng đỏ và hiển thị tên không kèm phần mở rộng như cũ.
+  - **Màn hình điều hướng tài liệu chuyên dụng (`XdwViewerActivity` & `activity_xdw_viewer.xml`)**: Xây dựng màn hình hiển thị trung gian khi người dùng chọn đọc tệp `.xdw` với đầy đủ thanh header, nút quay lại (`← Quay lại`), tên tệp và các nút chuyển tiếp (`◀ File trước` / `File tiếp theo ▶`) cũng như hỗ trợ thao tác vuốt ngang màn hình (swipe) để chuyển file nhịp nhàng như khi đang đọc PDF.
+  - **Cơ chế gọi ứng dụng DocuWorks Viewer bên ngoài**: Khi mở màn hình `XdwViewerActivity` hoặc bấm nút `"🚀 Mở lại DocuWorks Viewer"`, ứng dụng sử dụng `FileProvider` an toàn để tạo URI và tự động gửi Intent mở tài liệu sang ứng dụng DocuWorks Viewer đã cài đặt trên điện thoại theo cơ chế thử nghiệm tầng MIME type dự phòng (`vnd.fujixerox.docuworks` → `vnd.fujifilm.docuworks` → `x-xdw` → `*/*`).
+  - **Cải tiến luồng chuyển tiếp giữa các file (`PdfViewerActivity` & `XdwViewerActivity`)**: Khi người dùng đang đọc tài liệu (PDF hoặc XDW) và bấm nút Trang trước/Trang sau (hoặc vuốt ngang màn hình), ứng dụng tự động kiểm tra định dạng của file tiếp theo để linh hoạt chuyển đổi giữa trình xem PDF nội bộ và trình xem XDW bên ngoài mà không cần quay ngược ra màn hình chính.
+
 ## [v1.5.1] - 2026-07-02
+
+### 🐛 Sửa lỗi tương thích hiển thị & đồng bộ trên Kindle Fire 10
+- 2026-07-02, 23:40: **Khắc phục lỗi không hiển thị thông tin `自社品番, 品番, 自社品名, 品名` trên Kindle Fire 10 (`PdfMetadataManager` & `SyncManager`)**:
+  - **Phân tích nguyên nhân gốc rễ**: Trên máy ảo MEmu, tên tệp tin và phần mở rộng luôn đồng nhất là chữ thường (`.pdf`), tuy nhiên khi chuyển sang các dòng máy tính bảng Kindle Fire 10 (chạy Fire OS / hệ thống tệp FAT32), trình quản lý tệp và MTP thường tự động đổi hoa/thường (ví dụ thành `.PDF`, `.Pdf` hoặc thay đổi hoa/thường của tên gốc). Do trước đây ứng dụng truy vấn key trong `metadataMap` và so sánh tên file khi đồng bộ theo kiểu phân biệt chữ hoa/thường (case-sensitive) khớp với đuôi `.pdf`, kết quả tra cứu bị trả về `null`, khiến thẻ hiển thị thông tin (`tvMetadata`) bị ẩn (`GONE`).
+  - **Cải tiến `PdfMetadataManager`**: Thêm phương thức tra cứu linh hoạt `findMetadataEntry(fileName)`, hỗ trợ tìm kiếm chính xác, tìm kiếm không phân biệt chữ hoa/thường, và tìm kiếm theo tên gốc không phụ thuộc vào phần mở rộng (`.pdf/.PDF`). Áp dụng đồng bộ cho các phương thức `getMetadata`, `hasMetadata`, `formatForDisplay`, `formatForHighlightedDisplay` và `mergeFromRemote`. Đảm bảo khi lưu metadata mới qua `setMetadata` luôn chuẩn hóa key về định dạng chuẩn `*.pdf` chữ thường để thống nhất trên mọi thiết bị.
+  - **Cải tiến `SyncManager`**: Chuyển toàn bộ các bước so sánh tên file `pdf_metadata.json` và kiểm tra danh sách tệp trên Google Drive sang chế độ không phân biệt chữ hoa/thường (`ignoreCase = true`). Đồng thời tối ưu logic đồng bộ từ Drive: Nếu tệp `pdf_metadata.json` trên thiết bị chưa có dữ liệu OCR thực tế (`getMetadataCount() == 0`), ứng dụng sẽ luôn ưu tiên tải về dữ liệu từ Google Drive thay vì so sánh mốc thời gian (tránh trường hợp thiết bị mới tạo tệp rỗng có timestamp mới hơn Drive bị đẩy đè lên cloud).
 
 ### ✨ Tính năng mới & Cải tiến UI
 - 2026-07-02, 10:48: **Tùy chọn "Luôn giữ sáng màn hình khi đọc" (`SettingsActivity` & `PdfViewerActivity`)**:

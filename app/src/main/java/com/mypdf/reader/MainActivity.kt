@@ -23,6 +23,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mypdf.reader.databinding.ActivityMainBinding
 import java.io.File
+import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -297,7 +298,10 @@ class MainActivity : AppCompatActivity() {
             // Scan file trên IO thread để không block UI
             val files = withContext(Dispatchers.IO) {
                 PdfMetadataManager.loadAll()
-                folder.listFiles { file -> file.extension.lowercase() == "pdf" }
+                folder.listFiles { file ->
+                    val ext = file.extension.lowercase(Locale.ROOT)
+                    ext == "pdf" || ext == "xdw"
+                }
                     ?.sortedWith(compareBy<File> {
                         it.nameWithoutExtension.toIntOrNull() ?: Int.MAX_VALUE
                     }.thenBy { it.name })
@@ -330,29 +334,42 @@ class MainActivity : AppCompatActivity() {
         } else {
             filteredFiles.map { it.path }
         }
-        val intent = Intent(this, PdfViewerActivity::class.java).apply {
-            putExtra("file_path", file.path)
-            putExtra("file_name", "${file.name}.pdf")
-            putStringArrayListExtra("file_list", ArrayList(currentListPaths))
+        val ext = File(file.path).extension.lowercase(Locale.ROOT)
+        val realName = File(file.path).name
+        if (ext == "xdw") {
+            val intent = Intent(this, XdwViewerActivity::class.java).apply {
+                putExtra("file_path", file.path)
+                putExtra("file_name", realName)
+                putStringArrayListExtra("file_list", ArrayList(currentListPaths))
+            }
+            startActivity(intent)
+        } else {
+            val intent = Intent(this, PdfViewerActivity::class.java).apply {
+                putExtra("file_path", file.path)
+                putExtra("file_name", realName)
+                putStringArrayListExtra("file_list", ArrayList(currentListPaths))
+            }
+            startActivity(intent)
         }
-        startActivity(intent)
     }
 
     private fun addToReadingList(file: PdfFile) {
         ReadingListManager.addToList(file)
         refreshReadingList()
-        Toast.makeText(this, "${LocaleHelper.getString("added_to_list")} ${file.name}.pdf", Toast.LENGTH_SHORT).show()
+        val realName = File(file.path).name
+        Toast.makeText(this, "${LocaleHelper.getString("added_to_list")} $realName", Toast.LENGTH_SHORT).show()
     }
 
     private fun removeFromReadingList(position: Int) {
         if (position in readingList.indices) {
-            val fileName = readingList[position].name
+            val removedFile = readingList[position]
+            val realName = File(removedFile.path).name
             ReadingListManager.removeAtPosition(position)
             readingList.removeAt(position)
             readingListAdapter.notifyItemRemoved(position)
             readingListAdapter.notifyItemRangeChanged(position, readingList.size - position)
             updateBadge()
-            Toast.makeText(this, LocaleHelper.getString("removed_from_list").replace("%s", "$fileName.pdf"), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, LocaleHelper.getString("removed_from_list").replace("%s", realName), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -397,7 +414,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startMetadataScan() {
-        val unscannedFiles = allFiles.filter { !PdfMetadataManager.hasMetadata("${it.name}.pdf") }
+        val unscannedFiles = allFiles.filter {
+            File(it.path).extension.equals("pdf", ignoreCase = true) && !PdfMetadataManager.hasMetadata(File(it.path).name)
+        }
         if (unscannedFiles.isEmpty()) {
             Toast.makeText(this, LocaleHelper.getString("all_scanned"), Toast.LENGTH_SHORT).show()
             return

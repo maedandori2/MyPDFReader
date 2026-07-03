@@ -81,17 +81,48 @@ object PdfMetadataManager {
     }
 
     /**
-     * Lấy metadata cho 1 file PDF
+     * Tìm metadata entry theo tên file một cách linh hoạt:
+     * - Không phân biệt chữ hoa/thường (ví dụ: st-30.pdf vs ST-30.PDF)
+     * - Hỗ trợ cả tên có đuôi mở rộng (.pdf/.PDF) và không có đuôi
+     * Giúp khắc phục lỗi không hiển thị trên các thiết bị (như Kindle Fire 10) bị đổi hoa/thường tên file hoặc đuôi mở rộng.
      */
-    fun getMetadata(fileName: String): Map<String, String>? {
-        return metadataMap[fileName]
+    private fun findMetadataEntry(fileName: String): Map<String, String>? {
+        // 1. Thử tìm chính xác
+        metadataMap[fileName]?.let { return it }
+        
+        // 2. Thử tìm không phân biệt chữ hoa/thường
+        val lowerName = fileName.lowercase(java.util.Locale.ROOT)
+        for ((key, valMap) in metadataMap) {
+            if (key.lowercase(java.util.Locale.ROOT) == lowerName) {
+                return valMap
+            }
+        }
+        
+        // 3. Thử tìm theo tên không bao gồm đuôi mở rộng (.pdf/.PDF/v.v.), không phân biệt hoa/thường
+        val targetBase = fileName.substringBeforeLast(".").lowercase(java.util.Locale.ROOT)
+        for ((key, valMap) in metadataMap) {
+            val keyBase = key.substringBeforeLast(".").lowercase(java.util.Locale.ROOT)
+            if (keyBase == targetBase && targetBase.isNotEmpty()) {
+                return valMap
+            }
+        }
+        return null
     }
 
     /**
-     * Lưu metadata cho 1 file PDF
+     * Lấy metadata cho 1 file PDF
+     */
+    fun getMetadata(fileName: String): Map<String, String>? {
+        return findMetadataEntry(fileName)
+    }
+
+    /**
+     * Lưu metadata cho 1 file PDF (luôn chuẩn hóa tên file về dạng chuẩn "*.pdf" chữ thường đuôi)
      */
     fun setMetadata(fileName: String, data: Map<String, String>) {
-        metadataMap[fileName] = data
+        val baseName = fileName.substringBeforeLast(".")
+        val standardizedName = "$baseName.pdf"
+        metadataMap[standardizedName] = data
         saveAll()
     }
 
@@ -99,7 +130,8 @@ object PdfMetadataManager {
      * Kiểm tra file đã có metadata chưa
      */
     fun hasMetadata(fileName: String): Boolean {
-        return metadataMap.containsKey(fileName) && metadataMap[fileName]?.isNotEmpty() == true
+        val entry = findMetadataEntry(fileName)
+        return entry != null && entry.isNotEmpty()
     }
 
     /**
@@ -119,12 +151,13 @@ object PdfMetadataManager {
      * Ví dụ: "自社品番: ST-30 | 自社品名: Box | 品番: 123 | 品名: Box 2"
      */
     fun formatForDisplay(fileName: String): String? {
-        val data = metadataMap[fileName] ?: return null
+        val data = findMetadataEntry(fileName) ?: return null
         if (data.isEmpty()) return null
         
         // Sắp xếp lại theo đúng thứ tự của METADATA_KEYS để hiển thị đẹp nhất
         val sortedEntries = METADATA_KEYS.mapNotNull { key ->
-            data[key]?.let { value -> "$key: $value" }
+            val valStr = data[key] ?: data.entries.firstOrNull { it.key.trim() == key }?.value
+            if (!valStr.isNullOrBlank()) "$key: $valStr" else null
         }
         
         return if (sortedEntries.isNotEmpty()) sortedEntries.joinToString(" | ") else null
@@ -136,15 +169,16 @@ object PdfMetadataManager {
      * - Giá trị (value) được in đậm nổi bật: màu đỏ đậm (#C62828) cho tên sản phẩm, xanh đậm (#0D47A1) cho mã sản phẩm
      */
     fun formatForHighlightedDisplay(fileName: String): CharSequence? {
-        val data = metadataMap[fileName] ?: return null
+        val data = findMetadataEntry(fileName) ?: return null
         if (data.isEmpty()) return null
         
         val sortedEntries = METADATA_KEYS.mapNotNull { key ->
-            data[key]?.let { value ->
+            val valStr = data[key] ?: data.entries.firstOrNull { it.key.trim() == key }?.value
+            if (!valStr.isNullOrBlank()) {
                 val labelColor = SettingsManager.getMetadataLabelColor(key)
                 val valueColor = SettingsManager.getMetadataValueColor(key)
-                "<small><font color=\"$labelColor\">$key:</font></small> <font color=\"$valueColor\"><b>$value</b></font>"
-            }
+                "<small><font color=\"$labelColor\">$key:</font></small> <font color=\"$valueColor\"><b>$valStr</b></font>"
+            } else null
         }
         
         if (sortedEntries.isEmpty()) return null
@@ -169,13 +203,15 @@ object PdfMetadataManager {
             val remote = JSONObject(remoteJson)
             var merged = false
             for (key in remote.keys()) {
-                if (!hasMetadata(key)) {
+                val baseKey = key.substringBeforeLast(".")
+                val stdKey = "$baseKey.pdf"
+                if (!hasMetadata(stdKey)) {
                     val obj = remote.getJSONObject(key)
                     val map = mutableMapOf<String, String>()
                     for (field in obj.keys()) {
                         map[field] = obj.getString(field)
                     }
-                    metadataMap[key] = map
+                    metadataMap[stdKey] = map
                     merged = true
                 }
             }

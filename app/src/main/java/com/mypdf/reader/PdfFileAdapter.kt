@@ -62,10 +62,11 @@ class PdfFileAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val file = files[position]
-        holder.tvName.text = "${file.name}.pdf"
+        val realName = java.io.File(file.path).name
+        holder.tvName.text = realName
 
         // Hiển thị metadata (品名, 自社品番, 自社品名) cho cả 2 tab với làm nổi bật tự động
-        val metadataText = PdfMetadataManager.formatForHighlightedDisplay("${file.name}.pdf")
+        val metadataText = PdfMetadataManager.formatForHighlightedDisplay(realName)
         if (metadataText != null) {
             holder.tvMetadata.text = metadataText
             holder.tvMetadata.visibility = View.VISIBLE
@@ -118,18 +119,23 @@ class PdfFileAdapter(
 
             // Xử lý load thumbnail
             holder.ivThumbnail.tag = file.path
-            holder.ivThumbnail.setImageBitmap(null)
-            holder.ivThumbnail.setBackgroundColor(Color.parseColor("#E0E0E0"))
+            if (file.path.endsWith(".xdw", ignoreCase = true)) {
+                holder.ivThumbnail.setImageResource(R.drawable.ic_xdw)
+                holder.ivThumbnail.setBackgroundColor(Color.TRANSPARENT)
+            } else {
+                holder.ivThumbnail.setImageBitmap(null)
+                holder.ivThumbnail.setBackgroundColor(Color.parseColor("#E0E0E0"))
 
-            adapterScope?.launch {
-                val bitmap = PdfThumbnailLoader.loadThumbnail(file.path, 120, 160)
-                if (holder.ivThumbnail.tag == file.path) {
-                    if (bitmap != null) {
-                        holder.ivThumbnail.setImageBitmap(bitmap)
-                        holder.ivThumbnail.setBackgroundColor(Color.TRANSPARENT)
-                    } else {
-                        // Lỗi load ảnh, đổi màu báo lỗi
-                        holder.ivThumbnail.setBackgroundColor(Color.parseColor("#FFCDD2"))
+                adapterScope?.launch {
+                    val bitmap = PdfThumbnailLoader.loadThumbnail(file.path, 120, 160)
+                    if (holder.ivThumbnail.tag == file.path) {
+                        if (bitmap != null) {
+                            holder.ivThumbnail.setImageBitmap(bitmap)
+                            holder.ivThumbnail.setBackgroundColor(Color.TRANSPARENT)
+                        } else {
+                            // Lỗi load ảnh, đổi màu báo lỗi
+                            holder.ivThumbnail.setBackgroundColor(Color.parseColor("#FFCDD2"))
+                        }
                     }
                 }
             }

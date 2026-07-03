@@ -184,7 +184,7 @@ object SyncManager {
                     val success = downloadFile(token, fileId, localFile)
                     if (success) {
                         downloaded++
-                        if (fileName == PdfMetadataManager.METADATA_FILE_NAME) {
+                        if (fileName.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) {
                             PdfMetadataManager.loadAll()
                         }
                     } else {
@@ -203,17 +203,18 @@ object SyncManager {
                     continue
                 }
 
-                if (fileName == PdfMetadataManager.METADATA_FILE_NAME) {
-                    // Riêng pdf_metadata.json: trên Drive mới hơn thì tải về, máy mới hơn thì tải lên
-                    if (remoteEpoch > localEpoch + 500) {
+                if (fileName.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) {
+                    // Riêng pdf_metadata.json: ưu tiên tải về nếu trên Drive mới hơn hoặc nếu máy chưa có dữ liệu OCR thực tế
+                    val localHasData = PdfMetadataManager.getMetadataCount() > 0 && localFile.length() > 10
+                    if (remoteEpoch > localEpoch + 500 || !localHasData) {
                         val success = downloadFile(token, fileId, localFile)
                         if (success) {
                             downloaded++
                             PdfMetadataManager.loadAll()
-                        } else {
+                        } else if (!localFile.exists() || localFile.length() == 0L) {
                             localFile.delete()
                         }
-                    } else if (localEpoch > remoteEpoch + 500) {
+                    } else if (localEpoch > remoteEpoch + 500 && localHasData) {
                         onProgress("Đang tải lên $fileName (máy mới hơn Drive)...")
                         val success = uploadFileUpdate(token, fileId, localFile)
                         if (success) {
@@ -235,20 +236,21 @@ object SyncManager {
 
             // Bước 3.5: Nếu riêng pdf_metadata.json có trên máy nhưng chưa có trên Drive -> tạo mới trên Drive
             val metadataLocalFile = File(localFolder, PdfMetadataManager.METADATA_FILE_NAME)
-            if (metadataLocalFile.exists() && !driveNames.contains(PdfMetadataManager.METADATA_FILE_NAME)) {
+            val hasDriveMetadata = driveNames.any { it.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true) }
+            if (metadataLocalFile.exists() && metadataLocalFile.length() > 10 && !hasDriveMetadata) {
                 onProgress("Đang tạo ${PdfMetadataManager.METADATA_FILE_NAME} lên Drive...")
                 uploadFileCreate(token, folderId, metadataLocalFile)
             }
 
-            // Bước 4: Xóa file local không còn trên Drive (chỉ .pdf/.json)
+            // Bước 4: Xóa file local không còn trên Drive (chỉ .pdf/.xdw/.json, so sánh không phân biệt hoa/thường)
             onProgress("Kiểm tra xóa các file local không có trên Drive...")
             val localFiles = localFolder.listFiles() ?: emptyArray()
             for (f in localFiles) {
                 if (!f.isFile) continue
                 val nameLower = f.name.lowercase(Locale.getDefault())
-                val isPdfOrJson = nameLower.endsWith(".pdf") || nameLower.endsWith(".json")
-                if (!isPdfOrJson || f.name == PdfMetadataManager.METADATA_FILE_NAME) continue
-                if (!driveNames.contains(f.name)) {
+                val isTargetFile = nameLower.endsWith(".pdf") || nameLower.endsWith(".xdw") || nameLower.endsWith(".json")
+                if (!isTargetFile || f.name.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) continue
+                if (!driveNames.any { it.equals(f.name, ignoreCase = true) }) {
                     try {
                         if (f.delete()) {
                             deletedLocal++
@@ -322,10 +324,11 @@ object SyncManager {
                 val name = obj.getString("name")
                 val modified = if (obj.has("modifiedTime")) obj.getString("modifiedTime") else null
                 val mime = if (obj.has("mimeType")) obj.getString("mimeType") else null
-                // extra guard: accept only .pdf or .json by name/mime
+                // extra guard: accept only .pdf, .xdw or .json by name/mime
                 val nameLower = name.lowercase(Locale.getDefault())
-                if (nameLower.endsWith(".pdf") || nameLower.endsWith(".json") ||
-                    mime == "application/pdf" || mime == "application/json") {
+                val isDocuWorksMime = mime != null && mime.contains("docuworks", ignoreCase = true)
+                if (nameLower.endsWith(".pdf") || nameLower.endsWith(".xdw") || nameLower.endsWith(".json") ||
+                    mime == "application/pdf" || isDocuWorksMime || mime == "application/json") {
                     result.add(DriveFile(id, name, modified, mime))
                 }
             }

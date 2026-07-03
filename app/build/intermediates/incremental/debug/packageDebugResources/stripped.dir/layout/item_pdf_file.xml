@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Số thứ tự (chỉ hiện trong reading list, có thể sửa trực tiếp) -->
+        <EditText
+            android:id="@+id/tvIndex"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="#1565C0"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:maxLength="3"
+            android:padding="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:selectAllOnFocus="true"
+            android:visibility="gone" />
+
+        <!-- PDF Icon -->
+        <ImageView
+            android:id="@+id/ivThumbnail"
+            android:layout_width="40dp"
+            android:layout_height="48dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_pdf"
+            android:background="@android:color/transparent"
+            android:visibility="visible" />
+
+        <!-- File name -->
+        <TextView
+            android:id="@+id/tvFileName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textColor="#212121"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="10dp" />
+
+        <!-- Nút mở file (mắt) - tab All -->
+        <TextView
+            android:id="@+id/btnOpenFile"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="👁"
+            android:textSize="22sp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="gone" />
+
+        <!-- Nút thêm (+) - tab All -->
+        <TextView
+            android:id="@+id/btnAddToList"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="➕"
+            android:textSize="22sp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="gone" />
+
+        <!-- Controls reading list -->
+        <LinearLayout
+            android:id="@+id/layoutControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <!-- Mở file -->
+            <TextView
+                android:id="@+id/btnOpenReading"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="👁"
+                android:textSize="24sp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <!-- Lên -->
+            <TextView
+                android:id="@+id/btnMoveUp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="▲"
+                android:textSize="22sp"
+                android:textColor="#1565C0"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <!-- Xuống -->
+            <TextView
+                android:id="@+id/btnMoveDown"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="▼"
+                android:textSize="22sp"
+                android:textColor="#1565C0"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <!-- Xoá khỏi danh sách -->
+            <TextView
+                android:id="@+id/btnRemove"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="🗑"
+                android:textSize="22sp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Status -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginStart="58dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="gone" />
+
+    <!-- Metadata (品名, 自社品番, 自社品名) -->
+    <TextView
+        android:id="@+id/tvMetadata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:background="@drawable/bg_metadata_badge"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="5dp"
+        android:lineSpacingExtra="2dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0" />
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.mypdf.reader.app-mergeDebugResources-43:/layout/item_pdf_file.xml",
+        "source": "com.mypdf.reader.app-main-46:/layout/item_pdf_file.xml"
+    },
+    {
+        "merged": "com.mypdf.reader.app-mergeDebugResources-43:/layout/activity_settings.xml",
+        "source": "com.mypdf.reader.app-main-46:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.mypdf.reader.app-mergeDebugResources-43:/layout/activity_main.xml",
+        "source": "com.mypdf.reader.app-main-46:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.mypdf.reader.app-mergeDebugResources-43:/layout/activity_sync.xml",
+        "source": "com.mypdf.reader.app-main-46:/layout/activity_sync.xml"
+    },
+    {
+        "merged": "com.mypdf.reader.app-mergeDebugResources-43:/layout/activity_xdw_viewer.xml",
+        "source": "com.mypdf.reader.app-main-46:/layout/activity_xdw_viewer.xml"
+    },
+    {
+        "merged": "com.mypdf.reader.app-mergeDebugResources-43:/layout/activity_pdf_viewer.xml",
+        "source": "com.mypdf.reader.app-main-46:/layout/activity_pdf_viewer.xml"
+    }
+]

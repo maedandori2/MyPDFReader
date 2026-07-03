@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="48dp"
+    android:viewportWidth="40"
+    android:viewportHeight="48">
+    <!-- Document Body -->
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M6,0 L26,0 L36,10 L36,44 C36,46.2 34.2,48 32,48 L6,48 C3.8,48 2,46.2 2,44 L2,4 C2,1.8 3.8,0 6,0 Z"/>
+    <!-- Folded Corner -->
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M26,0 L36,10 L26,10 Z"/>
+    <!-- White lines inside document -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,20 L28,20 L28,23 L10,23 Z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,28 L28,28 L28,31 L10,31 Z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,36 L22,36 L22,39 L10,39 Z"/>
+</vector>
