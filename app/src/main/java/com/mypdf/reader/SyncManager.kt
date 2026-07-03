@@ -190,6 +190,7 @@ object SyncManager {
                     continue
                 }
 
+                val isFirstTimeSeen = !syncState.containsKey(fileName)
                 val storedEpoch = syncState[fileName] ?: 0L
                 val localEpoch = localFile.lastModified()
 
@@ -217,8 +218,15 @@ object SyncManager {
                         skipped++
                     }
                 } else {
-                    // Các file PDF/XDW: tải về nếu trên Drive mới hơn trong state, còn không thì bỏ qua
-                    if (remoteEpoch > storedEpoch || !localFile.exists()) {
+                    // Các file PDF/XDW:
+                    if (isFirstTimeSeen && localFile.exists() && localFile.length() > 0 && SettingsManager.isOfflineCopyEnabled()) {
+                        // Nhận diện file chép tay: File đã có trên máy nhưng chưa có trong lịch sử (sync_state)
+                        // Bỏ qua tải về, lập tức gán mốc thời gian của Drive vào bộ nhớ để theo dõi các bản cập nhật sau này
+                        syncState[fileName] = remoteEpoch
+                        localFile.setLastModified(remoteEpoch)
+                        skipped++
+                        Log.i(TAG, "Đã nhận diện file chép tay, bỏ qua tải: $fileName")
+                    } else if (remoteEpoch > storedEpoch || !localFile.exists()) {
                         val success = downloadFile(token, fileId, localFile, remoteEpoch)
                         if (success) {
                             downloaded++

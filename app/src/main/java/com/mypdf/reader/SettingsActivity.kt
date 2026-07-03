@@ -34,6 +34,10 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchKeepScreenOn.text = LocaleHelper.getString("keep_screen_on")
         binding.switchKeepScreenOn.isChecked = SettingsManager.isKeepScreenOn()
 
+        binding.tvSyncSectionTitle.text = LocaleHelper.getString("sync_section")
+        binding.switchOfflineCopy.text = LocaleHelper.getString("offline_copy")
+        binding.switchOfflineCopy.isChecked = SettingsManager.isOfflineCopyEnabled()
+
         binding.tvMetadataColorTitle.text = LocaleHelper.getString("metadata_colors_title")
         binding.tvMetadataColorDesc.text = LocaleHelper.getString("metadata_colors_desc")
         updateColorButtons()
@@ -75,6 +79,10 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.switchKeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
             SettingsManager.setKeepScreenOn(isChecked)
+        }
+
+        binding.switchOfflineCopy.setOnCheckedChangeListener { _, isChecked ->
+            SettingsManager.setOfflineCopyEnabled(isChecked)
         }
 
         binding.btnLabelJishaHinban.setOnClickListener {
