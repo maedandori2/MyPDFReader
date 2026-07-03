@@ -224,10 +224,16 @@ object SyncManager {
                         skipped++
                     }
                 } else {
-                    // Các file PDF khác: chỉ tải về nếu trên Drive mới hơn
+                    // Các file PDF/XDW: tải về nếu trên Drive mới hơn, upload nếu trên máy mới hơn
                     if (remoteEpoch > localEpoch + 500) {
                         val success = downloadFile(token, fileId, localFile)
                         if (success) downloaded++ else localFile.delete()
+                    } else if (localEpoch > remoteEpoch + 500) {
+                        onProgress("Đang tải lên $fileName (máy mới hơn Drive)...")
+                        val success = uploadFileUpdate(token, fileId, localFile)
+                        if (success) {
+                            Log.i(TAG, "Uploaded updated $fileName to Drive")
+                        }
                     } else {
                         skipped++
                     }
