@@ -93,13 +93,30 @@
                     android:textSize="16sp"
                     android:layout_marginBottom="12dp" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switchOfflineCopy"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🔌 Nhận diện file chép thủ công (không tải lại)"
+                    android:text="Khởi tạo lịch sử đồng bộ trực tiếp từ Google Drive. Giúp bỏ qua việc tải về đối với các file đã chép thủ công vào máy."
+                    android:textSize="12sp"
+                    android:textColor="#666666"
+                    android:layout_marginBottom="12dp" />
+
+                <Button
+                    android:id="@+id/btnInitSyncState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Khởi tạo dữ liệu đồng bộ (Cho file chép tay)"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                <TextView
+                    android:id="@+id/tvInitSyncStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
                     android:textSize="14sp"
-                    android:textColor="#333333" />
+                    android:textColor="#333333"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Metadata Colors Section -->

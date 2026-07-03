@@ -9,13 +9,11 @@ object SettingsManager {
     private const val KEY_NOTICE_OPACITY = "notice_opacity"
     private const val KEY_NOTICE_DURATION = "notice_duration"
     private const val KEY_KEEP_SCREEN_ON = "keep_screen_on"
-    private const val KEY_OFFLINE_COPY = "offline_copy"
     // Giá trị mặc định
     const val DEFAULT_FILE_NAME_SIZE = 19     // sp
     const val DEFAULT_NOTICE_OPACITY = 50     // % (0-100)
     const val DEFAULT_NOTICE_DURATION = 5     // giây
     const val DEFAULT_KEEP_SCREEN_ON = true
-    const val DEFAULT_OFFLINE_COPY = true
 
     const val MIN_FILE_NAME_SIZE = 12
     const val MAX_FILE_NAME_SIZE = 32
@@ -83,15 +81,7 @@ object SettingsManager {
         prefs().edit().putBoolean(KEY_KEEP_SCREEN_ON, keep).apply()
     }
 
-    // ── Sync Options ──
 
-    fun isOfflineCopyEnabled(): Boolean {
-        return prefs().getBoolean(KEY_OFFLINE_COPY, DEFAULT_OFFLINE_COPY)
-    }
-
-    fun setOfflineCopyEnabled(enabled: Boolean) {
-        prefs().edit().putBoolean(KEY_OFFLINE_COPY, enabled).apply()
-    }
 
     // ── Metadata Colors (自社品番, 品番, 自社品名, 品名) ──
 

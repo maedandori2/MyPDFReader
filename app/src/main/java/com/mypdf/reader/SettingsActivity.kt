@@ -35,8 +35,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchKeepScreenOn.isChecked = SettingsManager.isKeepScreenOn()
 
         binding.tvSyncSectionTitle.text = LocaleHelper.getString("sync_section")
-        binding.switchOfflineCopy.text = LocaleHelper.getString("offline_copy")
-        binding.switchOfflineCopy.isChecked = SettingsManager.isOfflineCopyEnabled()
+        binding.btnInitSyncState.text = LocaleHelper.getString("init_sync_state_btn")
 
         binding.tvMetadataColorTitle.text = LocaleHelper.getString("metadata_colors_title")
         binding.tvMetadataColorDesc.text = LocaleHelper.getString("metadata_colors_desc")
@@ -81,8 +80,8 @@ class SettingsActivity : AppCompatActivity() {
             SettingsManager.setKeepScreenOn(isChecked)
         }
 
-        binding.switchOfflineCopy.setOnCheckedChangeListener { _, isChecked ->
-            SettingsManager.setOfflineCopyEnabled(isChecked)
+        binding.btnInitSyncState.setOnClickListener {
+            initializeSyncState()
         }
 
         binding.btnLabelJishaHinban.setOnClickListener {
@@ -268,5 +267,22 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun initializeSyncState() {
+        binding.btnInitSyncState.isEnabled = false
+        binding.tvInitSyncStatus.visibility = View.VISIBLE
+        binding.tvInitSyncStatus.text = LocaleHelper.getString("init_sync_status_loading")
+
+        lifecycleScope.launch {
+            val result = SyncManager.initializeSyncStateFromDrive()
+            binding.btnInitSyncState.isEnabled = true
+            
+            result.onSuccess { count ->
+                binding.tvInitSyncStatus.text = LocaleHelper.getString("init_sync_status_success").replace("%d", count.toString())
+            }.onFailure { error ->
+                binding.tvInitSyncStatus.text = LocaleHelper.getString("init_sync_status_error").replace("%s", error.message ?: "Unknown")
+            }
+        }
     }
 }

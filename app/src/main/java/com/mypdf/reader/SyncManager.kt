@@ -190,7 +190,6 @@ object SyncManager {
                     continue
                 }
 
-                val isFirstTimeSeen = !syncState.containsKey(fileName)
                 val storedEpoch = syncState[fileName] ?: 0L
                 val localEpoch = localFile.lastModified()
 
@@ -219,13 +218,10 @@ object SyncManager {
                     }
                 } else {
                     // Các file PDF/XDW:
-                    if (isFirstTimeSeen && localFile.exists() && localFile.length() > 0 && SettingsManager.isOfflineCopyEnabled()) {
-                        // Nhận diện file chép tay: File đã có trên máy nhưng chưa có trong lịch sử (sync_state)
-                        // Bỏ qua tải về, lập tức gán mốc thời gian của Drive vào bộ nhớ để theo dõi các bản cập nhật sau này
-                        syncState[fileName] = remoteEpoch
-                        localFile.setLastModified(remoteEpoch)
+                    if (localFile.exists() && localEpoch > remoteEpoch) {
+                        // File trên máy mới hơn Drive -> bỏ qua tải đè để bảo toàn file chép tay / file đã chỉnh sửa
                         skipped++
-                        Log.i(TAG, "Đã nhận diện file chép tay, bỏ qua tải: $fileName")
+                        Log.i(TAG, "Đã bỏ qua tải: $fileName (Máy: $localEpoch > Drive: $remoteEpoch)")
                     } else if (remoteEpoch > storedEpoch || !localFile.exists()) {
                         val success = downloadFile(token, fileId, localFile, remoteEpoch)
                         if (success) {
@@ -263,6 +259,42 @@ object SyncManager {
         } catch (e: Exception) {
             Log.e(TAG, "syncFiles failed", e)
             SyncResult.Error("Lỗi: ${e.message}")
+        }
+    }
+
+    // =========================================================================
+    // 4.5. KHỞI TẠO STATE TỪ DRIVE (DÀNH CHO FILE CHÉP TAY)
+    // =========================================================================
+    suspend fun initializeSyncStateFromDrive(): Result<Int> = withContext(Dispatchers.IO) {
+        try {
+            val token = getAccessToken() ?: return@withContext Result.failure(Exception("Không lấy được token"))
+            val driveFolderName = getDriveFolder()
+            
+            val folderId = findFolderId(token, driveFolderName)
+                ?: return@withContext Result.failure(Exception("Không tìm thấy thư mục '$driveFolderName' trên Drive"))
+            
+            val files = listDriveFiles(token, folderId)
+            
+            val localFolder = File(MainActivity.PDF_FOLDER)
+            if (!localFolder.exists()) localFolder.mkdirs()
+            
+            val syncState = loadSyncState(localFolder)
+            var count = 0
+            
+            for (file in files) {
+                if (file.name.equals("sync_state.json", ignoreCase = true)) continue
+                val remoteEpoch = parseRfc3339ToEpoch(file.modifiedTime)
+                if (remoteEpoch != null) {
+                    syncState[file.name] = remoteEpoch
+                    count++
+                }
+            }
+            
+            saveSyncState(localFolder, syncState)
+            Result.success(count)
+        } catch (e: Exception) {
+            Log.e(TAG, "initializeSyncStateFromDrive failed", e)
+            Result.failure(e)
         }
     }
 
