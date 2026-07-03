@@ -152,14 +152,16 @@ object SyncManager {
 
             onProgress("Đang lấy danh sách file (pdf/json)...")
 
-            // Bước 2: Lấy danh sách file pdf/json trong folder
+            // Bước 2: Lấy danh sách file trong folder
             val files = listDriveFiles(token, folderId)
             if (files.isEmpty()) {
-                // Nếu không có file trên Drive, vẫn có thể xóa local file nếu cần
-                onProgress("Không có file PDF/JSON trên Drive. Kiểm tra và xóa local nếu cần...")
+                onProgress("Không có file PDF/JSON/XDW nào trên Drive.")
             } else {
                 onProgress("Tìm thấy ${files.size} file trên Drive. Đang xử lý...")
             }
+
+            // Load state lưu trữ ngày tháng từ Drive
+            val syncState = loadSyncState(localFolder)
 
             // Bước 3: Tạo thư mục local nếu chưa có
             if (!localFolder.exists()) localFolder.mkdirs()
@@ -179,61 +181,50 @@ object SyncManager {
 
                 onProgress("(${index + 1}/${files.size}) $fileName")
 
-                // Nếu file chưa tồn tại -> download
-                if (!localFile.exists()) {
-                    val remoteEpochInitial = parseRfc3339ToEpoch(remoteModified)
-                    val success = downloadFile(token, fileId, localFile, remoteEpochInitial)
-                    if (success) {
-                        downloaded++
-                        if (fileName.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) {
-                            PdfMetadataManager.loadAll()
-                        }
-                    } else {
-                        localFile.delete()
-                    }
-                    continue
-                }
+                // Bỏ qua nếu là file state
+                if (fileName.equals("sync_state.json", ignoreCase = true)) continue
 
-                // Nếu tồn tại -> so sánh modifiedTime (Drive) với lastModified local
                 val remoteEpoch = parseRfc3339ToEpoch(remoteModified)
-                val localEpoch = localFile.lastModified()
-
-                // Nếu không có remoteModified thì bỏ qua (skip)
                 if (remoteEpoch == null) {
                     skipped++
                     continue
                 }
 
+                val storedEpoch = syncState[fileName] ?: 0L
+                val localEpoch = localFile.lastModified()
+
                 if (fileName.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) {
-                    // Riêng pdf_metadata.json: ưu tiên tải về nếu trên Drive mới hơn hoặc nếu máy chưa có dữ liệu OCR thực tế
+                    // Riêng pdf_metadata.json: ưu tiên tải về nếu Drive mới hơn file state, ngược lại upload nếu file bị sửa đổi
                     val localHasData = PdfMetadataManager.getMetadataCount() > 0 && localFile.length() > 10
-                    if (remoteEpoch > localEpoch + 2500 || !localHasData) {
+                    if (remoteEpoch > storedEpoch || !localFile.exists() || !localHasData) {
                         val success = downloadFile(token, fileId, localFile, remoteEpoch)
                         if (success) {
                             downloaded++
+                            syncState[fileName] = remoteEpoch
                             PdfMetadataManager.loadAll()
                         } else if (!localFile.exists() || localFile.length() == 0L) {
                             localFile.delete()
                         }
-                    } else if (localEpoch > remoteEpoch + 2500 && localHasData) {
+                    } else if (localEpoch > storedEpoch + 2500 && localHasData) {
                         onProgress("Đang tải lên $fileName (máy mới hơn Drive)...")
                         val success = uploadFileUpdate(token, fileId, localFile)
                         if (success) {
                             Log.i(TAG, "Uploaded updated $fileName to Drive")
+                            // Tạm cập nhật state bằng thời gian hiện tại để không bị tải lại vòng lặp
+                            syncState[fileName] = System.currentTimeMillis()
                         }
                     } else {
                         skipped++
                     }
                 } else {
-                    // Các file PDF/XDW: tải về nếu trên Drive mới hơn, upload nếu trên máy mới hơn
-                    if (remoteEpoch > localEpoch + 2500) {
+                    // Các file PDF/XDW: tải về nếu trên Drive mới hơn trong state, còn không thì bỏ qua
+                    if (remoteEpoch > storedEpoch || !localFile.exists()) {
                         val success = downloadFile(token, fileId, localFile, remoteEpoch)
-                        if (success) downloaded++ else localFile.delete()
-                    } else if (localEpoch > remoteEpoch + 2500) {
-                        onProgress("Đang tải lên $fileName (máy mới hơn Drive)...")
-                        val success = uploadFileUpdate(token, fileId, localFile)
                         if (success) {
-                            Log.i(TAG, "Uploaded updated $fileName to Drive")
+                            downloaded++
+                            syncState[fileName] = remoteEpoch
+                        } else if (!localFile.exists()) {
+                            localFile.delete()
                         }
                     } else {
                         skipped++
@@ -249,29 +240,11 @@ object SyncManager {
                 uploadFileCreate(token, folderId, metadataLocalFile)
             }
 
-            // Bước 4: Xóa file local không còn trên Drive (chỉ .pdf/.xdw/.json, so sánh không phân biệt hoa/thường)
-            onProgress("Kiểm tra xóa các file local không có trên Drive...")
-            val localFiles = localFolder.listFiles() ?: emptyArray()
-            for (f in localFiles) {
-                if (!f.isFile) continue
-                val nameLower = f.name.lowercase(Locale.getDefault())
-                val isTargetFile = nameLower.endsWith(".pdf") || nameLower.endsWith(".xdw") || nameLower.endsWith(".json")
-                if (!isTargetFile || f.name.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) continue
-                if (!driveNames.any { it.equals(f.name, ignoreCase = true) }) {
-                    try {
-                        if (f.delete()) {
-                            deletedLocal++
-                            Log.d(TAG, "Deleted local file not on Drive: ${f.name}")
-                        } else {
-                            Log.w(TAG, "Failed to delete local file: ${f.name}")
-                        }
-                    } catch (e: Exception) {
-                        Log.w(TAG, "Exception deleting local file: ${f.name}", e)
-                    }
-                }
-            }
+            // (Đã xóa Bước 4 theo yêu cầu: không upload file local mới lên Drive, chỉ tải từ Drive về)
+
 
             // Lưu thời gian sync
+            saveSyncState(localFolder, syncState)
             saveLastSync()
 
             Log.i(TAG, "Sync complete. downloaded=$downloaded skipped=$skipped deletedLocal=$deletedLocal")
@@ -288,6 +261,33 @@ object SyncManager {
     // =========================================================================
     // 5. CÁC HÀM HỖ TRỢ DRIVE API
     // =========================================================================
+    private fun loadSyncState(folder: File): MutableMap<String, Long> {
+        val stateFile = File(folder, "sync_state.json")
+        val map = mutableMapOf<String, Long>()
+        if (stateFile.exists()) {
+            try {
+                val json = JSONObject(stateFile.readText())
+                json.keys().forEach { key ->
+                    map[key] = json.getLong(key)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to load sync state", e)
+            }
+        }
+        return map
+    }
+
+    private fun saveSyncState(folder: File, map: Map<String, Long>) {
+        val stateFile = File(folder, "sync_state.json")
+        try {
+            val json = JSONObject()
+            map.forEach { (k, v) -> json.put(k, v) }
+            stateFile.writeText(json.toString())
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to save sync state", e)
+        }
+    }
+
     private fun findFolderId(token: String, folderName: String): String? {
         return try {
             val query = "mimeType='application/vnd.google-apps.folder' and name='$folderName' and trashed=false"
@@ -311,49 +311,60 @@ object SyncManager {
     private data class DriveFile(val id: String, val name: String, val modifiedTime: String?, val mimeType: String?)
 
     private fun listDriveFiles(token: String, folderId: String): List<DriveFile> {
-        return try {
+        val result = mutableListOf<DriveFile>()
+        try {
             // query: trong folder, lấy tất cả để lọc ở client (100% an toàn không bị lỗi cú pháp API)
             val query = "'$folderId' in parents and trashed=false"
             val encoded = java.net.URLEncoder.encode(query, "UTF-8")
-            val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id,name,modifiedTime,mimeType)&pageSize=1000")
-
-            val conn = url.openConnection() as HttpURLConnection
-            conn.connectTimeout = 15_000
-            conn.readTimeout = 60_000
-            conn.setRequestProperty("Authorization", "Bearer $token")
-
-            val resp = JSONObject(conn.inputStream.bufferedReader().readText())
-            val files = resp.getJSONArray("files")
-            val result = mutableListOf<DriveFile>()
-            for (i in 0 until files.length()) {
-                val obj = files.getJSONObject(i)
-                val id = obj.getString("id")
-                val name = obj.getString("name")
-                val modified = if (obj.has("modifiedTime")) obj.getString("modifiedTime") else null
-                val mime = if (obj.has("mimeType")) obj.getString("mimeType") else null
-                
-                if (mime == "application/vnd.google-apps.folder") continue
-
-                var finalName = name
-                val nameLower = name.lowercase(Locale.getDefault())
-                val isDocuWorksMime = mime != null && (mime.contains("docuworks", ignoreCase = true) || mime.contains("xdw", ignoreCase = true))
-                
-                // Nếu Drive không trả về đuôi file, ta tự thêm vào để app nhận diện được
-                if (isDocuWorksMime && !nameLower.endsWith(".xdw")) {
-                    finalName += ".xdw"
-                } else if (mime == "application/pdf" && !nameLower.endsWith(".pdf")) {
-                    finalName += ".pdf"
+            
+            var pageToken: String? = null
+            do {
+                var urlStr = "https://www.googleapis.com/drive/v3/files?q=$encoded&fields=nextPageToken,files(id,name,modifiedTime,mimeType)&pageSize=1000"
+                if (pageToken != null) {
+                    urlStr += "&pageToken=$pageToken"
                 }
+                
+                val url = URL(urlStr)
+                val conn = url.openConnection() as HttpURLConnection
+                conn.connectTimeout = 15_000
+                conn.readTimeout = 60_000
+                conn.setRequestProperty("Authorization", "Bearer $token")
 
-                val finalNameLower = finalName.lowercase(Locale.getDefault())
-                if (finalNameLower.endsWith(".pdf") || finalNameLower.endsWith(".xdw") || finalNameLower.endsWith(".json")) {
-                    result.add(DriveFile(id, finalName, modified, mime))
+                val resp = JSONObject(conn.inputStream.bufferedReader().readText())
+                val files = resp.getJSONArray("files")
+                for (i in 0 until files.length()) {
+                    val obj = files.getJSONObject(i)
+                    val id = obj.getString("id")
+                    val name = obj.getString("name")
+                    val modified = if (obj.has("modifiedTime")) obj.getString("modifiedTime") else null
+                    val mime = if (obj.has("mimeType")) obj.getString("mimeType") else null
+                    
+                    if (mime == "application/vnd.google-apps.folder") continue
+
+                    var finalName = name
+                    val nameLower = name.lowercase(Locale.getDefault())
+                    val isDocuWorksMime = mime != null && (mime.contains("docuworks", ignoreCase = true) || mime.contains("xdw", ignoreCase = true))
+                    
+                    // Nếu Drive không trả về đuôi file, ta tự thêm vào để app nhận diện được
+                    if (isDocuWorksMime && !nameLower.endsWith(".xdw")) {
+                        finalName += ".xdw"
+                    } else if (mime == "application/pdf" && !nameLower.endsWith(".pdf")) {
+                        finalName += ".pdf"
+                    }
+
+                    val finalNameLower = finalName.lowercase(Locale.getDefault())
+                    if (finalNameLower.endsWith(".pdf") || finalNameLower.endsWith(".xdw") || finalNameLower.endsWith(".json")) {
+                        result.add(DriveFile(id, finalName, modified, mime))
+                    }
                 }
-            }
-            result
+                
+                pageToken = if (resp.has("nextPageToken")) resp.getString("nextPageToken") else null
+            } while (pageToken != null)
+            
+            return result
         } catch (e: Exception) {
             Log.e(TAG, "listDriveFiles failed", e)
-            emptyList()
+            return emptyList()
         }
     }
 
