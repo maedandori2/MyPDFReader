@@ -305,8 +305,8 @@ object SyncManager {
 
     private fun listDriveFiles(token: String, folderId: String): List<DriveFile> {
         return try {
-            // query: trong folder và là pdf hoặc json
-            val query = "'$folderId' in parents and trashed=false and (mimeType='application/pdf' or mimeType='application/json' or name contains '.json')"
+            // query: trong folder và không phải thư mục con (lấy tất cả file để lọc ở client, đảm bảo không bỏ sót .xdw hay file sai mimeType)
+            val query = "'$folderId' in parents and trashed=false and mimeType!='application/vnd.google-apps.folder'"
             val encoded = java.net.URLEncoder.encode(query, "UTF-8")
             val url = URL("https://www.googleapis.com/drive/v3/files?q=$encoded&fields=files(id,name,modifiedTime,mimeType)&pageSize=1000")
 
@@ -326,7 +326,7 @@ object SyncManager {
                 val mime = if (obj.has("mimeType")) obj.getString("mimeType") else null
                 // extra guard: accept only .pdf, .xdw or .json by name/mime
                 val nameLower = name.lowercase(Locale.getDefault())
-                val isDocuWorksMime = mime != null && mime.contains("docuworks", ignoreCase = true)
+                val isDocuWorksMime = mime != null && (mime.contains("docuworks", ignoreCase = true) || mime.contains("xdw", ignoreCase = true))
                 if (nameLower.endsWith(".pdf") || nameLower.endsWith(".xdw") || nameLower.endsWith(".json") ||
                     mime == "application/pdf" || isDocuWorksMime || mime == "application/json") {
                     result.add(DriveFile(id, name, modified, mime))
