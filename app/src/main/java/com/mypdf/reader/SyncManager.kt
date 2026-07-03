@@ -181,7 +181,8 @@ object SyncManager {
 
                 // Nếu file chưa tồn tại -> download
                 if (!localFile.exists()) {
-                    val success = downloadFile(token, fileId, localFile)
+                    val remoteEpochInitial = parseRfc3339ToEpoch(remoteModified)
+                    val success = downloadFile(token, fileId, localFile, remoteEpochInitial)
                     if (success) {
                         downloaded++
                         if (fileName.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) {
@@ -206,15 +207,15 @@ object SyncManager {
                 if (fileName.equals(PdfMetadataManager.METADATA_FILE_NAME, ignoreCase = true)) {
                     // Riêng pdf_metadata.json: ưu tiên tải về nếu trên Drive mới hơn hoặc nếu máy chưa có dữ liệu OCR thực tế
                     val localHasData = PdfMetadataManager.getMetadataCount() > 0 && localFile.length() > 10
-                    if (remoteEpoch > localEpoch + 500 || !localHasData) {
-                        val success = downloadFile(token, fileId, localFile)
+                    if (remoteEpoch > localEpoch + 2500 || !localHasData) {
+                        val success = downloadFile(token, fileId, localFile, remoteEpoch)
                         if (success) {
                             downloaded++
                             PdfMetadataManager.loadAll()
                         } else if (!localFile.exists() || localFile.length() == 0L) {
                             localFile.delete()
                         }
-                    } else if (localEpoch > remoteEpoch + 500 && localHasData) {
+                    } else if (localEpoch > remoteEpoch + 2500 && localHasData) {
                         onProgress("Đang tải lên $fileName (máy mới hơn Drive)...")
                         val success = uploadFileUpdate(token, fileId, localFile)
                         if (success) {
@@ -225,10 +226,10 @@ object SyncManager {
                     }
                 } else {
                     // Các file PDF/XDW: tải về nếu trên Drive mới hơn, upload nếu trên máy mới hơn
-                    if (remoteEpoch > localEpoch + 500) {
-                        val success = downloadFile(token, fileId, localFile)
+                    if (remoteEpoch > localEpoch + 2500) {
+                        val success = downloadFile(token, fileId, localFile, remoteEpoch)
                         if (success) downloaded++ else localFile.delete()
-                    } else if (localEpoch > remoteEpoch + 500) {
+                    } else if (localEpoch > remoteEpoch + 2500) {
                         onProgress("Đang tải lên $fileName (máy mới hơn Drive)...")
                         val success = uploadFileUpdate(token, fileId, localFile)
                         if (success) {
@@ -385,7 +386,7 @@ object SyncManager {
         return null
     }
 
-    private fun downloadFile(token: String, fileId: String, dest: File): Boolean {
+    private fun downloadFile(token: String, fileId: String, dest: File, remoteEpoch: Long? = null): Boolean {
         return try {
             val url = URL("https://www.googleapis.com/drive/v3/files/$fileId?alt=media")
             val conn = url.openConnection() as HttpURLConnection
@@ -396,9 +397,12 @@ object SyncManager {
             FileOutputStream(dest).use { out ->
                 conn.inputStream.copyTo(out)
             }
+            if (remoteEpoch != null) {
+                dest.setLastModified(remoteEpoch)
+            }
             true
         } catch (e: Exception) {
-            Log.e(TAG, "downloadFile failed: ${'$'}{dest.name}", e)
+            Log.e(TAG, "downloadFile failed: ${dest.name}", e)
             false
         }
     }
