@@ -169,11 +169,21 @@ public class BaseBridge implements aa {
             System.loadLibrary("icudata");
             System.loadLibrary("supkBase64"); // Load supkBase64 directly
             
-            // Try NEON first, then fallback to non-NEON
-            try {
-                System.loadLibrary("DWLibraryForAndroid_SP_VFP_NEON");
-            } catch (Throwable t) {
+            // Detect if running on an x86 device (which uses Houdini to translate ARM)
+            boolean isX86 = false;
+            if (android.os.Build.SUPPORTED_ABIS != null && android.os.Build.SUPPORTED_ABIS.length > 0) {
+                isX86 = android.os.Build.SUPPORTED_ABIS[0].contains("x86");
+            }
+            
+            if (isX86) {
+                // Houdini (ARM translation on x86) often crashes on NEON instructions. Load VFP.
                 System.loadLibrary("DWLibraryForAndroid_SP_VFP");
+            } else {
+                try {
+                    System.loadLibrary("DWLibraryForAndroid_SP_VFP_NEON");
+                } catch (Throwable t) {
+                    System.loadLibrary("DWLibraryForAndroid_SP_VFP");
+                }
             }
 
             mUseSkiaPortWithoutOSSkiaSymbols = true;
