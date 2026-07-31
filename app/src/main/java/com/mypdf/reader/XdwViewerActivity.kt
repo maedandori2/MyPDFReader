@@ -2,8 +2,6 @@ package com.mypdf.reader
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -26,6 +24,7 @@ class XdwViewerActivity : AppCompatActivity() {
     private var xdwHelper: XdwReaderHelper? = null
     private var currentPage = 0
     private var totalPages = 0
+    private var nativeMode = false
 
     companion object {
         const val SWIPE_THRESHOLD = 80
@@ -62,9 +61,8 @@ class XdwViewerActivity : AppCompatActivity() {
         setupGestures()
         updateNavButtons()
 
-        // Khởi tạo và đọc XDW
-        xdwHelper = XdwReaderHelper(this)
-        loadXdwDocument()
+        // Thử đọc XDW bằng native library
+        tryNativeLoad()
     }
     
     override fun onDestroy() {
@@ -72,25 +70,92 @@ class XdwViewerActivity : AppCompatActivity() {
         xdwHelper?.closeDocument()
     }
     
-    private fun loadXdwDocument() {
-        totalPages = xdwHelper?.openDocument(filePath) ?: -1
-        if (totalPages > 0) {
-            currentPage = 1
-            showPage(currentPage)
-        } else {
-            Toast.makeText(this, "Không thể mở file XDW này", Toast.LENGTH_SHORT).show()
+    private fun tryNativeLoad() {
+        // Chạy trên background thread để tránh block UI
+        Thread {
+            try {
+                // Kiểm tra library có load được không
+                val available = XdwReaderHelper.isAvailable()
+                if (!available) {
+                    runOnUiThread { fallbackToExternalViewer() }
+                    return@Thread
+                }
+                
+                val helper = XdwReaderHelper(this)
+                val pages = helper.openDocument(filePath)
+                
+                runOnUiThread {
+                    if (pages > 0) {
+                        // Native thành công!
+                        xdwHelper = helper
+                        totalPages = pages
+                        currentPage = 1
+                        nativeMode = true
+                        showPage(currentPage)
+                    } else {
+                        // Không mở được, fallback
+                        helper.closeDocument()
+                        fallbackToExternalViewer()
+                    }
+                }
+            } catch (e: Throwable) {
+                runOnUiThread { fallbackToExternalViewer() }
+            }
+        }.start()
+    }
+    
+    private fun fallbackToExternalViewer() {
+        nativeMode = false
+        // Ẩn page controls
+        binding.btnPrevPage.visibility = View.GONE
+        binding.btnNextPage.visibility = View.GONE
+        binding.tvPageInfo.visibility = View.GONE
+        
+        // Mở bằng ứng dụng ngoài
+        openInDocuWorksViewer()
+    }
+    
+    private fun openInDocuWorksViewer() {
+        val file = File(filePath)
+        if (!file.exists()) {
+            Toast.makeText(this, LocaleHelper.getString("file_not_found"), Toast.LENGTH_SHORT).show()
+            return
+        }
+        try {
+            val uri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/vnd.fujixerox.docuworks")
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            val mimeTypes = listOf(
+                "application/vnd.fujixerox.docuworks",
+                "application/vnd.fujifilm.docuworks",
+                "application/x-xdw",
+                "*/*"
+            )
+            var opened = false
+            for (mime in mimeTypes) {
+                try {
+                    intent.setDataAndType(uri, mime)
+                    startActivity(intent)
+                    opened = true
+                    break
+                } catch (_: Exception) {}
+            }
+            if (!opened) {
+                Toast.makeText(this, "Không tìm thấy ứng dụng đọc file .xdw", Toast.LENGTH_LONG).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Lỗi mở file: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
     
     private fun showPage(page: Int) {
-        if (totalPages <= 0) return
+        if (totalPages <= 0 || !nativeMode) return
         
-        // Cập nhật text (hiển thị 1-based cho người dùng)
         binding.tvPageInfo.text = "$page/$totalPages"
         
-        // Render hình ảnh trên background thread
         Thread {
-            // Native API sử dụng index 0-based, người dùng thấy 1-based
             val bitmap = xdwHelper?.getPageBitmap(page - 1, 1200, 1600)
             runOnUiThread {
                 if (bitmap != null) {
@@ -139,11 +204,7 @@ class XdwViewerActivity : AppCompatActivity() {
                 val diffX = e2.x - e1.x
                 val diffY = e2.y - e1.y
                 if (abs(diffX) > abs(diffY) && abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
-                    if (diffX > 0) {
-                        switchFile(-1)
-                    } else {
-                        switchFile(1)
-                    }
+                    if (diffX > 0) switchFile(-1) else switchFile(1)
                     return true
                 }
                 return false
@@ -188,11 +249,14 @@ class XdwViewerActivity : AppCompatActivity() {
             finish()
         } else {
             filePath = newPath
-            val fileName = newFile.name
-            updateTitleAndInfo(fileName)
+            updateTitleAndInfo(newFile.name)
             updateNavButtons()
             xdwHelper?.closeDocument()
-            loadXdwDocument()
+            if (nativeMode) {
+                tryNativeLoad()
+            } else {
+                openInDocuWorksViewer()
+            }
         }
     }
 

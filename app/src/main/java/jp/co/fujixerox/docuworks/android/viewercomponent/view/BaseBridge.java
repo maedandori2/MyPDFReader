@@ -159,6 +159,8 @@ public class BaseBridge implements aa {
         CPU_FEATURES(int i) { this.value = i; }
     }
 
+    private static boolean sLibraryLoaded = false;
+
     static {
         try {
             System.loadLibrary("c++_shared");
@@ -173,9 +175,15 @@ public class BaseBridge implements aa {
             if (!isUseOSSkiaSymbols()) {
                 mUseSkiaPortWithoutOSSkiaSymbols = true;
             }
+            sLibraryLoaded = true;
         } catch (Throwable th) {
             th.printStackTrace();
+            sLibraryLoaded = false;
         }
+    }
+
+    public static boolean isLibraryLoaded() {
+        return sLibraryLoaded;
     }
 
     public static BaseBridge a() {
