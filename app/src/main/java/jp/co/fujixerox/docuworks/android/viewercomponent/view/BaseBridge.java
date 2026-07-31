@@ -164,9 +164,10 @@ public class BaseBridge implements aa {
     static {
         try {
             System.loadLibrary("c++_shared");
-            // Skip loading cpufd because it might cause a crash on some devices
-            // System.loadLibrary("cpufd");
-            System.loadLibrary("icudata");
+            System.loadLibrary("cpufd");
+            int cPUFeatures = getCPUFeatures();
+            // We force ARM library without NEON to avoid Houdini crash
+            System.loadLibrary("DWLibraryForAndroid_SP_VFP");
             System.loadLibrary("supkBase64"); // Load supkBase64 directly
             
             // Detect if running on an x86 device (which uses Houdini to translate ARM)

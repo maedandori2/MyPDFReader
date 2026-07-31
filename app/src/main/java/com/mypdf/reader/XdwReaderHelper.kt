@@ -102,7 +102,9 @@ class XdwReaderHelper(private val context: Context) {
     fun getPageBitmap(pageIndex: Int, width: Int, height: Int): Bitmap? {
         return try {
             val b = bridge ?: return null
+            Log.d(TAG, "Calling setDrawingEnv($width, $height, 25)")
             b.setDrawingEnv(width, height, 25)
+            Log.d(TAG, "setDrawingEnv returned. Creating bitmap...")
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             
             // On modern Android (7+), passing Canvas to this legacy JNI library crashes 
