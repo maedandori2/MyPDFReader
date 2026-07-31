@@ -19,3 +19,11 @@
 # ML Kit
 -keep class com.google.mlkit.** { *; }
 -dontwarn com.google.mlkit.**
+
+# XDW JNI - Keep all classes in the Fuji Xerox package because
+# native .so libraries reference them by exact package/class/field names.
+# If ProGuard renames or removes them, the app crashes at native level.
+-keep class jp.co.fujixerox.** { *; }
+-keepclassmembers class jp.co.fujixerox.** { *; }
+-dontwarn jp.co.fujixerox.**
+
