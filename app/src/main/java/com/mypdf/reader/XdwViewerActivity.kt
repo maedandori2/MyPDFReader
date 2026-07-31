@@ -63,7 +63,7 @@ class XdwViewerActivity : AppCompatActivity() {
         updateNavButtons()
 
         // Khởi tạo và đọc XDW
-        xdwHelper = XdwReaderHelper()
+        xdwHelper = XdwReaderHelper(this)
         loadXdwDocument()
     }
     
@@ -85,16 +85,18 @@ class XdwViewerActivity : AppCompatActivity() {
     private fun showPage(page: Int) {
         if (totalPages <= 0) return
         
-        // Cập nhật text
+        // Cập nhật text (hiển thị 1-based cho người dùng)
         binding.tvPageInfo.text = "$page/$totalPages"
         
-        // Render hình ảnh (cần độ phân giải phù hợp, ví dụ 1200x1600 cho nét)
-        // Lưu ý: Tốc độ render tuỳ thuộc vào CPU máy
+        // Render hình ảnh trên background thread
         Thread {
-            val bitmap = xdwHelper?.getPageBitmap(page, 1200, 1600)
+            // Native API sử dụng index 0-based, người dùng thấy 1-based
+            val bitmap = xdwHelper?.getPageBitmap(page - 1, 1200, 1600)
             runOnUiThread {
                 if (bitmap != null) {
                     binding.ivXdwPage.setImageBitmap(bitmap)
+                } else {
+                    Toast.makeText(this, "Không thể render trang $page", Toast.LENGTH_SHORT).show()
                 }
             }
         }.start()
