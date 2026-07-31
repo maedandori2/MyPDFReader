@@ -83,8 +83,8 @@ public class BaseBridge implements aa {
     native int getNumberOfContents();
     native int getNumberOfDocuments();
     public native int getNumberOfFontEmbedded();
-    native int getNumberOfPages();
-    native int getNumberOfPagesOfDocument(int i);
+    public native int getNumberOfPages();
+    public native int getNumberOfPagesOfDocument(int i);
     public native String getOtherFilePath(int i, int i2, int i3);
     public native int getPageCheck(int i, int i2, int i3);
     native int getPageRect(int i, RectF rectF);
@@ -150,7 +150,7 @@ public class BaseBridge implements aa {
     public native boolean setTempEnv(String str);
     public native int startSearch(Object obj);
 
-    BaseBridge() {}
+    public BaseBridge() {}
 
     private enum CPU_FEATURES {
         NO_ARM(0), ARMv5TE(1), ARMEABIV7A(2), ARMEABIV7A_NEON(3), X86(4), ARM64(5);
