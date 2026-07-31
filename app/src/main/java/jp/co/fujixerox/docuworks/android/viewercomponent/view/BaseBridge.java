@@ -176,9 +176,7 @@ public class BaseBridge implements aa {
                 System.loadLibrary("DWLibraryForAndroid_SP_VFP");
             }
 
-            if (!isUseOSSkiaSymbols()) {
-                mUseSkiaPortWithoutOSSkiaSymbols = true;
-            }
+            mUseSkiaPortWithoutOSSkiaSymbols = true;
             sLibraryLoaded = true;
         } catch (Throwable th) {
             th.printStackTrace();
