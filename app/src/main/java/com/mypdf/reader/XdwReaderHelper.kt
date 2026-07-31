@@ -105,12 +105,11 @@ class XdwReaderHelper(private val context: Context) {
             b.setDrawingEnv(width, height, 25)
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             
-            val result = if (BaseBridge.mUseSkiaPortWithoutOSSkiaSymbols) {
-                b.a(pageIndex, 1.0f, bitmap, width, height)
-            } else {
-                val canvas = android.graphics.Canvas(bitmap)
-                b.a(pageIndex, 1.0f, canvas, width, height)
-            }
+            // On modern Android (7+), passing Canvas to this legacy JNI library crashes 
+            // because Canvas no longer has the 'mNativeCanvas' int field. 
+            // We MUST pass a Bitmap and force the library to use its embedded Skia port.
+            Log.d(TAG, "getPageImage: Forcing Bitmap instead of Canvas. mUseSkiaPortWithoutOSSkiaSymbols=${BaseBridge.mUseSkiaPortWithoutOSSkiaSymbols}")
+            val result = b.a(pageIndex, 1.0f, bitmap, width, height)
             
             Log.d(TAG, "getPageImage(page=$pageIndex) result=$result")
             if (result >= 0) bitmap
