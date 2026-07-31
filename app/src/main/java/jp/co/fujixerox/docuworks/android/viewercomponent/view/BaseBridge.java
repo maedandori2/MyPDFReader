@@ -164,14 +164,18 @@ public class BaseBridge implements aa {
     static {
         try {
             System.loadLibrary("c++_shared");
-            System.loadLibrary("cpufd");
+            // Skip loading cpufd because it might cause a crash on some devices
+            // System.loadLibrary("cpufd");
             System.loadLibrary("icudata");
-            int cPUFeatures = getCPUFeatures();
-            if (cPUFeatures == CPU_FEATURES.ARM64.getValue() || cPUFeatures == CPU_FEATURES.ARMEABIV7A_NEON.getValue()) {
+            System.loadLibrary("supkBase64"); // Load supkBase64 directly
+            
+            // Try NEON first, then fallback to non-NEON
+            try {
                 System.loadLibrary("DWLibraryForAndroid_SP_VFP_NEON");
-            } else {
+            } catch (Throwable t) {
                 System.loadLibrary("DWLibraryForAndroid_SP_VFP");
             }
+
             if (!isUseOSSkiaSymbols()) {
                 mUseSkiaPortWithoutOSSkiaSymbols = true;
             }
