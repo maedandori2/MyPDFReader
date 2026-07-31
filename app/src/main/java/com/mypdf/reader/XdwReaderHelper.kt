@@ -69,8 +69,12 @@ class XdwReaderHelper(private val context: Context) {
                 return -1
             }
             
-            val tempDir = context.cacheDir.absolutePath
-            b.setTempEnv(tempDir)
+            val tempDir = File(context.cacheDir, "dwlib")
+            if (!tempDir.exists()) tempDir.mkdirs()
+            val tempPath = tempDir.absolutePath + "/"
+            
+            val tempResult = b.setTempEnv(tempPath)
+            Log.d(TAG, "setTempEnv returned: $tempResult (path=$tempPath)")
             
             try { b.closeDocument() } catch (_: Throwable) {}
             
