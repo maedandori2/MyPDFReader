@@ -22,6 +22,10 @@ class XdwViewerActivity : AppCompatActivity() {
     private var fileList = listOf<String>()
     private var fileIndex = 0
     private lateinit var gestureDetector: GestureDetector
+    
+    private var xdwHelper: XdwReaderHelper? = null
+    private var currentPage = 0
+    private var totalPages = 0
 
     companion object {
         const val SWIPE_THRESHOLD = 80
@@ -49,17 +53,62 @@ class XdwViewerActivity : AppCompatActivity() {
         binding.btnNextFile.text = LocaleHelper.getString("next_page")
 
         binding.btnBack.setOnClickListener { finish() }
-        binding.btnOpenDocuWorks.setOnClickListener { openInDocuWorksViewer() }
         binding.btnPrevFile.setOnClickListener { switchFile(-1) }
         binding.btnNextFile.setOnClickListener { switchFile(1) }
+        
+        binding.btnPrevPage.setOnClickListener { switchPage(-1) }
+        binding.btnNextPage.setOnClickListener { switchPage(1) }
 
         setupGestures()
         updateNavButtons()
 
-        // Tự động mở ứng dụng DocuWorks Viewer sau một khoảng trễ ngắn
-        Handler(Looper.getMainLooper()).postDelayed({
-            openInDocuWorksViewer()
-        }, 300)
+        // Khởi tạo và đọc XDW
+        xdwHelper = XdwReaderHelper()
+        loadXdwDocument()
+    }
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        xdwHelper?.closeDocument()
+    }
+    
+    private fun loadXdwDocument() {
+        totalPages = xdwHelper?.openDocument(filePath) ?: -1
+        if (totalPages > 0) {
+            currentPage = 1
+            showPage(currentPage)
+        } else {
+            Toast.makeText(this, "Không thể mở file XDW này", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun showPage(page: Int) {
+        if (totalPages <= 0) return
+        
+        // Cập nhật text
+        binding.tvPageInfo.text = "$page/$totalPages"
+        
+        // Render hình ảnh (cần độ phân giải phù hợp, ví dụ 1200x1600 cho nét)
+        // Lưu ý: Tốc độ render tuỳ thuộc vào CPU máy
+        Thread {
+            val bitmap = xdwHelper?.getPageBitmap(page, 1200, 1600)
+            runOnUiThread {
+                if (bitmap != null) {
+                    binding.ivXdwPage.setImageBitmap(bitmap)
+                }
+            }
+        }.start()
+        
+        binding.btnPrevPage.isEnabled = page > 1
+        binding.btnNextPage.isEnabled = page < totalPages
+    }
+    
+    private fun switchPage(direction: Int) {
+        val newPage = currentPage + direction
+        if (newPage in 1..totalPages) {
+            currentPage = newPage
+            showPage(currentPage)
+        }
     }
 
     private fun updateTitleAndInfo(fileName: String) {
@@ -68,7 +117,6 @@ class XdwViewerActivity : AppCompatActivity() {
         } else {
             binding.tvTitle.text = fileName
         }
-        binding.tvFileName.text = fileName
     }
 
     private fun updateNavButtons() {
@@ -141,48 +189,8 @@ class XdwViewerActivity : AppCompatActivity() {
             val fileName = newFile.name
             updateTitleAndInfo(fileName)
             updateNavButtons()
-            openInDocuWorksViewer()
-        }
-    }
-
-    private fun openInDocuWorksViewer() {
-        val file = File(filePath)
-        if (!file.exists()) {
-            Toast.makeText(this, LocaleHelper.getString("file_not_found"), Toast.LENGTH_SHORT).show()
-            return
-        }
-        try {
-            val uri = FileProvider.getUriForFile(
-                this,
-                "${packageName}.fileprovider",
-                file
-            )
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "application/vnd.fujixerox.docuworks")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            try {
-                startActivity(intent)
-            } catch (e1: Exception) {
-                try {
-                    intent.setDataAndType(uri, "application/vnd.fujifilm.docuworks")
-                    startActivity(intent)
-                } catch (e2: Exception) {
-                    try {
-                        intent.setDataAndType(uri, "application/x-xdw")
-                        startActivity(intent)
-                    } catch (e3: Exception) {
-                        try {
-                            intent.setDataAndType(uri, "*/*")
-                            startActivity(intent)
-                        } catch (e4: Exception) {
-                            Toast.makeText(this, "Vui lòng cài đặt ứng dụng DocuWorks Viewer để đọc file .xdw!", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this, "Lỗi mở file .xdw: ${e.message}", Toast.LENGTH_SHORT).show()
+            xdwHelper?.closeDocument()
+            loadXdwDocument()
         }
     }
 

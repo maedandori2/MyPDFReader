@@ -42,52 +42,51 @@
             android:visibility="invisible" />
     </LinearLayout>
 
-    <!-- Content Card -->
-    <LinearLayout
+    <!-- Content Viewer -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="32dp">
-
+        android:layout_height="match_parent"
+        android:layout_above="@id/layoutNav"
+        android:layout_below="@id/layoutTopBar">
+        
         <ImageView
-            android:layout_width="96dp"
-            android:layout_height="112dp"
-            android:src="@drawable/ic_xdw"
+            android:id="@+id/ivXdwPage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="fitCenter" />
-
-        <TextView
-            android:id="@+id/tvFileName"
+            
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="center" />
-
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Tài liệu .xdw được đọc bằng ứng dụng DocuWorks Viewer bên ngoài."
-            android:textColor="#B0BEC5"
-            android:textSize="14sp"
-            android:gravity="center" />
-
-        <Button
-            android:id="@+id/btnOpenDocuWorks"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp"
-            android:text="🚀 Mở lại DocuWorks Viewer"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#1976D2"
-            android:paddingHorizontal="24dp"
-            style="@style/Widget.MaterialComponents.Button" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:background="#88000000"
+            android:orientation="horizontal"
+            android:padding="8dp">
+            
+            <Button
+                android:id="@+id/btnPrevPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◀ Trang" />
+                
+            <TextView
+                android:id="@+id/tvPageInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="#FFFFFF"
+                android:text="1/1" />
+                
+            <Button
+                android:id="@+id/btnNextPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trang ▶" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <!-- Bottom nav -->
     <LinearLayout
