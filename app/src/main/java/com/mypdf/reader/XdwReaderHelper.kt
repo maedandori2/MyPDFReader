@@ -35,7 +35,7 @@ class XdwReaderHelper {
                 Log.e(TAG, "Failed to open document. Result code: $result")
                 return -1
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.e(TAG, "Exception opening XDW document", e)
             -1
         }
@@ -60,7 +60,7 @@ class XdwReaderHelper {
                 Log.e(TAG, "Failed to render page $pageIndex. Result: $result")
                 null
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.e(TAG, "Exception rendering page $pageIndex", e)
             null
         }
