@@ -104,7 +104,14 @@ class XdwReaderHelper(private val context: Context) {
             val b = bridge ?: return null
             b.setDrawingEnv(width, height, 25)
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            val result = b.a(pageIndex, 1.0f, bitmap, width, height)
+            
+            val result = if (BaseBridge.mUseSkiaPortWithoutOSSkiaSymbols) {
+                b.a(pageIndex, 1.0f, bitmap, width, height)
+            } else {
+                val canvas = android.graphics.Canvas(bitmap)
+                b.a(pageIndex, 1.0f, canvas, width, height)
+            }
+            
             Log.d(TAG, "getPageImage(page=$pageIndex) result=$result")
             if (result >= 0) bitmap
             else { bitmap.recycle(); null }

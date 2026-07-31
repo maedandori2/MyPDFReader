@@ -186,7 +186,9 @@ public class BaseBridge implements aa {
                 }
             }
 
-            mUseSkiaPortWithoutOSSkiaSymbols = true;
+            if (!isUseOSSkiaSymbols()) {
+                mUseSkiaPortWithoutOSSkiaSymbols = true;
+            }
             sLibraryLoaded = true;
         } catch (Throwable th) {
             th.printStackTrace();
