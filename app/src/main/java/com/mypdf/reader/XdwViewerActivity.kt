@@ -10,20 +10,14 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.lifecycle.lifecycleScope
 import com.mypdf.reader.databinding.ActivityXdwViewerBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.abs
 
 /**
  * Activity hiển thị file XDW (DocuWorks).
- * Thử native library trước, nếu thất bại thì mở ứng dụng ngoài.
- * Dùng lifecycleScope để tự động cancel khi Activity bị destroy.
+ * Mở file bằng ứng dụng DocuWorks Viewer bên ngoài (nếu có cài).
+ * Hỗ trợ chuyển file trước/sau trong danh sách bằng nút hoặc vuốt ngang.
  */
 class XdwViewerActivity : AppCompatActivity() {
 
@@ -32,15 +26,6 @@ class XdwViewerActivity : AppCompatActivity() {
     private var fileList = listOf<String>()
     private var fileIndex = 0
     private lateinit var gestureDetector: GestureDetector
-
-    private var xdwHelper: XdwReaderHelper? = null
-    private var currentPage = 0
-    private var totalPages = 0
-    private var nativeMode = false
-
-    // Job hiện tại cho việc load/render — dùng để cancel khi chuyển file hoặc destroy
-    private var loadJob: Job? = null
-    private var renderJob: Job? = null
 
     companion object {
         private const val TAG = "XdwViewerActivity"
@@ -64,120 +49,56 @@ class XdwViewerActivity : AppCompatActivity() {
 
         updateTitleAndInfo(fileName)
 
-        binding.btnBack.text = "← " + LocaleHelper.getString("back_button")
-        binding.btnPrevFile.text = LocaleHelper.getString("prev_page")
-        binding.btnNextFile.text = LocaleHelper.getString("next_page")
+        // Dùng try-catch khi gọi LocaleHelper phòng trường hợp chưa init
+        binding.btnBack.text = "← " + safeGetString("back_button", "Quay lại")
+        binding.btnPrevFile.text = safeGetString("prev_page", "◀ File trước")
+        binding.btnNextFile.text = safeGetString("next_page", "File tiếp theo ▶")
 
         binding.btnBack.setOnClickListener { finish() }
         binding.btnPrevFile.setOnClickListener { switchFile(-1) }
         binding.btnNextFile.setOnClickListener { switchFile(1) }
 
-        binding.btnPrevPage.setOnClickListener { switchPage(-1) }
-        binding.btnNextPage.setOnClickListener { switchPage(1) }
-
-        setupGestures()
-        updateNavButtons()
-
-        // Thử đọc XDW bằng native library
-        tryNativeLoad()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Cancel tất cả job đang chạy
-        loadJob?.cancel()
-        renderJob?.cancel()
-        xdwHelper?.closeDocument()
-    }
-
-    /**
-     * Thử load file XDW bằng native DocuWorks library.
-     * Chạy trên IO thread qua lifecycleScope → tự động cancel khi Activity destroy.
-     */
-    private fun tryNativeLoad() {
-        // Cancel job cũ nếu đang chạy (trường hợp switchFile)
-        loadJob?.cancel()
-
-        loadJob = lifecycleScope.launch {
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    // Kiểm tra library có load được không
-                    if (!XdwReaderHelper.isAvailable()) {
-                        return@withContext LoadResult.Unavailable
-                    }
-
-                    val helper = XdwReaderHelper(this@XdwViewerActivity)
-                    val pages = helper.openDocument(filePath)
-
-                    if (pages > 0) {
-                        LoadResult.Success(helper, pages)
-                    } else {
-                        helper.closeDocument()
-                        LoadResult.Failed
-                    }
-                }
-
-                // Đã trở lại UI thread, kiểm tra coroutine vẫn active
-                if (!isActive) return@launch
-
-                when (result) {
-                    is LoadResult.Success -> {
-                        xdwHelper = result.helper
-                        totalPages = result.pages
-                        currentPage = 1
-                        nativeMode = true
-                        showPage(currentPage)
-                    }
-                    else -> {
-                        fallbackToExternalViewer()
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "tryNativeLoad failed", e)
-                if (isActive) {
-                    fallbackToExternalViewer()
-                }
-            }
-        }
-    }
-
-    /**
-     * Kết quả load native XDW — sealed class an toàn hơn truyền giá trị nullable.
-     */
-    private sealed class LoadResult {
-        data class Success(val helper: XdwReaderHelper, val pages: Int) : LoadResult()
-        object Failed : LoadResult()
-        object Unavailable : LoadResult()
-    }
-
-    /**
-     * Fallback: mở file bằng ứng dụng DocuWorks ngoài.
-     * Nếu không tìm thấy ứng dụng nào, hiện thông báo rồi finish() Activity.
-     */
-    private fun fallbackToExternalViewer() {
-        nativeMode = false
-        // Ẩn page controls
+        // Ẩn page controls — không dùng native rendering
         binding.btnPrevPage.visibility = View.GONE
         binding.btnNextPage.visibility = View.GONE
         binding.tvPageInfo.visibility = View.GONE
 
-        // Mở bằng ứng dụng ngoài
+        setupGestures()
+        updateNavButtons()
+
+        // Mở file bằng ứng dụng DocuWorks Viewer bên ngoài
         openInDocuWorksViewer()
     }
 
+    /**
+     * Lấy chuỗi đa ngôn ngữ an toàn — trả về fallback nếu LocaleHelper chưa init.
+     */
+    private fun safeGetString(key: String, fallback: String): String {
+        return try {
+            LocaleHelper.getString(key)
+        } catch (e: Exception) {
+            fallback
+        }
+    }
+
+    /**
+     * Mở file .xdw bằng ứng dụng DocuWorks Viewer bên ngoài.
+     * Thử nhiều MIME type khác nhau để tương thích với các phiên bản DocuWorks Viewer.
+     * Nếu không tìm thấy ứng dụng nào, hiện Toast rồi finish().
+     */
     private fun openInDocuWorksViewer() {
         val file = File(filePath)
         if (!file.exists()) {
-            Toast.makeText(this, LocaleHelper.getString("file_not_found"), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, safeGetString("file_not_found", "Không tìm thấy file"), Toast.LENGTH_SHORT).show()
             finish()
             return
         }
         try {
             val uri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
             val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "application/vnd.fujixerox.docuworks")
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
+            // Thử nhiều MIME type để tương thích với các phiên bản DocuWorks
             val mimeTypes = listOf(
                 "application/vnd.fujixerox.docuworks",
                 "application/vnd.fujifilm.docuworks",
@@ -191,65 +112,18 @@ class XdwViewerActivity : AppCompatActivity() {
                     startActivity(intent)
                     opened = true
                     break
-                } catch (_: Exception) {}
+                } catch (e: Exception) {
+                    Log.d(TAG, "Failed with MIME $mime: ${e.message}")
+                }
             }
             if (!opened) {
                 Toast.makeText(this, "Không tìm thấy ứng dụng đọc file .xdw", Toast.LENGTH_LONG).show()
-                // Không để Activity trống — finish() để quay về màn hình trước
                 finish()
             }
         } catch (e: Exception) {
+            Log.e(TAG, "Error opening XDW file", e)
             Toast.makeText(this, "Lỗi mở file: ${e.message}", Toast.LENGTH_SHORT).show()
             finish()
-        }
-    }
-
-    /**
-     * Hiển thị trang XDW bằng native library.
-     * Render bitmap trên IO thread, cập nhật UI trên main thread.
-     */
-    private fun showPage(page: Int) {
-        if (totalPages <= 0 || !nativeMode) return
-
-        binding.tvPageInfo.text = "$page/$totalPages"
-
-        // Cancel render cũ nếu đang chạy (chuyển trang nhanh)
-        renderJob?.cancel()
-
-        renderJob = lifecycleScope.launch {
-            try {
-                val bitmap = withContext(Dispatchers.IO) {
-                    xdwHelper?.getPageBitmap(page - 1, 1200, 1600)
-                }
-
-                if (!isActive) return@launch
-
-                if (bitmap != null) {
-                    binding.ivXdwPage.setImageBitmap(bitmap)
-                } else {
-                    Toast.makeText(
-                        this@XdwViewerActivity,
-                        "Không thể render trang $page",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "showPage failed for page $page", e)
-            }
-        }
-
-        binding.btnPrevPage.isEnabled = page > 1
-        binding.btnNextPage.isEnabled = page < totalPages
-    }
-
-    /**
-     * Chuyển trang trong file XDW hiện tại.
-     */
-    private fun switchPage(direction: Int) {
-        val newPage = currentPage + direction
-        if (newPage in 1..totalPages) {
-            currentPage = newPage
-            showPage(currentPage)
         }
     }
 
@@ -294,30 +168,35 @@ class XdwViewerActivity : AppCompatActivity() {
 
     /**
      * Chuyển sang file trước/sau trong danh sách.
-     * Cancel job cũ và đóng document trước khi mở file mới.
+     * Nếu file tiếp theo là PDF, chuyển sang PdfViewerActivity.
+     * Nếu file tiếp theo là XDW, mở lại bằng external viewer.
      */
     private fun switchFile(direction: Int) {
         if (fileList.size <= 1) {
-            Toast.makeText(this, LocaleHelper.getString("no_other_file"), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, safeGetString("no_other_file", "Không có file khác"), Toast.LENGTH_SHORT).show()
             return
         }
         val newIndex = fileIndex + direction
         if (newIndex < 0) {
-            Toast.makeText(this, LocaleHelper.getString("first_file"), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, safeGetString("first_file", "Đây là file đầu tiên"), Toast.LENGTH_SHORT).show()
             return
         }
         if (newIndex >= fileList.size) {
-            Toast.makeText(this, LocaleHelper.getString("last_file"), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, safeGetString("last_file", "Đây là file cuối cùng"), Toast.LENGTH_SHORT).show()
             return
         }
         fileIndex = newIndex
         val newPath = fileList[fileIndex]
         val newFile = File(newPath)
         if (!newFile.exists()) {
-            Toast.makeText(this, LocaleHelper.getString("file_not_found"), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, safeGetString("file_not_found", "Không tìm thấy file"), Toast.LENGTH_SHORT).show()
             return
         }
-        ReadingListManager.markAsRead(newPath)
+        try {
+            ReadingListManager.markAsRead(newPath)
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to mark as read", e)
+        }
         if (newFile.extension.equals("pdf", ignoreCase = true)) {
             val intent = Intent(this, PdfViewerActivity::class.java).apply {
                 putExtra("file_path", newPath)
@@ -327,30 +206,27 @@ class XdwViewerActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            // Cancel job cũ trước khi chuyển file mới
-            loadJob?.cancel()
-            renderJob?.cancel()
-
             filePath = newPath
             updateTitleAndInfo(newFile.name)
             updateNavButtons()
-            xdwHelper?.closeDocument()
-            if (nativeMode) {
-                tryNativeLoad()
-            } else {
-                openInDocuWorksViewer()
-            }
+            openInDocuWorksViewer()
         }
     }
 
     /**
      * Áp dụng cài đặt giữ sáng màn hình từ SettingsManager.
+     * An toàn khi SettingsManager chưa init — catch exception và dùng default.
      */
     private fun applyKeepScreenOn() {
-        if (SettingsManager.isKeepScreenOn()) {
+        try {
+            if (SettingsManager.isKeepScreenOn()) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+        } catch (e: Exception) {
+            // SettingsManager chưa init — mặc định giữ sáng
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        } else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
 }

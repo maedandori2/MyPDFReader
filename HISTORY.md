@@ -4,26 +4,26 @@
 
 ### 🐛 Sửa lỗi crash khi mở file XDW
 - 2026-08-01, 15:38: **Fix crash `UnsatisfiedLinkError` trên thiết bị arm64 (`BaseBridge.java`)**:
-  - Nguyên nhân: Static initializer luôn load `DWLibraryForAndroid_SP_VFP` trước (dòng 170), nhưng thư mục `jniLibs/arm64-v8a/` không có file `.so` này → crash ngay khi class được load lần đầu.
+  - Nguyên nhân: Static initializer luôn load `DWLibraryForAndroid_SP_VFP` trước, nhưng thư mục `jniLibs/arm64-v8a/` không có file `.so` này → crash ngay khi class được load lần đầu.
   - Sửa: Phát hiện kiến trúc CPU (`arm64`/`armeabi-v7a`/`x86`) trước khi load. ARM64 chỉ load NEON, ARM32 thử NEON rồi fallback VFP, x86 load VFP.
   - Bonus: Xóa logic load trùng lặp (VFP bị load 2 lần trên x86) gây xung đột symbol.
-- 2026-08-01, 15:38: **Fix crash lifecycle `XdwViewerActivity.kt`**:
-  - Nguyên nhân: Dùng raw `Thread` + `runOnUiThread` để load/render XDW. Nếu user nhấn Back trước khi Thread xong, `runOnUiThread` truy cập `binding` đã destroy → crash `IllegalStateException`.
-  - Sửa: Thay `Thread` bằng `lifecycleScope.launch` + `withContext(Dispatchers.IO)` — tự động cancel khi Activity destroy. Thêm cancel job cũ khi chuyển file.
-  - Sửa: Activity hiện trống (không finish) khi không tìm thấy ứng dụng đọc XDW bên ngoài → thêm `finish()` khi fallback thất bại.
-- 2026-08-01, 15:38: **Fix race condition singleton bridge (`XdwReaderHelper.kt`)**:
-  - Nguyên nhân: `bridge` là static field singleton, nhưng `openDocument()`/`closeDocument()`/`getPageBitmap()` không synchronized → 2 Activity mở cùng lúc gây xung đột native call.
-  - Sửa: Thêm `bridgeLock` object + `synchronized` block cho tất cả thao tác trên bridge.
+  - Bonus: Dời `getCPUFeatures()` xuống sau khi DWLibrary đã load, wrap `isUseOSSkiaSymbols()` riêng vì có thể gây SIGSEGV trên Android 7+.
+- 2026-08-01, 15:49: **Gỡ bỏ hoàn toàn native DocuWorks rendering (`XdwViewerActivity.kt`)**:
+  - Nguyên nhân gốc rễ: Thư viện native DocuWorks (BaseBridge) là legacy library không tương thích Android mới. Các native method (`getCPUFeatures()`, `isUseOSSkiaSymbols()`, `openDocument()`, `getPageImage()`) có thể gây **fatal native crash (SIGSEGV)** mà Java/Kotlin try-catch KHÔNG bắt được — process chết ngay lập tức.
+  - Sửa: Loại bỏ hoàn toàn việc thử native loading. `XdwViewerActivity` giờ chỉ mở file bằng ứng dụng DocuWorks Viewer bên ngoài (FileProvider + Intent).
+  - Sửa: Thêm `finish()` khi không tìm thấy ứng dụng đọc XDW bên ngoài (trước đây Activity hiện trống).
+  - Sửa: Wrap tất cả singleton calls (`LocaleHelper`, `SettingsManager`, `ReadingListManager`) trong try-catch với fallback value, phòng trường hợp chưa init.
 
 #### 📝 File đã sửa
 | File | Thay đổi |
 |------|----------|
-| `BaseBridge.java` | Sửa static initializer: load native library theo kiến trúc CPU, xóa load trùng lặp |
-| `XdwViewerActivity.kt` | Chuyển từ raw Thread sang lifecycleScope, thêm finish() khi fallback fail, cancel job khi destroy |
-| `XdwReaderHelper.kt` | Thêm synchronized cho tất cả thao tác trên singleton bridge |
+| `BaseBridge.java` | Sửa static initializer: load native library theo kiến trúc CPU, dời getCPUFeatures sau DWLibrary, wrap isUseOSSkiaSymbols riêng |
+| `XdwViewerActivity.kt` | Gỡ hoàn toàn native rendering, chỉ dùng external viewer, wrap singleton calls an toàn |
+| `XdwReaderHelper.kt` | Thêm crash detection qua SharedPreferences, synchronized cho singleton bridge (không còn được gọi nhưng giữ lại cho tương lai) |
 | `HISTORY.md` | Cập nhật changelog v1.5.3 |
 
 ---
+
 
 
 ## [v1.5.2] - 2026-07-03

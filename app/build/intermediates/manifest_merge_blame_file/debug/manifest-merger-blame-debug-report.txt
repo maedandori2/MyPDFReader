@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.mypdf.reader"
-4    android:versionCode="82"
-5    android:versionName="1.82" >
+4    android:versionCode="105"
+5    android:versionName="1.105" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="22"
@@ -54,80 +54,81 @@
 29-->[androidx.core:core:1.12.0] C:\Users\sangt\.gradle\caches\transforms-3\83c3abf2779746bcacd076bcea1d5914\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
 30
 31    <application
-31-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:17:5-60:19
+31-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:17:5-61:19
 32        android:allowBackup="true"
 32-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:18:9-35
 33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 33-->[androidx.core:core:1.12.0] C:\Users\sangt\.gradle\caches\transforms-3\83c3abf2779746bcacd076bcea1d5914\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
 34        android:debuggable="true"
 35        android:extractNativeLibs="true"
+35-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:21:9-41
 36        android:label="@string/app_name"
 36-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:19:9-41
 37        android:supportsRtl="true"
 37-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:20:9-35
 38        android:theme="@style/Theme.MyPDFReader" >
-38-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:21:9-49
+38-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:22:9-49
 39        <activity
-39-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:23:9-31:20
+39-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:24:9-32:20
 40            android:name="com.mypdf.reader.MainActivity"
-40-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:24:13-41
+40-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:25:13-41
 41            android:exported="true"
-41-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:25:13-36
+41-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:26:13-36
 42            android:windowSoftInputMode="adjustPan" >
-42-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:26:13-52
+42-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:27:13-52
 43            <intent-filter>
-43-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:27:13-30:29
+43-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:28:13-31:29
 44                <action android:name="android.intent.action.MAIN" />
-44-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:28:17-69
-44-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:28:25-66
+44-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:29:17-69
+44-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:29:25-66
 45
 46                <category android:name="android.intent.category.LAUNCHER" />
-46-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:29:17-77
-46-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:29:27-74
+46-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:30:17-77
+46-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:30:27-74
 47            </intent-filter>
 48        </activity>
 49        <activity
-49-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:33:9-35:40
+49-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:34:9-36:40
 50            android:name="com.mypdf.reader.PdfViewerActivity"
-50-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:34:13-46
+50-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:35:13-46
 51            android:exported="false" />
-51-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:35:13-37
+51-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:36:13-37
 52        <activity
-52-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:37:9-39:40
+52-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:38:9-40:40
 53            android:name="com.mypdf.reader.XdwViewerActivity"
-53-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:38:13-46
+53-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:39:13-46
 54            android:exported="false" />
-54-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:39:13-37
+54-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:40:13-37
 55
 56        <!-- SyncActivity: xóa intent-filter OAuth callback vì không còn dùng GoogleSignIn -->
 57        <activity
-57-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:42:9-44:40
+57-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:43:9-45:40
 58            android:name="com.mypdf.reader.SyncActivity"
-58-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:43:13-41
+58-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:44:13-41
 59            android:exported="false" />
-59-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:44:13-37
+59-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:45:13-37
 60        <activity
-60-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:46:9-48:40
+60-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:47:9-49:40
 61            android:name="com.mypdf.reader.SettingsActivity"
-61-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:47:13-45
+61-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:48:13-45
 62            android:exported="false" />
-62-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:48:13-37
+62-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:49:13-37
 63
 64        <provider
 65            android:name="androidx.core.content.FileProvider"
-65-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:51:13-62
+65-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:52:13-62
 66            android:authorities="com.mypdf.reader.fileprovider"
-66-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:52:13-64
+66-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:53:13-64
 67            android:exported="false"
-67-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:53:13-37
+67-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:54:13-37
 68            android:grantUriPermissions="true" >
-68-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:54:13-47
+68-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:55:13-47
 69            <meta-data
-69-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:55:13-57:54
+69-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:56:13-58:54
 70                android:name="android.support.FILE_PROVIDER_PATHS"
-70-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:56:17-67
+70-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:57:17-67
 71                android:resource="@xml/file_paths" />
-71-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:57:17-51
+71-->J:\android make\MyPDFReader\app\src\main\AndroidManifest.xml:58:17-51
 72        </provider>
 73
 74        <service

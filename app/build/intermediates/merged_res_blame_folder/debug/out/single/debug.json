@@ -1,50 +1,58 @@
 [
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/xml_file_paths.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/xml/file_paths.xml"
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\layout_item_pdf_file.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\layout\\item_pdf_file.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/drawable_ic_xdw.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/drawable/ic_xdw.xml"
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\layout_activity_pdf_viewer.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\layout\\activity_pdf_viewer.xml"
+    },
+    {
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\layout\\activity_main.xml"
     },
     {
         "merged": "com.mypdf.reader.app-merged_res-44:/layout_activity_xdw_viewer.xml.flat",
         "source": "com.mypdf.reader.app-main-46:/layout/activity_xdw_viewer.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/drawable_bg_settings_btn.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/drawable/bg_settings_btn.xml"
-    },
-    {
-        "merged": "com.mypdf.reader.app-merged_res-44:/layout_activity_pdf_viewer.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/layout/activity_pdf_viewer.xml"
-    },
-    {
-        "merged": "com.mypdf.reader.app-merged_res-44:/layout_item_pdf_file.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/layout/item_pdf_file.xml"
-    },
-    {
         "merged": "com.mypdf.reader.app-merged_res-44:/layout_activity_settings.xml.flat",
         "source": "com.mypdf.reader.app-main-46:/layout/activity_settings.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/drawable_bg_metadata_badge.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/drawable/bg_metadata_badge.xml"
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\drawable_bg_metadata_badge.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\drawable\\bg_metadata_badge.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/drawable_ic_pdf.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/drawable/ic_pdf.xml"
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\drawable_ic_pdf.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\drawable\\ic_pdf.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/layout_activity_main.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/layout/activity_main.xml"
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\drawable_ic_xdw.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\drawable\\ic_xdw.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/layout_activity_sync.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/layout/activity_sync.xml"
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\layout_activity_xdw_viewer.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\layout\\activity_xdw_viewer.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-merged_res-44:/drawable_bg_search.xml.flat",
-        "source": "com.mypdf.reader.app-main-46:/drawable/bg_search.xml"
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\layout_activity_settings.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\layout\\activity_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\drawable_bg_search.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\drawable\\bg_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\drawable_bg_settings_btn.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\drawable\\bg_settings_btn.xml"
+    },
+    {
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\xml_file_paths.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\xml\\file_paths.xml"
+    },
+    {
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-merged_res-44:\\layout_activity_sync.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\8.1.1\\com.mypdf.reader.app-main-46:\\layout\\activity_sync.xml"
     }
 ]

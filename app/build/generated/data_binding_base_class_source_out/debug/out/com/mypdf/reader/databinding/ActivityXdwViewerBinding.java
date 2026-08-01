@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,10 +29,16 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
   public final Button btnNextFile;
 
   @NonNull
-  public final Button btnOpenDocuWorks;
+  public final Button btnNextPage;
 
   @NonNull
   public final Button btnPrevFile;
+
+  @NonNull
+  public final Button btnPrevPage;
+
+  @NonNull
+  public final ImageView ivXdwPage;
 
   @NonNull
   public final LinearLayout layoutNav;
@@ -40,27 +47,25 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
   public final LinearLayout layoutTopBar;
 
   @NonNull
-  public final TextView tvFileName;
-
-  @NonNull
-  public final TextView tvStatus;
+  public final TextView tvPageInfo;
 
   @NonNull
   public final TextView tvTitle;
 
   private ActivityXdwViewerBinding(@NonNull RelativeLayout rootView, @NonNull Button btnBack,
-      @NonNull Button btnNextFile, @NonNull Button btnOpenDocuWorks, @NonNull Button btnPrevFile,
-      @NonNull LinearLayout layoutNav, @NonNull LinearLayout layoutTopBar,
-      @NonNull TextView tvFileName, @NonNull TextView tvStatus, @NonNull TextView tvTitle) {
+      @NonNull Button btnNextFile, @NonNull Button btnNextPage, @NonNull Button btnPrevFile,
+      @NonNull Button btnPrevPage, @NonNull ImageView ivXdwPage, @NonNull LinearLayout layoutNav,
+      @NonNull LinearLayout layoutTopBar, @NonNull TextView tvPageInfo, @NonNull TextView tvTitle) {
     this.rootView = rootView;
     this.btnBack = btnBack;
     this.btnNextFile = btnNextFile;
-    this.btnOpenDocuWorks = btnOpenDocuWorks;
+    this.btnNextPage = btnNextPage;
     this.btnPrevFile = btnPrevFile;
+    this.btnPrevPage = btnPrevPage;
+    this.ivXdwPage = ivXdwPage;
     this.layoutNav = layoutNav;
     this.layoutTopBar = layoutTopBar;
-    this.tvFileName = tvFileName;
-    this.tvStatus = tvStatus;
+    this.tvPageInfo = tvPageInfo;
     this.tvTitle = tvTitle;
   }
 
@@ -103,15 +108,27 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.btnOpenDocuWorks;
-      Button btnOpenDocuWorks = ViewBindings.findChildViewById(rootView, id);
-      if (btnOpenDocuWorks == null) {
+      id = R.id.btnNextPage;
+      Button btnNextPage = ViewBindings.findChildViewById(rootView, id);
+      if (btnNextPage == null) {
         break missingId;
       }
 
       id = R.id.btnPrevFile;
       Button btnPrevFile = ViewBindings.findChildViewById(rootView, id);
       if (btnPrevFile == null) {
+        break missingId;
+      }
+
+      id = R.id.btnPrevPage;
+      Button btnPrevPage = ViewBindings.findChildViewById(rootView, id);
+      if (btnPrevPage == null) {
+        break missingId;
+      }
+
+      id = R.id.ivXdwPage;
+      ImageView ivXdwPage = ViewBindings.findChildViewById(rootView, id);
+      if (ivXdwPage == null) {
         break missingId;
       }
 
@@ -127,15 +144,9 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvFileName;
-      TextView tvFileName = ViewBindings.findChildViewById(rootView, id);
-      if (tvFileName == null) {
-        break missingId;
-      }
-
-      id = R.id.tvStatus;
-      TextView tvStatus = ViewBindings.findChildViewById(rootView, id);
-      if (tvStatus == null) {
+      id = R.id.tvPageInfo;
+      TextView tvPageInfo = ViewBindings.findChildViewById(rootView, id);
+      if (tvPageInfo == null) {
         break missingId;
       }
 
@@ -146,7 +157,8 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
       }
 
       return new ActivityXdwViewerBinding((RelativeLayout) rootView, btnBack, btnNextFile,
-          btnOpenDocuWorks, btnPrevFile, layoutNav, layoutTopBar, tvFileName, tvStatus, tvTitle);
+          btnNextPage, btnPrevFile, btnPrevPage, ivXdwPage, layoutNav, layoutTopBar, tvPageInfo,
+          tvTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

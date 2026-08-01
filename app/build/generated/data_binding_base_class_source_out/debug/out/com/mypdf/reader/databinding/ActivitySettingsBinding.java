@@ -32,6 +32,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final Button btnDownloadUpdate;
 
   @NonNull
+  public final Button btnInitSyncState;
+
+  @NonNull
   public final TextView btnLabelHinban;
 
   @NonNull
@@ -68,6 +71,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final TextView tvCurrentVersion;
 
   @NonNull
+  public final TextView tvInitSyncStatus;
+
+  @NonNull
   public final TextView tvMetadataColorDesc;
 
   @NonNull
@@ -83,6 +89,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final TextView tvSettingsTitle;
 
   @NonNull
+  public final TextView tvSyncSectionTitle;
+
+  @NonNull
   public final TextView tvUpdateSectionTitle;
 
   @NonNull
@@ -90,20 +99,22 @@ public final class ActivitySettingsBinding implements ViewBinding {
 
   private ActivitySettingsBinding(@NonNull LinearLayout rootView, @NonNull Button btnBack,
       @NonNull Button btnCheckUpdate, @NonNull Button btnDownloadUpdate,
-      @NonNull TextView btnLabelHinban, @NonNull TextView btnLabelHinmei,
-      @NonNull TextView btnLabelJishaHinban, @NonNull TextView btnLabelJishaHinmei,
-      @NonNull TextView btnValueHinban, @NonNull TextView btnValueHinmei,
-      @NonNull TextView btnValueJishaHinban, @NonNull TextView btnValueJishaHinmei,
-      @NonNull LinearLayout layoutDownloadProgress, @NonNull ProgressBar pbDownload,
-      @NonNull SwitchMaterial switchKeepScreenOn, @NonNull TextView tvCurrentVersion,
+      @NonNull Button btnInitSyncState, @NonNull TextView btnLabelHinban,
+      @NonNull TextView btnLabelHinmei, @NonNull TextView btnLabelJishaHinban,
+      @NonNull TextView btnLabelJishaHinmei, @NonNull TextView btnValueHinban,
+      @NonNull TextView btnValueHinmei, @NonNull TextView btnValueJishaHinban,
+      @NonNull TextView btnValueJishaHinmei, @NonNull LinearLayout layoutDownloadProgress,
+      @NonNull ProgressBar pbDownload, @NonNull SwitchMaterial switchKeepScreenOn,
+      @NonNull TextView tvCurrentVersion, @NonNull TextView tvInitSyncStatus,
       @NonNull TextView tvMetadataColorDesc, @NonNull TextView tvMetadataColorTitle,
       @NonNull TextView tvProgressPercent, @NonNull TextView tvReadingSectionTitle,
-      @NonNull TextView tvSettingsTitle, @NonNull TextView tvUpdateSectionTitle,
-      @NonNull TextView tvUpdateStatus) {
+      @NonNull TextView tvSettingsTitle, @NonNull TextView tvSyncSectionTitle,
+      @NonNull TextView tvUpdateSectionTitle, @NonNull TextView tvUpdateStatus) {
     this.rootView = rootView;
     this.btnBack = btnBack;
     this.btnCheckUpdate = btnCheckUpdate;
     this.btnDownloadUpdate = btnDownloadUpdate;
+    this.btnInitSyncState = btnInitSyncState;
     this.btnLabelHinban = btnLabelHinban;
     this.btnLabelHinmei = btnLabelHinmei;
     this.btnLabelJishaHinban = btnLabelJishaHinban;
@@ -116,11 +127,13 @@ public final class ActivitySettingsBinding implements ViewBinding {
     this.pbDownload = pbDownload;
     this.switchKeepScreenOn = switchKeepScreenOn;
     this.tvCurrentVersion = tvCurrentVersion;
+    this.tvInitSyncStatus = tvInitSyncStatus;
     this.tvMetadataColorDesc = tvMetadataColorDesc;
     this.tvMetadataColorTitle = tvMetadataColorTitle;
     this.tvProgressPercent = tvProgressPercent;
     this.tvReadingSectionTitle = tvReadingSectionTitle;
     this.tvSettingsTitle = tvSettingsTitle;
+    this.tvSyncSectionTitle = tvSyncSectionTitle;
     this.tvUpdateSectionTitle = tvUpdateSectionTitle;
     this.tvUpdateStatus = tvUpdateStatus;
   }
@@ -167,6 +180,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
       id = R.id.btnDownloadUpdate;
       Button btnDownloadUpdate = ViewBindings.findChildViewById(rootView, id);
       if (btnDownloadUpdate == null) {
+        break missingId;
+      }
+
+      id = R.id.btnInitSyncState;
+      Button btnInitSyncState = ViewBindings.findChildViewById(rootView, id);
+      if (btnInitSyncState == null) {
         break missingId;
       }
 
@@ -242,6 +261,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvInitSyncStatus;
+      TextView tvInitSyncStatus = ViewBindings.findChildViewById(rootView, id);
+      if (tvInitSyncStatus == null) {
+        break missingId;
+      }
+
       id = R.id.tvMetadataColorDesc;
       TextView tvMetadataColorDesc = ViewBindings.findChildViewById(rootView, id);
       if (tvMetadataColorDesc == null) {
@@ -272,6 +297,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvSyncSectionTitle;
+      TextView tvSyncSectionTitle = ViewBindings.findChildViewById(rootView, id);
+      if (tvSyncSectionTitle == null) {
+        break missingId;
+      }
+
       id = R.id.tvUpdateSectionTitle;
       TextView tvUpdateSectionTitle = ViewBindings.findChildViewById(rootView, id);
       if (tvUpdateSectionTitle == null) {
@@ -285,11 +316,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
       }
 
       return new ActivitySettingsBinding((LinearLayout) rootView, btnBack, btnCheckUpdate,
-          btnDownloadUpdate, btnLabelHinban, btnLabelHinmei, btnLabelJishaHinban,
+          btnDownloadUpdate, btnInitSyncState, btnLabelHinban, btnLabelHinmei, btnLabelJishaHinban,
           btnLabelJishaHinmei, btnValueHinban, btnValueHinmei, btnValueJishaHinban,
           btnValueJishaHinmei, layoutDownloadProgress, pbDownload, switchKeepScreenOn,
-          tvCurrentVersion, tvMetadataColorDesc, tvMetadataColorTitle, tvProgressPercent,
-          tvReadingSectionTitle, tvSettingsTitle, tvUpdateSectionTitle, tvUpdateStatus);
+          tvCurrentVersion, tvInitSyncStatus, tvMetadataColorDesc, tvMetadataColorTitle,
+          tvProgressPercent, tvReadingSectionTitle, tvSettingsTitle, tvSyncSectionTitle,
+          tvUpdateSectionTitle, tvUpdateStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

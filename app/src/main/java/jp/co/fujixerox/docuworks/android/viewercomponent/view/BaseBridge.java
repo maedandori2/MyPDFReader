@@ -165,7 +165,6 @@ public class BaseBridge implements aa {
         try {
             System.loadLibrary("c++_shared");
             System.loadLibrary("cpufd");
-            int cPUFeatures = getCPUFeatures();
             System.loadLibrary("supkBase64");
 
             // Phát hiện kiến trúc CPU để load đúng thư viện native
@@ -192,9 +191,23 @@ public class BaseBridge implements aa {
                 }
             }
 
-            if (!isUseOSSkiaSymbols()) {
+            // getCPUFeatures() là native method — gọi SAU khi DWLibrary đã load
+            // Wrap riêng vì có thể crash trên một số thiết bị
+            try {
+                getCPUFeatures();
+            } catch (Throwable ignored) {}
+
+            // isUseOSSkiaSymbols() có thể gây native crash trên Android 7+
+            // do Skia API thay đổi. Wrap riêng và mặc định dùng built-in Skia.
+            try {
+                if (!isUseOSSkiaSymbols()) {
+                    mUseSkiaPortWithoutOSSkiaSymbols = true;
+                }
+            } catch (Throwable t) {
+                // Nếu không gọi được, mặc định dùng built-in Skia port
                 mUseSkiaPortWithoutOSSkiaSymbols = true;
             }
+
             sLibraryLoaded = true;
         } catch (Throwable th) {
             th.printStackTrace();

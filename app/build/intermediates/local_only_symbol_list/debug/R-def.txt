@@ -9,6 +9,7 @@ id btnAddToList
 id btnBack
 id btnCheckUpdate
 id btnDownloadUpdate
+id btnInitSyncState
 id btnLabelHinban
 id btnLabelHinmei
 id btnLabelJishaHinban
@@ -21,7 +22,6 @@ id btnMoveDown
 id btnMoveUp
 id btnNextFile
 id btnNextPage
-id btnOpenDocuWorks
 id btnOpenFile
 id btnOpenReading
 id btnPrevFile
@@ -40,6 +40,7 @@ id etSearch
 id fabReadNext
 id ivPage
 id ivThumbnail
+id ivXdwPage
 id layoutAll
 id layoutControls
 id layoutDownloadProgress
@@ -64,6 +65,7 @@ id tvFileCount
 id tvFileName
 id tvFolderLabel
 id tvIndex
+id tvInitSyncStatus
 id tvLastSync
 id tvLoginDesc
 id tvLoginTitle
@@ -76,6 +78,7 @@ id tvReadingNotice
 id tvReadingSectionTitle
 id tvSettingsTitle
 id tvStatus
+id tvSyncSectionTitle
 id tvSyncStatus
 id tvSyncTitle
 id tvTitle
