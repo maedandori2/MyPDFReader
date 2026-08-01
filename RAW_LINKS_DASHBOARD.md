@@ -102,741 +102,9 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-af/values-af.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-af/values-af.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-af/values-af.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-am/values-am.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-am/values-am.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-am/values-am.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ar/values-ar.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ar/values-ar.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ar/values-ar.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-as/values-as.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-as/values-as.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-as/values-as.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-az/values-az.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-az/values-az.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-az/values-az.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-b+es+419/values-b+es+419.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-b+es+419/values-b+es+419.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-b+es+419/values-b+es+419.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-b+sr+Latn/values-b+sr+Latn.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-b+sr+Latn/values-b+sr+Latn.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-b+sr+Latn/values-b+sr+Latn.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-be/values-be.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-be/values-be.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-be/values-be.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bg/values-bg.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bg/values-bg.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bg/values-bg.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bn/values-bn.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bn/values-bn.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bn/values-bn.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bs/values-bs.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bs/values-bs.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-bs/values-bs.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ca/values-ca.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ca/values-ca.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ca/values-ca.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-cs/values-cs.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-cs/values-cs.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-cs/values-cs.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-da/values-da.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-da/values-da.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-da/values-da.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-de/values-de.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-de/values-de.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-de/values-de.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-el/values-el.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-el/values-el.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-el/values-el.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rAU/values-en-rAU.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rAU/values-en-rAU.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rAU/values-en-rAU.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rCA/values-en-rCA.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rCA/values-en-rCA.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rCA/values-en-rCA.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rGB/values-en-rGB.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rGB/values-en-rGB.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rGB/values-en-rGB.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rIN/values-en-rIN.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rIN/values-en-rIN.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rIN/values-en-rIN.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rXC/values-en-rXC.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rXC/values-en-rXC.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-en-rXC/values-en-rXC.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-es-rUS/values-es-rUS.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-es-rUS/values-es-rUS.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-es-rUS/values-es-rUS.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-es/values-es.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-es/values-es.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-es/values-es.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-et/values-et.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-et/values-et.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-et/values-et.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-eu/values-eu.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-eu/values-eu.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-eu/values-eu.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fa/values-fa.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fa/values-fa.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fa/values-fa.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fi/values-fi.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fi/values-fi.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fi/values-fi.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fr-rCA/values-fr-rCA.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fr-rCA/values-fr-rCA.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fr-rCA/values-fr-rCA.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fr/values-fr.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fr/values-fr.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-fr/values-fr.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-gl/values-gl.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-gl/values-gl.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-gl/values-gl.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-gu/values-gu.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-gu/values-gu.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-gu/values-gu.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h320dp-port-v13/values-h320dp-port-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h320dp-port-v13/values-h320dp-port-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h320dp-port-v13/values-h320dp-port-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h360dp-land-v13/values-h360dp-land-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h360dp-land-v13/values-h360dp-land-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h360dp-land-v13/values-h360dp-land-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h480dp-land-v13/values-h480dp-land-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h480dp-land-v13/values-h480dp-land-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h480dp-land-v13/values-h480dp-land-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h550dp-port-v13/values-h550dp-port-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h550dp-port-v13/values-h550dp-port-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h550dp-port-v13/values-h550dp-port-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h720dp-v13/values-h720dp-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h720dp-v13/values-h720dp-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-h720dp-v13/values-h720dp-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hi/values-hi.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hi/values-hi.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hi/values-hi.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hr/values-hr.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hr/values-hr.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hr/values-hr.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hu/values-hu.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hu/values-hu.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hu/values-hu.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hy/values-hy.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hy/values-hy.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-hy/values-hy.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-in/values-in.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-in/values-in.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-in/values-in.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-is/values-is.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-is/values-is.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-is/values-is.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-it/values-it.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-it/values-it.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-it/values-it.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-iw/values-iw.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-iw/values-iw.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-iw/values-iw.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ja/values-ja.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ja/values-ja.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ja/values-ja.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ka/values-ka.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ka/values-ka.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ka/values-ka.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-kk/values-kk.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-kk/values-kk.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-kk/values-kk.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-km/values-km.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-km/values-km.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-km/values-km.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-kn/values-kn.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-kn/values-kn.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-kn/values-kn.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ko/values-ko.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ko/values-ko.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ko/values-ko.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ky/values-ky.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ky/values-ky.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ky/values-ky.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-land/values-land.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-land/values-land.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-land/values-land.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-large-v4/values-large-v4.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-large-v4/values-large-v4.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-large-v4/values-large-v4.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ldltr-v21/values-ldltr-v21.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ldltr-v21/values-ldltr-v21.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ldltr-v21/values-ldltr-v21.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ldrtl-v17/values-ldrtl-v17.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ldrtl-v17/values-ldrtl-v17.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ldrtl-v17/values-ldrtl-v17.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lo/values-lo.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lo/values-lo.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lo/values-lo.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lt/values-lt.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lt/values-lt.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lt/values-lt.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lv/values-lv.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lv/values-lv.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-lv/values-lv.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mk/values-mk.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mk/values-mk.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mk/values-mk.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ml/values-ml.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ml/values-ml.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ml/values-ml.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mn/values-mn.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mn/values-mn.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mn/values-mn.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mr/values-mr.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mr/values-mr.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-mr/values-mr.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ms/values-ms.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ms/values-ms.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ms/values-ms.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-my/values-my.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-my/values-my.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-my/values-my.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-nb/values-nb.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-nb/values-nb.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-nb/values-nb.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ne/values-ne.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ne/values-ne.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ne/values-ne.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-nl/values-nl.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-nl/values-nl.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-nl/values-nl.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-or/values-or.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-or/values-or.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-or/values-or.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pa/values-pa.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pa/values-pa.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pa/values-pa.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pl/values-pl.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pl/values-pl.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pl/values-pl.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-port/values-port.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-port/values-port.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-port/values-port.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt-rBR/values-pt-rBR.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt-rBR/values-pt-rBR.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt-rBR/values-pt-rBR.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt-rPT/values-pt-rPT.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt-rPT/values-pt-rPT.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt-rPT/values-pt-rPT.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt/values-pt.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt/values-pt.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-pt/values-pt.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ro/values-ro.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ro/values-ro.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ro/values-ro.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ru/values-ru.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ru/values-ru.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ru/values-ru.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-si/values-si.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-si/values-si.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-si/values-si.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sk/values-sk.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sk/values-sk.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sk/values-sk.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sl/values-sl.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sl/values-sl.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sl/values-sl.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-small-v4/values-small-v4.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-small-v4/values-small-v4.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-small-v4/values-small-v4.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sq/values-sq.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sq/values-sq.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sq/values-sq.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sr/values-sr.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sr/values-sr.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sr/values-sr.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sv/values-sv.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sv/values-sv.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sv/values-sv.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sw/values-sw.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sw/values-sw.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sw/values-sw.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sw600dp-v13/values-sw600dp-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sw600dp-v13/values-sw600dp-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-sw600dp-v13/values-sw600dp-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ta/values-ta.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ta/values-ta.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ta/values-ta.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-te/values-te.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-te/values-te.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-te/values-te.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-th/values-th.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-th/values-th.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-th/values-th.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-tl/values-tl.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-tl/values-tl.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-tl/values-tl.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-tr/values-tr.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-tr/values-tr.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-tr/values-tr.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-uk/values-uk.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-uk/values-uk.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-uk/values-uk.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ur/values-ur.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ur/values-ur.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-ur/values-ur.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-uz/values-uz.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-uz/values-uz.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-uz/values-uz.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v16/values-v16.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v16/values-v16.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v16/values-v16.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v17/values-v17.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v17/values-v17.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v17/values-v17.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v18/values-v18.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v18/values-v18.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v18/values-v18.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v21/values-v21.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v21/values-v21.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v21/values-v21.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v22/values-v22.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v22/values-v22.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v22/values-v22.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v23/values-v23.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v23/values-v23.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v23/values-v23.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v24/values-v24.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v24/values-v24.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v24/values-v24.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v25/values-v25.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v25/values-v25.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v25/values-v25.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v26/values-v26.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v26/values-v26.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v26/values-v26.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v28/values-v28.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v28/values-v28.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v28/values-v28.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v31/values-v31.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v31/values-v31.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v31/values-v31.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v34/values-v34.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v34/values-v34.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-v34/values-v34.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-vi/values-vi.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-vi/values-vi.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-vi/values-vi.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w320dp-land-v13/values-w320dp-land-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w320dp-land-v13/values-w320dp-land-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w320dp-land-v13/values-w320dp-land-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w360dp-port-v13/values-w360dp-port-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w360dp-port-v13/values-w360dp-port-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w360dp-port-v13/values-w360dp-port-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w400dp-port-v13/values-w400dp-port-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w400dp-port-v13/values-w400dp-port-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w400dp-port-v13/values-w400dp-port-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w600dp-land-v13/values-w600dp-land-v13.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w600dp-land-v13/values-w600dp-land-v13.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-w600dp-land-v13/values-w600dp-land-v13.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-watch-v20/values-watch-v20.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-watch-v20/values-watch-v20.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-watch-v20/values-watch-v20.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-watch-v21/values-watch-v21.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-watch-v21/values-watch-v21.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-watch-v21/values-watch-v21.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-xlarge-v4/values-xlarge-v4.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-xlarge-v4/values-xlarge-v4.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-xlarge-v4/values-xlarge-v4.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rCN/values-zh-rCN.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rCN/values-zh-rCN.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rCN/values-zh-rCN.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rHK/values-zh-rHK.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rHK/values-zh-rHK.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rHK/values-zh-rHK.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rTW/values-zh-rTW.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rTW/values-zh-rTW.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zh-rTW/values-zh-rTW.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zu/values-zu.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zu/values-zu.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values-zu/values-zu.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values/values.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values/values.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values/values.xml)
-```
-
-
 #### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/merger.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merger.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/merger.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_main.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_main.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_main.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_pdf_viewer.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_pdf_viewer.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_pdf_viewer.xml)
 ```
 
 
@@ -846,27 +114,9 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_sync.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_sync.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_sync.xml)
-```
-
-
 #### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_xdw_viewer.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_xdw_viewer.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/activity_xdw_viewer.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/item_pdf_file.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/item_pdf_file.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir/layout/item_pdf_file.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/packageDebugResources/merged.dir/values/values.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir/values/values.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir/values/values.xml)
 ```
 
 
@@ -876,39 +126,15 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
-#### 📄 app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_main.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_main.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_main.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_pdf_viewer.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_pdf_viewer.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_pdf_viewer.xml)
-```
-
-
 #### 📄 app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_settings.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_settings.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_settings.xml)
 ```
 
 
-#### 📄 app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_sync.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_sync.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_sync.xml)
-```
-
-
 #### 📄 app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_xdw_viewer.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_xdw_viewer.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/activity_xdw_viewer.xml)
-```
-
-
-#### 📄 app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/item_pdf_file.xml
-```text
-[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/item_pdf_file.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir/layout/item_pdf_file.xml)
 ```
 
 
@@ -2263,8 +1489,30 @@ Tự động cập nhật lúc: $(date)
 * **app/build/intermediates/local_only_symbol_list/debug/R-def.txt**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/local_only_symbol_list/debug/R-def.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/local_only_symbol_list/debug/R-def.txt)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/local_only_symbol_list/debug/R-def.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/local_only_symbol_list/debug/R-def.txt))
 * **app/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt))
 * **app/build/intermediates/merged_java_res/debug/base.jar**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_java_res/debug/base.jar](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_java_res/debug/base.jar)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_java_res/debug/base.jar](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_java_res/debug/base.jar))
+* **app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libc++_shared.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libc++_shared.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libc++_shared.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libcpufd.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libcpufd.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libcpufd.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libicudata.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libicudata.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libicudata.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libsupkBase64.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libsupkBase64.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/arm64-v8a/libsupkBase64.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libc++_shared.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libc++_shared.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libc++_shared.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libcpufd.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libcpufd.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libcpufd.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libicudata.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libicudata.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libicudata.so))
+* **app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libsupkBase64.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libsupkBase64.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_jni_libs/debug/out/armeabi-v7a/libsupkBase64.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libcpufd.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libcpufd.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libcpufd.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libicudata.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libicudata.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libicudata.so))
 * **app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libicudata.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libicudata.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libicudata.so))
 * **app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so))
+* **app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so))
 * **app/build/intermediates/merged_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so))
 * **app/build/intermediates/merged_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so))
 * **app/build/intermediates/merged_res/debug/drawable_bg_metadata_badge.xml.flat**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_res/debug/drawable_bg_metadata_badge.xml.flat](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_res/debug/drawable_bg_metadata_badge.xml.flat)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_res/debug/drawable_bg_metadata_badge.xml.flat](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/merged_res/debug/drawable_bg_metadata_badge.xml.flat))
@@ -2519,8 +1767,19 @@ Tự động cập nhật lúc: $(date)
 * **app/build/intermediates/project_dex_archive/debug/out/com/mypdf/reader/db/PdfEntity.dex**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/project_dex_archive/debug/out/com/mypdf/reader/db/PdfEntity.dex](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/project_dex_archive/debug/out/com/mypdf/reader/db/PdfEntity.dex)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/project_dex_archive/debug/out/com/mypdf/reader/db/PdfEntity.dex](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/project_dex_archive/debug/out/com/mypdf/reader/db/PdfEntity.dex))
 * **app/build/intermediates/runtime_symbol_list/debug/R.txt**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/runtime_symbol_list/debug/R.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/runtime_symbol_list/debug/R.txt)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/runtime_symbol_list/debug/R.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/runtime_symbol_list/debug/R.txt))
 * **app/build/intermediates/source_set_path_map/debug/file-map.txt**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/source_set_path_map/debug/file-map.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/source_set_path_map/debug/file-map.txt)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/source_set_path_map/debug/file-map.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/source_set_path_map/debug/file-map.txt))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libDWLibraryForAndroid_SP_VFP_NEON.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libc++_shared.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libcpufd.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libcpufd.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libcpufd.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libicudata.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libicudata.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libicudata.so))
 * **app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/libsupkBase64.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libDWLibraryForAndroid_SP_VFP_NEON.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libc++_shared.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libcpufd.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libicudata.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libicudata.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libicudata.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libicudata.so))
 * **app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so))
+* **app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/armeabi-v7a/libsupkBase64.so))
 * **app/build/intermediates/stripped_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86/libmlkit_google_ocr_pipeline.so))
 * **app/build/intermediates/stripped_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/stripped_native_libs/debug/out/lib/x86_64/libmlkit_google_ocr_pipeline.so))
 * **app/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt))
@@ -2570,9 +1829,7 @@ Tự động cập nhật lúc: $(date)
 * **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream))
 * **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len))
 * **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len))
-* **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values))
 * **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at))
-* **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s))
 * **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i))
 * **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len))
 * **app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab))
@@ -2662,9 +1919,7 @@ Tự động cập nhật lúc: $(date)
 * **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream))
 * **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.keystream.len))
 * **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.len))
-* **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values))
 * **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at))
-* **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s))
 * **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i))
 * **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab_i.len))
 * **app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/kotlin/kaptGenerateStubsDebugKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab))
@@ -2751,7 +2006,13 @@ Tự động cập nhật lúc: $(date)
 * **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$DownloadProgressListener.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$DownloadProgressListener.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$DownloadProgressListener.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$DownloadProgressListener.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$DownloadProgressListener.class))
 * **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$VersionInfo.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$VersionInfo.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$VersionInfo.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$VersionInfo.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress$VersionInfo.class))
 * **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/UpdateCheckerWithProgress.class))
+* **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper$Companion.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper$Companion.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper$Companion.class))
+* **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwReaderHelper.class))
 * **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$Companion.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$Companion.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$Companion.class))
+* **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class))
+* **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class))
+* **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class))
+* **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class))
 * **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/XdwViewerActivity.class))
 * **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase$Companion.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase$Companion.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase$Companion.class))
 * **app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/incrementalData/debug/com/mypdf/reader/db/AppDatabase.class))
@@ -2791,6 +2052,8 @@ Tự động cập nhật lúc: $(date)
 * **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateChecker.kapt_metadata**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateChecker.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateChecker.kapt_metadata)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateChecker.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateChecker.kapt_metadata))
 * **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.java**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.java)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.java))
 * **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.kapt_metadata**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.kapt_metadata)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/UpdateCheckerWithProgress.kapt_metadata))
+* **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.java**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.java)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.java))
+* **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.kapt_metadata**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.kapt_metadata)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwReaderHelper.kapt_metadata))
 * **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.java**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.java)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.java))
 * **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.kapt_metadata**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.kapt_metadata)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.kapt_metadata](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/XdwViewerActivity.kapt_metadata))
 * **app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/db/AppDatabase.java**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/db/AppDatabase.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/db/AppDatabase.java)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/db/AppDatabase.java](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kapt3/stubs/debug/com/mypdf/reader/db/AppDatabase.java))
@@ -2847,8 +2110,9 @@ Tự động cập nhật lúc: $(date)
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ReadingListManager.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ReadingListManager.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ReadingListManager.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ReadingListManager.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ReadingListManager.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ServiceAccountJwt.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ServiceAccountJwt.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ServiceAccountJwt.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ServiceAccountJwt.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/ServiceAccountJwt.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$checkUpdate$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$checkUpdate$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$checkUpdate$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$checkUpdate$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$checkUpdate$1.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$initializeSyncState$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$initializeSyncState$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$initializeSyncState$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$initializeSyncState$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$initializeSyncState$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$10$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$10$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$10$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$10$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$10$1.class))
-* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$3$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$3$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$3$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$3$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$3$1.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$11$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$11$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$11$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$11$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$11$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$4$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$4$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$4$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$4$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$4$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$5$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$5$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$5$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$5$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$5$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$6$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$6$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$6$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$6$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SettingsActivity$setupListeners$6$1.class))
@@ -2868,6 +2132,8 @@ Tự động cập nhật lúc: $(date)
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult$Success.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult$Success.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult$Success.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult$Success.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult$Success.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$SyncResult.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$getAccessToken$2.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$getAccessToken$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$getAccessToken$2.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$getAccessToken$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$getAccessToken$2.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$1.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$2.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$2.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$initializeSyncStateFromDrive$2.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$2.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$2.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$listAllFolders$2.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$syncFiles$2.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$syncFiles$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$syncFiles$2.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$syncFiles$2.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/SyncManager$syncFiles$2.class))
@@ -2888,8 +2154,18 @@ Tự động cập nhật lúc: $(date)
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1$4.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1$4.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1$4.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1$4.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1$4.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress$downloadWithProgress$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/UpdateCheckerWithProgress.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper$Companion.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper$Companion.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper$Companion.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwReaderHelper.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$Companion.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$Companion.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$Companion.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$Companion.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Failed.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Success.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult$Unavailable.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$LoadResult.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$setupGestures$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$setupGestures$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$setupGestures$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$setupGestures$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$setupGestures$1.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1$bitmap$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1$bitmap$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1$bitmap$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1$bitmap$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1$bitmap$1.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$showPage$1.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1$result$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1$result$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1$result$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1$result$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1$result$1.class))
+* **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity$tryNativeLoad$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/XdwViewerActivity.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_1_2$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_1_2$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_1_2$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_1_2$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_1_2$1.class))
 * **app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_2_3$1.class**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_2_3$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_2_3$1.class)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_2_3$1.class](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/tmp/kotlin-classes/debug/com/mypdf/reader/db/AppDatabase$Companion$MIGRATION_2_3$1.class))
