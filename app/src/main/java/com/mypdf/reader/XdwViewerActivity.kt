@@ -21,8 +21,8 @@ import kotlinx.coroutines.withContext
 
 /**
  * Activity hiển thị file XDW (DocuWorks).
- * Ưu tiên render trực tiếp trong app bằng native BaseBridge.
- * Nếu native library không khả dụng hoặc mở thất bại thì fallback sang app ngoài.
+ * Native BaseBridge hiện không ổn định trên nhiều máy Android mới và có thể gây SIGSEGV.
+ * Vì vậy activity này mặc định mở XDW bằng app ngoài để tránh crash.
  */
 class XdwViewerActivity : AppCompatActivity() {
 
@@ -40,6 +40,7 @@ class XdwViewerActivity : AppCompatActivity() {
     private var isRendering = false
     private var usingNativeRenderer = false
     private var uiVisible = true
+    private val allowNativeRenderer = false
 
     companion object {
         private const val TAG = "XdwViewerActivity"
@@ -78,7 +79,7 @@ class XdwViewerActivity : AppCompatActivity() {
         updateFileNavButtons()
 
         binding.ivXdwPage.post {
-            openCurrentFile(preferNative = true)
+            openCurrentFile(preferNative = allowNativeRenderer)
         }
     }
 
@@ -178,7 +179,7 @@ class XdwViewerActivity : AppCompatActivity() {
 
     /**
      * Mở file .xdw bằng ứng dụng DocuWorks Viewer bên ngoài.
-     * Dùng khi native renderer không khả dụng hoặc mở thất bại.
+     * Dùng làm đường mặc định an toàn để tránh crash từ native DocuWorks legacy.
      */
     private fun openInExternalViewer() {
         val file = File(filePath)
@@ -306,7 +307,7 @@ class XdwViewerActivity : AppCompatActivity() {
     /**
      * Chuyển sang file trước/sau trong danh sách.
      * Nếu file tiếp theo là PDF, chuyển sang PdfViewerActivity.
-     * Nếu file tiếp theo là XDW, mở lại trong app bằng native nếu có thể.
+     * Nếu file tiếp theo là XDW, dùng đường mở an toàn hiện tại.
      */
     private fun switchFile(direction: Int) {
         if (isNavigating) return
@@ -357,7 +358,7 @@ class XdwViewerActivity : AppCompatActivity() {
             usingNativeRenderer = false
             updateTitleAndInfo(newFile.name)
             updatePageNav()
-            openCurrentFile(preferNative = true)
+            openCurrentFile(preferNative = allowNativeRenderer)
         } finally {
             isNavigating = false
         }
