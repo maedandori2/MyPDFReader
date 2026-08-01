@@ -24,6 +24,12 @@ Tự động cập nhật lúc: $(date)
 ```
 
 
+#### 📄 .idea/deploymentTargetSelector.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/deploymentTargetSelector.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/deploymentTargetSelector.xml)
+```
+
+
 #### 📄 .idea/gradle.xml
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/gradle.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/gradle.xml)
