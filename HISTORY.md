@@ -1,5 +1,31 @@
 # 📋 Lịch sử thay đổi — MyPDFReader
 
+## [v1.5.3] - 2026-08-01
+
+### 🐛 Sửa lỗi crash khi mở file XDW
+- 2026-08-01, 15:38: **Fix crash `UnsatisfiedLinkError` trên thiết bị arm64 (`BaseBridge.java`)**:
+  - Nguyên nhân: Static initializer luôn load `DWLibraryForAndroid_SP_VFP` trước (dòng 170), nhưng thư mục `jniLibs/arm64-v8a/` không có file `.so` này → crash ngay khi class được load lần đầu.
+  - Sửa: Phát hiện kiến trúc CPU (`arm64`/`armeabi-v7a`/`x86`) trước khi load. ARM64 chỉ load NEON, ARM32 thử NEON rồi fallback VFP, x86 load VFP.
+  - Bonus: Xóa logic load trùng lặp (VFP bị load 2 lần trên x86) gây xung đột symbol.
+- 2026-08-01, 15:38: **Fix crash lifecycle `XdwViewerActivity.kt`**:
+  - Nguyên nhân: Dùng raw `Thread` + `runOnUiThread` để load/render XDW. Nếu user nhấn Back trước khi Thread xong, `runOnUiThread` truy cập `binding` đã destroy → crash `IllegalStateException`.
+  - Sửa: Thay `Thread` bằng `lifecycleScope.launch` + `withContext(Dispatchers.IO)` — tự động cancel khi Activity destroy. Thêm cancel job cũ khi chuyển file.
+  - Sửa: Activity hiện trống (không finish) khi không tìm thấy ứng dụng đọc XDW bên ngoài → thêm `finish()` khi fallback thất bại.
+- 2026-08-01, 15:38: **Fix race condition singleton bridge (`XdwReaderHelper.kt`)**:
+  - Nguyên nhân: `bridge` là static field singleton, nhưng `openDocument()`/`closeDocument()`/`getPageBitmap()` không synchronized → 2 Activity mở cùng lúc gây xung đột native call.
+  - Sửa: Thêm `bridgeLock` object + `synchronized` block cho tất cả thao tác trên bridge.
+
+#### 📝 File đã sửa
+| File | Thay đổi |
+|------|----------|
+| `BaseBridge.java` | Sửa static initializer: load native library theo kiến trúc CPU, xóa load trùng lặp |
+| `XdwViewerActivity.kt` | Chuyển từ raw Thread sang lifecycleScope, thêm finish() khi fallback fail, cancel job khi destroy |
+| `XdwReaderHelper.kt` | Thêm synchronized cho tất cả thao tác trên singleton bridge |
+| `HISTORY.md` | Cập nhật changelog v1.5.3 |
+
+---
+
+
 ## [v1.5.2] - 2026-07-03
 
 ### ✨ Hỗ trợ đồng bộ và đọc file DocuWorks (`.xdw`)

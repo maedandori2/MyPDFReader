@@ -166,20 +166,25 @@ public class BaseBridge implements aa {
             System.loadLibrary("c++_shared");
             System.loadLibrary("cpufd");
             int cPUFeatures = getCPUFeatures();
-            // We force ARM library without NEON to avoid Houdini crash
-            System.loadLibrary("DWLibraryForAndroid_SP_VFP");
-            System.loadLibrary("supkBase64"); // Load supkBase64 directly
-            
-            // Detect if running on an x86 device (which uses Houdini to translate ARM)
+            System.loadLibrary("supkBase64");
+
+            // Phát hiện kiến trúc CPU để load đúng thư viện native
             boolean isX86 = false;
+            boolean isArm64 = false;
             if (android.os.Build.SUPPORTED_ABIS != null && android.os.Build.SUPPORTED_ABIS.length > 0) {
-                isX86 = android.os.Build.SUPPORTED_ABIS[0].contains("x86");
+                String primaryAbi = android.os.Build.SUPPORTED_ABIS[0];
+                isX86 = primaryAbi.contains("x86");
+                isArm64 = primaryAbi.contains("arm64");
             }
-            
+
             if (isX86) {
-                // Houdini (ARM translation on x86) often crashes on NEON instructions. Load VFP.
+                // Houdini (ARM translation trên x86) hay crash với NEON. Chỉ load VFP.
                 System.loadLibrary("DWLibraryForAndroid_SP_VFP");
+            } else if (isArm64) {
+                // Thư mục arm64-v8a chỉ có NEON .so, không có VFP .so
+                System.loadLibrary("DWLibraryForAndroid_SP_VFP_NEON");
             } else {
+                // armeabi-v7a: thử NEON trước, fallback VFP nếu không hỗ trợ
                 try {
                     System.loadLibrary("DWLibraryForAndroid_SP_VFP_NEON");
                 } catch (Throwable t) {
