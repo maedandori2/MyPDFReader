@@ -1,16 +1,14 @@
 package com.mypdf.reader.db;
 
 import androidx.annotation.NonNull;
-import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
-import androidx.room.RoomDatabase;
-import androidx.room.RoomOpenHelper;
+import androidx.room.RoomOpenDelegate;
 import androidx.room.migration.AutoMigrationSpec;
 import androidx.room.migration.Migration;
 import androidx.room.util.DBUtil;
 import androidx.room.util.TableInfo;
-import androidx.sqlite.db.SupportSQLiteDatabase;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
+import androidx.sqlite.SQLite;
+import androidx.sqlite.SQLiteConnection;
 import java.lang.Class;
 import java.lang.Override;
 import java.lang.String;
@@ -24,118 +22,85 @@ import java.util.Set;
 import javax.annotation.processing.Generated;
 
 @Generated("androidx.room.RoomProcessor")
-@SuppressWarnings({"unchecked", "deprecation"})
+@SuppressWarnings({"unchecked", "deprecation", "removal"})
 public final class AppDatabase_Impl extends AppDatabase {
   private volatile PdfDao _pdfDao;
 
   @Override
   @NonNull
-  protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(3) {
+  protected RoomOpenDelegate createOpenDelegate() {
+    final RoomOpenDelegate _openDelegate = new RoomOpenDelegate(3, "5f2d4bbcb4ac45e6f7595c21753a1ddf", "62f9ae7289ee48a7fe89282090dcd3b4") {
       @Override
-      public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `reading_list` (`path` TEXT NOT NULL, `name` TEXT NOT NULL, `isRead` INTEGER NOT NULL, `position` INTEGER NOT NULL, PRIMARY KEY(`path`))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5f2d4bbcb4ac45e6f7595c21753a1ddf')");
+      public void createAllTables(@NonNull final SQLiteConnection connection) {
+        SQLite.execSQL(connection, "CREATE TABLE IF NOT EXISTS `reading_list` (`path` TEXT NOT NULL, `name` TEXT NOT NULL, `isRead` INTEGER NOT NULL, `position` INTEGER NOT NULL, PRIMARY KEY(`path`))");
+        SQLite.execSQL(connection, "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
+        SQLite.execSQL(connection, "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5f2d4bbcb4ac45e6f7595c21753a1ddf')");
       }
 
       @Override
-      public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS `reading_list`");
-        final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
-        if (_callbacks != null) {
-          for (RoomDatabase.Callback _callback : _callbacks) {
-            _callback.onDestructiveMigration(db);
-          }
-        }
+      public void dropAllTables(@NonNull final SQLiteConnection connection) {
+        SQLite.execSQL(connection, "DROP TABLE IF EXISTS `reading_list`");
       }
 
       @Override
-      public void onCreate(@NonNull final SupportSQLiteDatabase db) {
-        final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
-        if (_callbacks != null) {
-          for (RoomDatabase.Callback _callback : _callbacks) {
-            _callback.onCreate(db);
-          }
-        }
+      public void onCreate(@NonNull final SQLiteConnection connection) {
       }
 
       @Override
-      public void onOpen(@NonNull final SupportSQLiteDatabase db) {
-        mDatabase = db;
-        internalInitInvalidationTracker(db);
-        final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
-        if (_callbacks != null) {
-          for (RoomDatabase.Callback _callback : _callbacks) {
-            _callback.onOpen(db);
-          }
-        }
+      public void onOpen(@NonNull final SQLiteConnection connection) {
+        internalInitInvalidationTracker(connection);
       }
 
       @Override
-      public void onPreMigrate(@NonNull final SupportSQLiteDatabase db) {
-        DBUtil.dropFtsSyncTriggers(db);
+      public void onPreMigrate(@NonNull final SQLiteConnection connection) {
+        DBUtil.dropFtsSyncTriggers(connection);
       }
 
       @Override
-      public void onPostMigrate(@NonNull final SupportSQLiteDatabase db) {
+      public void onPostMigrate(@NonNull final SQLiteConnection connection) {
       }
 
       @Override
       @NonNull
-      public RoomOpenHelper.ValidationResult onValidateSchema(
-          @NonNull final SupportSQLiteDatabase db) {
-        final HashMap<String, TableInfo.Column> _columnsReadingList = new HashMap<String, TableInfo.Column>(4);
+      public RoomOpenDelegate.ValidationResult onValidateSchema(
+          @NonNull final SQLiteConnection connection) {
+        final Map<String, TableInfo.Column> _columnsReadingList = new HashMap<String, TableInfo.Column>(4);
         _columnsReadingList.put("path", new TableInfo.Column("path", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsReadingList.put("name", new TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsReadingList.put("isRead", new TableInfo.Column("isRead", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsReadingList.put("position", new TableInfo.Column("position", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        final HashSet<TableInfo.ForeignKey> _foreignKeysReadingList = new HashSet<TableInfo.ForeignKey>(0);
-        final HashSet<TableInfo.Index> _indicesReadingList = new HashSet<TableInfo.Index>(0);
+        final Set<TableInfo.ForeignKey> _foreignKeysReadingList = new HashSet<TableInfo.ForeignKey>(0);
+        final Set<TableInfo.Index> _indicesReadingList = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoReadingList = new TableInfo("reading_list", _columnsReadingList, _foreignKeysReadingList, _indicesReadingList);
-        final TableInfo _existingReadingList = TableInfo.read(db, "reading_list");
+        final TableInfo _existingReadingList = TableInfo.read(connection, "reading_list");
         if (!_infoReadingList.equals(_existingReadingList)) {
-          return new RoomOpenHelper.ValidationResult(false, "reading_list(com.mypdf.reader.db.PdfEntity).\n"
+          return new RoomOpenDelegate.ValidationResult(false, "reading_list(com.mypdf.reader.db.PdfEntity).\n"
                   + " Expected:\n" + _infoReadingList + "\n"
                   + " Found:\n" + _existingReadingList);
         }
-        return new RoomOpenHelper.ValidationResult(true, null);
+        return new RoomOpenDelegate.ValidationResult(true, null);
       }
-    }, "5f2d4bbcb4ac45e6f7595c21753a1ddf", "62f9ae7289ee48a7fe89282090dcd3b4");
-    final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
-    final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
-    return _helper;
+    };
+    return _openDelegate;
   }
 
   @Override
   @NonNull
   protected InvalidationTracker createInvalidationTracker() {
-    final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
-    final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
+    final Map<String, String> _shadowTablesMap = new HashMap<String, String>(0);
+    final Map<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
     return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "reading_list");
   }
 
   @Override
   public void clearAllTables() {
-    super.assertNotMainThread();
-    final SupportSQLiteDatabase _db = super.getOpenHelper().getWritableDatabase();
-    try {
-      super.beginTransaction();
-      _db.execSQL("DELETE FROM `reading_list`");
-      super.setTransactionSuccessful();
-    } finally {
-      super.endTransaction();
-      _db.query("PRAGMA wal_checkpoint(FULL)").close();
-      if (!_db.inTransaction()) {
-        _db.execSQL("VACUUM");
-      }
-    }
+    super.performClear(false, "reading_list");
   }
 
   @Override
   @NonNull
   protected Map<Class<?>, List<Class<?>>> getRequiredTypeConverters() {
-    final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
+    final Map<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
     _typeConvertersMap.put(PdfDao.class, PdfDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
@@ -143,7 +108,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   public Set<Class<? extends AutoMigrationSpec>> getRequiredAutoMigrationSpecs() {
-    final HashSet<Class<? extends AutoMigrationSpec>> _autoMigrationSpecsSet = new HashSet<Class<? extends AutoMigrationSpec>>();
+    final Set<Class<? extends AutoMigrationSpec>> _autoMigrationSpecsSet = new HashSet<Class<? extends AutoMigrationSpec>>();
     return _autoMigrationSpecsSet;
   }
 

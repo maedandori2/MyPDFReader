@@ -1,0 +1,6 @@
+com.mypdf.reader.test.app-androidTest-0 J:\android make\MyPDFReader\app\build\generated\res\resValues\androidTest\debug
+com.mypdf.reader.test.app-updated_navigation_xml-1 J:\android make\MyPDFReader\app\build\generated\updated_navigation_xml\debugAndroidTest
+com.mypdf.reader.test.app-mergeDebugAndroidTestResources-2 J:\android make\MyPDFReader\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.mypdf.reader.test.app-mergeDebugAndroidTestResources-3 J:\android make\MyPDFReader\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.mypdf.reader.test.app-debugAndroidTest-4 J:\android make\MyPDFReader\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
+gradleHome-0 C:\Users\sangt\.gradle

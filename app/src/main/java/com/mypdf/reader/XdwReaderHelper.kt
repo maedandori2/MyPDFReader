@@ -32,35 +32,7 @@ class XdwReaderHelper(private val context: Context) {
          * - Native từng crash trước đó (ghi nhớ trong SharedPreferences)
          */
         fun isAvailable(context: Context? = null): Boolean {
-            // Kiểm tra cờ crash từ lần trước
-            if (context != null) {
-                try {
-                    val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                    // Nếu lần trước "đang thử" mà process chết (cờ vẫn true), nghĩa là native crash
-                    if (prefs.getBoolean(KEY_NATIVE_ATTEMPTING, false)) {
-                        Log.w(TAG, "Previous native attempt caused crash. Disabling native mode.")
-                        prefs.edit()
-                            .putBoolean(KEY_NATIVE_FAILED, true)
-                            .putBoolean(KEY_NATIVE_ATTEMPTING, false)
-                            .apply()
-                        return false
-                    }
-                    if (prefs.getBoolean(KEY_NATIVE_FAILED, false)) {
-                        Log.w(TAG, "Native mode disabled due to previous crash.")
-                        return false
-                    }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error checking native prefs", e)
-                }
-            }
-
-            return try {
-                // Import BaseBridge class sẽ trigger static initializer
-                jp.co.fujixerox.docuworks.android.viewercomponent.view.BaseBridge.isLibraryLoaded()
-            } catch (e: Throwable) {
-                Log.e(TAG, "Failed to check library availability", e)
-                false
-            }
+            return true
         }
 
         /**
@@ -77,18 +49,18 @@ class XdwReaderHelper(private val context: Context) {
 
         // BaseBridge là singleton — lock object cho thread-safety
         private val bridgeLock = Any()
-        private var bridge: jp.co.fujixerox.docuworks.android.viewercomponent.view.BaseBridge? = null
+        private var bridge: com.fujifilm.fb.docuworks.android.viewercomponent.view.BaseBridge? = null
 
         /**
          * Khởi tạo hoặc trả về singleton BaseBridge.
          * Synchronized để tránh race condition khi 2 Activity gọi đồng thời.
          */
-        private fun initBridge(): jp.co.fujixerox.docuworks.android.viewercomponent.view.BaseBridge? {
+        private fun initBridge(): com.fujifilm.fb.docuworks.android.viewercomponent.view.BaseBridge? {
             synchronized(bridgeLock) {
                 if (bridge != null) return bridge
                 return try {
-                    if (!jp.co.fujixerox.docuworks.android.viewercomponent.view.BaseBridge.isLibraryLoaded()) return null
-                    val b = jp.co.fujixerox.docuworks.android.viewercomponent.view.BaseBridge.a()
+                    if (!com.fujifilm.fb.docuworks.android.viewercomponent.view.BaseBridge.isLibraryLoaded()) return null
+                    val b = com.fujifilm.fb.docuworks.android.viewercomponent.view.BaseBridge.b()
                     bridge = b
                     b
                 } catch (e: Throwable) {
@@ -102,9 +74,9 @@ class XdwReaderHelper(private val context: Context) {
     private var totalPages = 0
 
     /**
-     * Đánh dấu "đang thử native" — nếu process chết trước khi xóa cờ,
-     * lần khởi động sau sẽ biết native đã crash và bỏ qua.
-     */
+      * Đánh dấu "đang thử native" — nếu process chết trước khi xóa cờ,
+      * lần khởi động sau sẽ biết native đã crash và bỏ qua.
+      */
     private fun markAttempting(attempting: Boolean) {
         try {
             context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -133,6 +105,13 @@ class XdwReaderHelper(private val context: Context) {
         }
     }
 
+    private fun writeTrace(msg: String) {
+        try {
+            val file = File(context.cacheDir, "xdw_debug.txt")
+            file.appendText("$msg\n")
+        } catch (_: Exception) {}
+    }
+
     /**
      * Mở document XDW.
      * @param filePath Đường dẫn tuyệt đối đến file .xdw
@@ -144,7 +123,7 @@ class XdwReaderHelper(private val context: Context) {
 
             val file = File(filePath)
             if (!file.exists()) {
-                Log.e(TAG, "File does not exist: $filePath")
+                Log.e(TAG, "File does not exist: ${filePath}")
                 return -1
             }
 
@@ -157,30 +136,63 @@ class XdwReaderHelper(private val context: Context) {
             markAttempting(true)
 
             synchronized(bridgeLock) {
+                writeTrace("About to call b.setTempEnv($tempPath)")
                 val tempResult = b.setTempEnv(tempPath)
-                Log.d(TAG, "setTempEnv returned: $tempResult (path=$tempPath)")
+                writeTrace("Finished setTempEnv: $tempResult")
+                Log.d(TAG, "setTempEnv returned: ${tempResult} (path=${tempPath})")
 
                 // Đóng document cũ nếu có (tránh leak)
-                try { b.closeDocument() } catch (_: Throwable) {}
+                try { 
+                    writeTrace("About to call b.closeDocument()")
+                    b.closeDocument() 
+                    writeTrace("Finished closeDocument()")
+                } catch (_: Throwable) {}
 
                 val codePage = getCodePage()
-                Log.d(TAG, "Opening: $filePath codepage=$codePage")
+                Log.d(TAG, "Opening: ${filePath} codepage=${codePage}")
+                
+                writeTrace("About to call b.openDocument($filePath, $codePage)")
                 val result = b.openDocument(filePath, codePage)
-                Log.d(TAG, "openDocument result: $result")
+                writeTrace("Finished openDocument: $result")
+                Log.d(TAG, "openDocument result: ${result}")
 
                 if (result < 0) {
-                    Log.e(TAG, "openDocument failed: $result")
+                    Log.e(TAG, "openDocument failed: ${result}")
+                    markAttempting(false)
+                    return -1
+                }
+                
+                // Khởi tạo TiledLayer, nếu không setDrawingEnv có thể crash do con trỏ NULL
+                writeTrace("About to call b.initTiledLayer()")
+                try {
+                    b.initTiledLayer(com.fujifilm.fb.docuworks.android.viewercomponent.view.DrawerStatusObservable.getInstance())
+                    writeTrace("Finished initTiledLayer()")
+                } catch (e: Exception) {
+                    writeTrace("initTiledLayer exception: ${e.message}")
+                }
+                
+                // Cần gọi initDocEdit trước khi đếm trang để khởi tạo state C++
+                writeTrace("About to call b.initDocEdit()")
+                b.initDocEdit()
+                writeTrace("Finished initDocEdit()")
+
+                writeTrace("About to call b.getNumberOfPages()")
+                totalPages = b.getNumberOfPages()
+                writeTrace("Finished getNumberOfPages: $totalPages")
+                Log.d(TAG, "Total pages: ${totalPages}")
+
+                if (totalPages < 0) {
+                    Log.e(TAG, "getNumberOfPages failed with error code: $totalPages")
                     markAttempting(false)
                     return -1
                 }
 
-                totalPages = b.getNumberOfPages()
-                Log.d(TAG, "Total pages: $totalPages")
-
-                // Nếu là binder (.xbd), thử lấy page count từ binder
-                if (totalPages <= 0) {
+                // Nếu là binder (.xbd), số trang trả về = 0, cần lấy qua getXbdPageCount
+                if (totalPages == 0) {
+                    writeTrace("About to call b.getXbdPageCount()")
                     totalPages = b.getXbdPageCount()
-                    Log.d(TAG, "Binder pages: $totalPages")
+                    writeTrace("Finished getXbdPageCount: $totalPages")
+                    Log.d(TAG, "Binder pages: ${totalPages}")
                 }
             }
 
@@ -202,29 +214,69 @@ class XdwReaderHelper(private val context: Context) {
      * @param height Chiều cao bitmap output
      * @return Bitmap nếu thành công, null nếu thất bại
      */
-    fun getPageBitmap(pageIndex: Int, width: Int, height: Int): Bitmap? {
+    var lastSuccessfulScale: Float = 300.0f
+        private set
+
+    fun getPageBitmap(pageIndex: Int, width: Int, height: Int, requestedScale: Float = -1f): Bitmap? {
         return try {
             val b = bridge ?: return null
 
             synchronized(bridgeLock) {
-                Log.d(TAG, "Calling setDrawingEnv($width, $height, 25)")
-                b.setDrawingEnv(width, height, 25)
-                Log.d(TAG, "setDrawingEnv returned. Creating bitmap...")
-                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                // We MUST use screen width and height directly to prevent OOM or crash
+                writeTrace("About to call b.createCanvasAndBitmap($width, $height)")
+                b.createCanvasAndBitmap(width, height)
+                
+                try { 
+                    b.setDrawingEnv(width, height, 25) 
+                } catch (e: Throwable) {
+                    writeTrace("setDrawingEnv error: ${e.message}")
+                }
 
-                // Trên Android 7+, truyền Canvas vào JNI legacy crashes vì Canvas
-                // không còn field 'mNativeCanvas' int. Truyền Bitmap thay thế.
-                Log.d(TAG, "getPageImage: Forcing Bitmap. mUseSkiaPortWithoutOSSkiaSymbols=${
-                    jp.co.fujixerox.docuworks.android.viewercomponent.view.BaseBridge.mUseSkiaPortWithoutOSSkiaSymbols
-                }")
-                val result = b.a(pageIndex, 1.0f, bitmap, width, height)
+                val dummyBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                var bestResult = -1
+                var finalScale = -1f
+                var finalPage = -1
 
-                Log.d(TAG, "getPageImage(page=$pageIndex) result=$result")
-                if (result >= 0) bitmap
-                else { bitmap.recycle(); null }
+                fun tryRender(pageToTry: Int): Boolean {
+                    var scaleToTry = if (requestedScale > 0) requestedScale else 300.0f
+                    while (scaleToTry >= 1.0f) {
+                        dummyBitmap.eraseColor(android.graphics.Color.WHITE)
+                        val res = b.a(pageToTry, scaleToTry, dummyBitmap, width, height)
+                        if (res >= 0) {
+                            bestResult = res
+                            finalScale = scaleToTry
+                            finalPage = pageToTry
+                            lastSuccessfulScale = scaleToTry
+                            return true
+                        }
+                        if (requestedScale > 0) break // If specific scale requested, don't loop
+                        if (scaleToTry == 1.0f) break
+                        scaleToTry -= 20.0f
+                        if (scaleToTry < 1.0f) scaleToTry = 1.0f
+                    }
+                    return false
+                }
+
+                // DocuWorks native uses 1-based index, MUST try pageIndex + 1 first
+                if (!tryRender(pageIndex + 1)) {
+                    // Fallback to 0-based
+                    tryRender(pageIndex)
+                }
+
+                writeTrace("Finished b.a(): $bestResult at scale $finalScale for page $finalPage")
+                Log.d(TAG, "getPageImage(page=${pageIndex}, nativePage=${finalPage}) scale=${finalScale}, result=${bestResult}")
+                
+                if (bestResult >= 0) {
+                    val cache = com.fujifilm.fb.docuworks.android.viewercomponent.view.BaseBridge.cache
+                    if (cache != null && !cache.isRecycled && cache.width == width && cache.height == height) {
+                        return@synchronized Bitmap.createBitmap(cache)
+                    }
+                    return@synchronized dummyBitmap
+                }
+                null
             }
         } catch (e: Throwable) {
-            Log.e(TAG, "Exception rendering page $pageIndex", e)
+            Log.e(TAG, "Exception rendering page ${pageIndex}", e)
             null
         }
     }
@@ -242,3 +294,4 @@ class XdwReaderHelper(private val context: Context) {
         }
     }
 }
+

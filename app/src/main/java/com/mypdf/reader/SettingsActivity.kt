@@ -39,6 +39,11 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.tvMetadataColorTitle.text = LocaleHelper.getString("metadata_colors_title")
         binding.tvMetadataColorDesc.text = LocaleHelper.getString("metadata_colors_desc")
+        
+        val xdwScale = SettingsManager.getXdwRenderScale()
+        binding.sbXdwRenderScale.progress = xdwScale - 10
+        binding.tvXdwRenderScale.text = xdwScale.toString()
+        
         updateColorButtons()
     }
 
@@ -79,6 +84,18 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchKeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
             SettingsManager.setKeepScreenOn(isChecked)
         }
+
+        binding.sbXdwRenderScale.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.tvXdwRenderScale.text = (progress + 10).toString()
+            }
+            override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {
+                seekBar?.let {
+                    SettingsManager.setXdwRenderScale(it.progress + 10)
+                }
+            }
+        })
 
         binding.btnInitSyncState.setOnClickListener {
             initializeSyncState()

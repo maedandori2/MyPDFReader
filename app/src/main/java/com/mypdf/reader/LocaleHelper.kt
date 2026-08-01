@@ -93,6 +93,8 @@ object LocaleHelper {
             "cannot_open" to "Không thể mở file",
             "prev_page" to "◀ Trang trước",
             "next_page" to "Trang sau ▶",
+            "prev_file" to "File trước",
+            "next_file" to "File tiếp theo",
             "reading_file_number" to "📖 Đang đọc file số %d",
 
             // ── SyncActivity ──
@@ -201,6 +203,8 @@ object LocaleHelper {
             "cannot_open" to "ファイルを開けません",
             "prev_page" to "◀ 前のページ",
             "next_page" to "次のページ ▶",
+            "prev_file" to "前のファイル",
+            "next_file" to "次のファイル",
             "reading_file_number" to "📖 ファイル %d を読んでいます",
 
             // ── SyncActivity ──

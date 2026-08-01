@@ -44,6 +44,9 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
   public final LinearLayout layoutNav;
 
   @NonNull
+  public final LinearLayout layoutPageNav;
+
+  @NonNull
   public final LinearLayout layoutTopBar;
 
   @NonNull
@@ -55,7 +58,8 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
   private ActivityXdwViewerBinding(@NonNull RelativeLayout rootView, @NonNull Button btnBack,
       @NonNull Button btnNextFile, @NonNull Button btnNextPage, @NonNull Button btnPrevFile,
       @NonNull Button btnPrevPage, @NonNull ImageView ivXdwPage, @NonNull LinearLayout layoutNav,
-      @NonNull LinearLayout layoutTopBar, @NonNull TextView tvPageInfo, @NonNull TextView tvTitle) {
+      @NonNull LinearLayout layoutPageNav, @NonNull LinearLayout layoutTopBar,
+      @NonNull TextView tvPageInfo, @NonNull TextView tvTitle) {
     this.rootView = rootView;
     this.btnBack = btnBack;
     this.btnNextFile = btnNextFile;
@@ -64,6 +68,7 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
     this.btnPrevPage = btnPrevPage;
     this.ivXdwPage = ivXdwPage;
     this.layoutNav = layoutNav;
+    this.layoutPageNav = layoutPageNav;
     this.layoutTopBar = layoutTopBar;
     this.tvPageInfo = tvPageInfo;
     this.tvTitle = tvTitle;
@@ -138,6 +143,12 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.layoutPageNav;
+      LinearLayout layoutPageNav = ViewBindings.findChildViewById(rootView, id);
+      if (layoutPageNav == null) {
+        break missingId;
+      }
+
       id = R.id.layoutTopBar;
       LinearLayout layoutTopBar = ViewBindings.findChildViewById(rootView, id);
       if (layoutTopBar == null) {
@@ -157,8 +168,8 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
       }
 
       return new ActivityXdwViewerBinding((RelativeLayout) rootView, btnBack, btnNextFile,
-          btnNextPage, btnPrevFile, btnPrevPage, ivXdwPage, layoutNav, layoutTopBar, tvPageInfo,
-          tvTitle);
+          btnNextPage, btnPrevFile, btnPrevPage, ivXdwPage, layoutNav, layoutPageNav, layoutTopBar,
+          tvPageInfo, tvTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

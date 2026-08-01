@@ -9,11 +9,17 @@ object SettingsManager {
     private const val KEY_NOTICE_OPACITY = "notice_opacity"
     private const val KEY_NOTICE_DURATION = "notice_duration"
     private const val KEY_KEEP_SCREEN_ON = "keep_screen_on"
+    private const val KEY_XDW_RENDER_SCALE = "xdw_render_scale"
+    
     // Giá trị mặc định
     const val DEFAULT_FILE_NAME_SIZE = 19     // sp
     const val DEFAULT_NOTICE_OPACITY = 50     // % (0-100)
     const val DEFAULT_NOTICE_DURATION = 5     // giây
     const val DEFAULT_KEEP_SCREEN_ON = true
+    const val DEFAULT_XDW_RENDER_SCALE = 150
+    
+    const val MIN_XDW_RENDER_SCALE = 10
+    const val MAX_XDW_RENDER_SCALE = 200
 
     const val MIN_FILE_NAME_SIZE = 12
     const val MAX_FILE_NAME_SIZE = 32
@@ -79,6 +85,17 @@ object SettingsManager {
 
     fun setKeepScreenOn(keep: Boolean) {
         prefs().edit().putBoolean(KEY_KEEP_SCREEN_ON, keep).apply()
+    }
+
+    // ── XDW Render Scale ──
+
+    fun getXdwRenderScale(): Int {
+        return prefs().getInt(KEY_XDW_RENDER_SCALE, DEFAULT_XDW_RENDER_SCALE)
+    }
+
+    fun setXdwRenderScale(scale: Int) {
+        val clamped = scale.coerceIn(MIN_XDW_RENDER_SCALE, MAX_XDW_RENDER_SCALE)
+        prefs().edit().putInt(KEY_XDW_RENDER_SCALE, clamped).apply()
     }
 
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,6 +66,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final ProgressBar pbDownload;
 
   @NonNull
+  public final SeekBar sbXdwRenderScale;
+
+  @NonNull
   public final SwitchMaterial switchKeepScreenOn;
 
   @NonNull
@@ -97,6 +101,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   @NonNull
   public final TextView tvUpdateStatus;
 
+  @NonNull
+  public final TextView tvXdwRenderScale;
+
   private ActivitySettingsBinding(@NonNull LinearLayout rootView, @NonNull Button btnBack,
       @NonNull Button btnCheckUpdate, @NonNull Button btnDownloadUpdate,
       @NonNull Button btnInitSyncState, @NonNull TextView btnLabelHinban,
@@ -104,12 +111,13 @@ public final class ActivitySettingsBinding implements ViewBinding {
       @NonNull TextView btnLabelJishaHinmei, @NonNull TextView btnValueHinban,
       @NonNull TextView btnValueHinmei, @NonNull TextView btnValueJishaHinban,
       @NonNull TextView btnValueJishaHinmei, @NonNull LinearLayout layoutDownloadProgress,
-      @NonNull ProgressBar pbDownload, @NonNull SwitchMaterial switchKeepScreenOn,
-      @NonNull TextView tvCurrentVersion, @NonNull TextView tvInitSyncStatus,
-      @NonNull TextView tvMetadataColorDesc, @NonNull TextView tvMetadataColorTitle,
-      @NonNull TextView tvProgressPercent, @NonNull TextView tvReadingSectionTitle,
-      @NonNull TextView tvSettingsTitle, @NonNull TextView tvSyncSectionTitle,
-      @NonNull TextView tvUpdateSectionTitle, @NonNull TextView tvUpdateStatus) {
+      @NonNull ProgressBar pbDownload, @NonNull SeekBar sbXdwRenderScale,
+      @NonNull SwitchMaterial switchKeepScreenOn, @NonNull TextView tvCurrentVersion,
+      @NonNull TextView tvInitSyncStatus, @NonNull TextView tvMetadataColorDesc,
+      @NonNull TextView tvMetadataColorTitle, @NonNull TextView tvProgressPercent,
+      @NonNull TextView tvReadingSectionTitle, @NonNull TextView tvSettingsTitle,
+      @NonNull TextView tvSyncSectionTitle, @NonNull TextView tvUpdateSectionTitle,
+      @NonNull TextView tvUpdateStatus, @NonNull TextView tvXdwRenderScale) {
     this.rootView = rootView;
     this.btnBack = btnBack;
     this.btnCheckUpdate = btnCheckUpdate;
@@ -125,6 +133,7 @@ public final class ActivitySettingsBinding implements ViewBinding {
     this.btnValueJishaHinmei = btnValueJishaHinmei;
     this.layoutDownloadProgress = layoutDownloadProgress;
     this.pbDownload = pbDownload;
+    this.sbXdwRenderScale = sbXdwRenderScale;
     this.switchKeepScreenOn = switchKeepScreenOn;
     this.tvCurrentVersion = tvCurrentVersion;
     this.tvInitSyncStatus = tvInitSyncStatus;
@@ -136,6 +145,7 @@ public final class ActivitySettingsBinding implements ViewBinding {
     this.tvSyncSectionTitle = tvSyncSectionTitle;
     this.tvUpdateSectionTitle = tvUpdateSectionTitle;
     this.tvUpdateStatus = tvUpdateStatus;
+    this.tvXdwRenderScale = tvXdwRenderScale;
   }
 
   @Override
@@ -249,6 +259,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.sbXdwRenderScale;
+      SeekBar sbXdwRenderScale = ViewBindings.findChildViewById(rootView, id);
+      if (sbXdwRenderScale == null) {
+        break missingId;
+      }
+
       id = R.id.switchKeepScreenOn;
       SwitchMaterial switchKeepScreenOn = ViewBindings.findChildViewById(rootView, id);
       if (switchKeepScreenOn == null) {
@@ -315,13 +331,19 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvXdwRenderScale;
+      TextView tvXdwRenderScale = ViewBindings.findChildViewById(rootView, id);
+      if (tvXdwRenderScale == null) {
+        break missingId;
+      }
+
       return new ActivitySettingsBinding((LinearLayout) rootView, btnBack, btnCheckUpdate,
           btnDownloadUpdate, btnInitSyncState, btnLabelHinban, btnLabelHinmei, btnLabelJishaHinban,
           btnLabelJishaHinmei, btnValueHinban, btnValueHinmei, btnValueJishaHinban,
-          btnValueJishaHinmei, layoutDownloadProgress, pbDownload, switchKeepScreenOn,
-          tvCurrentVersion, tvInitSyncStatus, tvMetadataColorDesc, tvMetadataColorTitle,
-          tvProgressPercent, tvReadingSectionTitle, tvSettingsTitle, tvSyncSectionTitle,
-          tvUpdateSectionTitle, tvUpdateStatus);
+          btnValueJishaHinmei, layoutDownloadProgress, pbDownload, sbXdwRenderScale,
+          switchKeepScreenOn, tvCurrentVersion, tvInitSyncStatus, tvMetadataColorDesc,
+          tvMetadataColorTitle, tvProgressPercent, tvReadingSectionTitle, tvSettingsTitle,
+          tvSyncSectionTitle, tvUpdateSectionTitle, tvUpdateStatus, tvXdwRenderScale);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
