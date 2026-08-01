@@ -6,6 +6,54 @@ Tự động cập nhật lúc: $(date)
 ### 🌟 CÁC FILE QUAN TRỌNG (Có nút Copy)
 
 
+#### 📄 .idea/AndroidProjectSystem.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/AndroidProjectSystem.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/AndroidProjectSystem.xml)
+```
+
+
+#### 📄 .idea/caches/deviceStreaming.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/caches/deviceStreaming.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/caches/deviceStreaming.xml)
+```
+
+
+#### 📄 .idea/compiler.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/compiler.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/compiler.xml)
+```
+
+
+#### 📄 .idea/gradle.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/gradle.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/gradle.xml)
+```
+
+
+#### 📄 .idea/markdown.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/markdown.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/markdown.xml)
+```
+
+
+#### 📄 .idea/migrations.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/migrations.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/migrations.xml)
+```
+
+
+#### 📄 .idea/misc.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/misc.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/misc.xml)
+```
+
+
+#### 📄 .idea/vcs.xml
+```text
+[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/vcs.xml](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/vcs.xml)
+```
+
+
 #### 📄 app/build/intermediates/annotation_processor_list/debug/annotationProcessors.json
 ```text
 [https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/annotation_processor_list/debug/annotationProcessors.json](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build/intermediates/annotation_processor_list/debug/annotationProcessors.json)
@@ -1275,10 +1323,10 @@ Tự động cập nhật lúc: $(date)
 * **.gradle/buildOutputCleanup/buildOutputCleanup.lock**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/buildOutputCleanup.lock](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/buildOutputCleanup.lock)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/buildOutputCleanup.lock](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/buildOutputCleanup.lock))
 * **.gradle/buildOutputCleanup/cache.properties**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/cache.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/cache.properties)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/cache.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/cache.properties))
 * **.gradle/buildOutputCleanup/outputFiles.bin**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/outputFiles.bin](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/outputFiles.bin)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/outputFiles.bin](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/buildOutputCleanup/outputFiles.bin))
+* **.gradle/config.properties**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/config.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/config.properties)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/config.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/config.properties))
 * **.gradle/file-system.probe**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/file-system.probe](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/file-system.probe)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/file-system.probe](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/file-system.probe))
-* **.gradle/kotlin/errors/errors-1783036599438.log**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036599438.log](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036599438.log)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036599438.log](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036599438.log))
-* **.gradle/kotlin/errors/errors-1783036672786.log**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036672786.log](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036672786.log)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036672786.log](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/kotlin/errors/errors-1783036672786.log))
 * **.gradle/vcs-1/gc.properties**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/vcs-1/gc.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/vcs-1/gc.properties)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/vcs-1/gc.properties](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.gradle/vcs-1/gc.properties))
+* **.idea/.gitignore**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/.gitignore](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/.gitignore)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/.gitignore](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/.idea/.gitignore))
 * **HISTORY.md**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/HISTORY.md))
 * **README.md**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/README.md))
 * **app/build.gradle**: [[https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle)]([https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle](https://raw.githubusercontent.com/maedandori2/MyPDFReader/main/app/build.gradle))
