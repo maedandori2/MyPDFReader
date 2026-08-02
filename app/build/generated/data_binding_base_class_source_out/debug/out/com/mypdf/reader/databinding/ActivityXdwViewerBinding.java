@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.mypdf.reader.R;
@@ -38,9 +38,6 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
   public final Button btnPrevPage;
 
   @NonNull
-  public final ImageView ivXdwPage;
-
-  @NonNull
   public final LinearLayout layoutNav;
 
   @NonNull
@@ -50,6 +47,9 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
   public final LinearLayout layoutTopBar;
 
   @NonNull
+  public final RecyclerView rvXdwTiles;
+
+  @NonNull
   public final TextView tvPageInfo;
 
   @NonNull
@@ -57,19 +57,19 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
 
   private ActivityXdwViewerBinding(@NonNull RelativeLayout rootView, @NonNull Button btnBack,
       @NonNull Button btnNextFile, @NonNull Button btnNextPage, @NonNull Button btnPrevFile,
-      @NonNull Button btnPrevPage, @NonNull ImageView ivXdwPage, @NonNull LinearLayout layoutNav,
+      @NonNull Button btnPrevPage, @NonNull LinearLayout layoutNav,
       @NonNull LinearLayout layoutPageNav, @NonNull LinearLayout layoutTopBar,
-      @NonNull TextView tvPageInfo, @NonNull TextView tvTitle) {
+      @NonNull RecyclerView rvXdwTiles, @NonNull TextView tvPageInfo, @NonNull TextView tvTitle) {
     this.rootView = rootView;
     this.btnBack = btnBack;
     this.btnNextFile = btnNextFile;
     this.btnNextPage = btnNextPage;
     this.btnPrevFile = btnPrevFile;
     this.btnPrevPage = btnPrevPage;
-    this.ivXdwPage = ivXdwPage;
     this.layoutNav = layoutNav;
     this.layoutPageNav = layoutPageNav;
     this.layoutTopBar = layoutTopBar;
+    this.rvXdwTiles = rvXdwTiles;
     this.tvPageInfo = tvPageInfo;
     this.tvTitle = tvTitle;
   }
@@ -131,12 +131,6 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.ivXdwPage;
-      ImageView ivXdwPage = ViewBindings.findChildViewById(rootView, id);
-      if (ivXdwPage == null) {
-        break missingId;
-      }
-
       id = R.id.layoutNav;
       LinearLayout layoutNav = ViewBindings.findChildViewById(rootView, id);
       if (layoutNav == null) {
@@ -155,6 +149,12 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.rvXdwTiles;
+      RecyclerView rvXdwTiles = ViewBindings.findChildViewById(rootView, id);
+      if (rvXdwTiles == null) {
+        break missingId;
+      }
+
       id = R.id.tvPageInfo;
       TextView tvPageInfo = ViewBindings.findChildViewById(rootView, id);
       if (tvPageInfo == null) {
@@ -168,7 +168,7 @@ public final class ActivityXdwViewerBinding implements ViewBinding {
       }
 
       return new ActivityXdwViewerBinding((RelativeLayout) rootView, btnBack, btnNextFile,
-          btnNextPage, btnPrevFile, btnPrevPage, ivXdwPage, layoutNav, layoutPageNav, layoutTopBar,
+          btnNextPage, btnPrevFile, btnPrevPage, layoutNav, layoutPageNav, layoutTopBar, rvXdwTiles,
           tvPageInfo, tvTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);

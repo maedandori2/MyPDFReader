@@ -208,6 +208,41 @@ class XdwReaderHelper(private val context: Context) {
     }
 
     /**
+     * Render 1 trang XDW thành danh sách các Bitmap nhỏ (Tiles) để hiển thị mượt trong RecyclerView.
+     */
+    fun getPageTiles(pageIndex: Int, targetWidth: Int, targetHeight: Int, requestedScale: Float = -1f): List<Bitmap> {
+        val fullBitmap = getPageBitmap(pageIndex, targetWidth, targetHeight, requestedScale) ?: return emptyList()
+        
+        // 1. Cắt bỏ viền trắng để lấy đúng tỷ lệ ảnh
+        val croppedBitmap = cropWhitespace(fullBitmap)
+        
+        // 2. Chia nhỏ thành các tile theo chiều dọc
+        val tiles = mutableListOf<Bitmap>()
+        val tileHeight = 1000 // Kích thước mỗi tile (pixels)
+        val width = croppedBitmap.width
+        val height = croppedBitmap.height
+        
+        var y = 0
+        while (y < height) {
+            val th = Math.min(tileHeight, height - y)
+            val tile = Bitmap.createBitmap(croppedBitmap, 0, y, width, th)
+            tiles.add(tile)
+            y += th
+        }
+        
+        // Giải phóng bitmap tạm nếu cần
+        if (croppedBitmap != fullBitmap && !fullBitmap.isRecycled) {
+            fullBitmap.recycle()
+        }
+        // Không recycle croppedBitmap ở đây vì các tile dùng chung bộ nhớ pixel của nó 
+        // (Bitmap.createBitmap với tọa độ có thể tái sử dụng mảng pixel nếu có thể, hoặc tạo bản sao)
+        // Tuy nhiên ở Android, createBitmap (subset) tạo object mới chia sẻ pixel reference (nếu immutable) hoặc copy.
+        // Để an toàn, nếu memory là vấn đề, ta cứ để Garbage Collector lo croppedBitmap sau khi list tiles không còn reference.
+        
+        return tiles
+    }
+
+    /**
      * Render 1 trang XDW thành Bitmap.
      * @param pageIndex Index trang (0-based)
      * @param width Chiều rộng bitmap output
@@ -292,6 +327,82 @@ class XdwReaderHelper(private val context: Context) {
         } catch (e: Throwable) {
             Log.e(TAG, "Exception closing document", e)
         }
+    }
+
+    /**
+     * Loại bỏ khoảng trắng (white border) xung quanh ảnh và trả về ảnh đã crop.
+     */
+    private fun cropWhitespace(bitmap: Bitmap): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+
+        var top = 0
+        var bottom = height - 1
+        var left = 0
+        var right = width - 1
+
+        val rowPixels = IntArray(width)
+
+        var found = false
+        for (y in 0 until height) {
+            bitmap.getPixels(rowPixels, 0, width, 0, y, width, 1)
+            for (x in 0 until width) {
+                if (rowPixels[x] != android.graphics.Color.WHITE) {
+                    top = y
+                    found = true
+                    break
+                }
+            }
+            if (found) break
+        }
+
+        if (!found) return bitmap // Toàn màu trắng
+
+        found = false
+        for (y in height - 1 downTo top) {
+            bitmap.getPixels(rowPixels, 0, width, 0, y, width, 1)
+            for (x in 0 until width) {
+                if (rowPixels[x] != android.graphics.Color.WHITE) {
+                    bottom = y
+                    found = true
+                    break
+                }
+            }
+            if (found) break
+        }
+
+        found = false
+        for (x in 0 until width) {
+            for (y in top..bottom) {
+                if (bitmap.getPixel(x, y) != android.graphics.Color.WHITE) {
+                    left = x
+                    found = true
+                    break
+                }
+            }
+            if (found) break
+        }
+
+        found = false
+        for (x in width - 1 downTo left) {
+            for (y in top..bottom) {
+                if (bitmap.getPixel(x, y) != android.graphics.Color.WHITE) {
+                    right = x
+                    found = true
+                    break
+                }
+            }
+            if (found) break
+        }
+
+        val newWidth = right - left + 1
+        val newHeight = bottom - top + 1
+
+        if (newWidth <= 0 || newHeight <= 0 || (newWidth == width && newHeight == height)) {
+            return bitmap
+        }
+
+        return Bitmap.createBitmap(bitmap, left, top, newWidth, newHeight)
     }
 }
 

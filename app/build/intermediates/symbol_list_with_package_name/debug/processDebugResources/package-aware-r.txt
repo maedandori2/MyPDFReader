@@ -3389,7 +3389,7 @@ id italic
 id item_touch_helper_previous_elevation
 id ivPage
 id ivThumbnail
-id ivXdwPage
+id ivTile
 id jumpToEnd
 id jumpToStart
 id labeled
@@ -3543,6 +3543,7 @@ id rounded
 id row_index_key
 id rvFiles
 id rvReadingList
+id rvXdwTiles
 id save_non_transition_alpha
 id save_overlay_view
 id sawtooth
@@ -3846,6 +3847,7 @@ layout design_text_input_start_icon
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_pdf_file
+layout item_xdw_tile
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title

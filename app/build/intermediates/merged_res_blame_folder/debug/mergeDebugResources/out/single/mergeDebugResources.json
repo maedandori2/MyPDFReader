@@ -44,11 +44,15 @@
         "source": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-main-45:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.mypdf.reader.app-debug-43:/layout_activity_settings.xml.flat",
-        "source": "com.mypdf.reader.app-main-45:/layout/activity_settings.xml"
-    },
-    {
         "merged": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-debug-43:\\layout_activity_xdw_viewer.xml.flat",
         "source": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-main-45:\\layout\\activity_xdw_viewer.xml"
+    },
+    {
+        "merged": "com.mypdf.reader.app-debug-43:/layout_item_xdw_tile.xml.flat",
+        "source": "com.mypdf.reader.app-main-45:/layout/item_xdw_tile.xml"
+    },
+    {
+        "merged": "com.mypdf.reader.app-debug-43:/layout_activity_xdw_viewer.xml.flat",
+        "source": "com.mypdf.reader.app-main-45:/layout/activity_xdw_viewer.xml"
     }
 ]

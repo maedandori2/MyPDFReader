@@ -40,7 +40,7 @@ id etSearch
 id fabReadNext
 id ivPage
 id ivThumbnail
-id ivXdwPage
+id ivTile
 id layoutAll
 id layoutControls
 id layoutDownloadProgress
@@ -54,6 +54,7 @@ id pbDownload
 id progressBar
 id rvFiles
 id rvReadingList
+id rvXdwTiles
 id sbXdwRenderScale
 id switchAutoSync
 id switchKeepScreenOn
@@ -93,6 +94,7 @@ layout activity_settings
 layout activity_sync
 layout activity_xdw_viewer
 layout item_pdf_file
+layout item_xdw_tile
 string app_name
 style Theme.MyPDFReader
 xml file_paths

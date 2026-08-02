@@ -10,7 +10,7 @@ package com.mypdf.reader;
  * BaseBridge là singleton (static field) nên chỉ mở được 1 document tại 1 thời điểm.
  * Tất cả phương thức truy cập bridge được synchronized để tránh race condition.
  */
-@kotlin.Metadata(mv = {2, 2, 0}, k = 1, xi = 48, d1 = {"\u0000>\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0010\u0007\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0007\u0018\u0000 \u001e2\u00020\u0001:\u0001\u001eB\u000f\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\u0004\b\u0004\u0010\u0005J\u0010\u0010\b\u001a\u00020\t2\u0006\u0010\n\u001a\u00020\u000bH\u0002J\b\u0010\f\u001a\u00020\u0007H\u0002J\u0010\u0010\r\u001a\u00020\t2\u0006\u0010\u000e\u001a\u00020\u000fH\u0002J\u000e\u0010\u0010\u001a\u00020\u00072\u0006\u0010\u0011\u001a\u00020\u000fJ*\u0010\u0017\u001a\u0004\u0018\u00010\u00182\u0006\u0010\u0019\u001a\u00020\u00072\u0006\u0010\u001a\u001a\u00020\u00072\u0006\u0010\u001b\u001a\u00020\u00072\b\b\u0002\u0010\u001c\u001a\u00020\u0013J\u0006\u0010\u001d\u001a\u00020\tR\u000e\u0010\u0002\u001a\u00020\u0003X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0007X\u0082\u000e\u00a2\u0006\u0002\n\u0000R\u001e\u0010\u0014\u001a\u00020\u00132\u0006\u0010\u0012\u001a\u00020\u0013@BX\u0086\u000e\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0015\u0010\u0016\u00a8\u0006\u001f"}, d2 = {"Lcom/mypdf/reader/XdwReaderHelper;", "", "context", "Landroid/content/Context;", "<init>", "(Landroid/content/Context;)V", "totalPages", "", "markAttempting", "", "attempting", "", "getCodePage", "writeTrace", "msg", "", "openDocument", "filePath", "value", "", "lastSuccessfulScale", "getLastSuccessfulScale", "()F", "getPageBitmap", "Landroid/graphics/Bitmap;", "pageIndex", "width", "height", "requestedScale", "closeDocument", "Companion", "app_debug"})
+@kotlin.Metadata(mv = {2, 2, 0}, k = 1, xi = 48, d1 = {"\u0000B\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0010\u0007\n\u0002\b\f\u0018\u0000 $2\u00020\u0001:\u0001$B\u000f\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\u0004\b\u0004\u0010\u0005J\u0010\u0010\b\u001a\u00020\t2\u0006\u0010\n\u001a\u00020\u000bH\u0002J\b\u0010\f\u001a\u00020\u0007H\u0002J\u0010\u0010\r\u001a\u00020\t2\u0006\u0010\u000e\u001a\u00020\u000fH\u0002J\u000e\u0010\u0010\u001a\u00020\u00072\u0006\u0010\u0011\u001a\u00020\u000fJ.\u0010\u0012\u001a\b\u0012\u0004\u0012\u00020\u00140\u00132\u0006\u0010\u0015\u001a\u00020\u00072\u0006\u0010\u0016\u001a\u00020\u00072\u0006\u0010\u0017\u001a\u00020\u00072\b\b\u0002\u0010\u0018\u001a\u00020\u0019J*\u0010\u001e\u001a\u0004\u0018\u00010\u00142\u0006\u0010\u0015\u001a\u00020\u00072\u0006\u0010\u001f\u001a\u00020\u00072\u0006\u0010 \u001a\u00020\u00072\b\b\u0002\u0010\u0018\u001a\u00020\u0019J\u0006\u0010!\u001a\u00020\tJ\u0010\u0010\"\u001a\u00020\u00142\u0006\u0010#\u001a\u00020\u0014H\u0002R\u000e\u0010\u0002\u001a\u00020\u0003X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0007X\u0082\u000e\u00a2\u0006\u0002\n\u0000R\u001e\u0010\u001b\u001a\u00020\u00192\u0006\u0010\u001a\u001a\u00020\u0019@BX\u0086\u000e\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001c\u0010\u001d\u00a8\u0006%"}, d2 = {"Lcom/mypdf/reader/XdwReaderHelper;", "", "context", "Landroid/content/Context;", "<init>", "(Landroid/content/Context;)V", "totalPages", "", "markAttempting", "", "attempting", "", "getCodePage", "writeTrace", "msg", "", "openDocument", "filePath", "getPageTiles", "", "Landroid/graphics/Bitmap;", "pageIndex", "targetWidth", "targetHeight", "requestedScale", "", "value", "lastSuccessfulScale", "getLastSuccessfulScale", "()F", "getPageBitmap", "width", "height", "closeDocument", "cropWhitespace", "bitmap", "Companion", "app_debug"})
 public final class XdwReaderHelper {
     @org.jetbrains.annotations.NotNull()
     private final android.content.Context context = null;
@@ -73,6 +73,14 @@ public final class XdwReaderHelper {
     }
     
     /**
+     * Render 1 trang XDW thành danh sách các Bitmap nhỏ (Tiles) để hiển thị mượt trong RecyclerView.
+     */
+    @org.jetbrains.annotations.NotNull()
+    public final java.util.List<android.graphics.Bitmap> getPageTiles(int pageIndex, int targetWidth, int targetHeight, float requestedScale) {
+        return null;
+    }
+    
+    /**
      * Render 1 trang XDW thành Bitmap.
      * @param pageIndex Index trang (0-based)
      * @param width Chiều rộng bitmap output
@@ -92,6 +100,13 @@ public final class XdwReaderHelper {
      * Đóng document hiện tại. An toàn khi gọi nhiều lần.
      */
     public final void closeDocument() {
+    }
+    
+    /**
+     * Loại bỏ khoảng trắng (white border) xung quanh ảnh và trả về ảnh đã crop.
+     */
+    private final android.graphics.Bitmap cropWhitespace(android.graphics.Bitmap bitmap) {
+        return null;
     }
     
     @kotlin.Metadata(mv = {2, 2, 0}, k = 1, xi = 48, d1 = {"\u00000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u0004\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\b\u0086\u0003\u0018\u00002\u00020\u0001B\t\b\u0002\u00a2\u0006\u0004\b\u0002\u0010\u0003J\u0012\u0010\t\u001a\u00020\n2\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\fJ\u000e\u0010\r\u001a\u00020\u000e2\u0006\u0010\u000b\u001a\u00020\fJ\n\u0010\u0012\u001a\u0004\u0018\u00010\u0011H\u0002R\u000e\u0010\u0004\u001a\u00020\u0005X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0005X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0007\u001a\u00020\u0005X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\b\u001a\u00020\u0005X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u000f\u001a\u00020\u0001X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u0010\u0010\u0010\u001a\u0004\u0018\u00010\u0011X\u0082\u000e\u00a2\u0006\u0002\n\u0000\u00a8\u0006\u0013"}, d2 = {"Lcom/mypdf/reader/XdwReaderHelper$Companion;", "", "<init>", "()V", "TAG", "", "PREFS_NAME", "KEY_NATIVE_FAILED", "KEY_NATIVE_ATTEMPTING", "isAvailable", "", "context", "Landroid/content/Context;", "resetNativeFlag", "", "bridgeLock", "bridge", "Lcom/fujifilm/fb/docuworks/android/viewercomponent/view/BaseBridge;", "initBridge", "app_debug"})

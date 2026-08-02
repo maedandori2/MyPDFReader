@@ -35,31 +35,19 @@ class XdwViewerActivity : AppCompatActivity() {
     private var xdwReaderHelper: XdwReaderHelper? = null
     private var currentPageIndex = 0
     private var totalPages = 0
-    private var currentBitmap: Bitmap? = null
+    private var currentTiles: List<Bitmap> = emptyList()
     private var isNavigating = false
     private var isRendering = false
     private var usingNativeRenderer = false
     private var uiVisible = true
     private var allowNativeRenderer = true
 
-    // Zoom & pan state
-    private val matrix = android.graphics.Matrix()
-    private val savedMatrix = android.graphics.Matrix()
-    private var lastX = 0f
-    private var lastY = 0f
-    private var midX = 0f
-    private var midY = 0f
-    private var mode = NONE
-    private var dist = 0f
-    private var isZoomed = false
+    private var tileAdapter: XdwTileAdapter? = null
 
     companion object {
         private const val TAG = "XdwViewerActivity"
         const val SWIPE_THRESHOLD = 80
         const val SWIPE_VELOCITY = 80
-        const val NONE = 0
-        const val DRAG = 1
-        const val ZOOM = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,12 +78,54 @@ class XdwViewerActivity : AppCompatActivity() {
         binding.btnNextPage.setOnClickListener { showPage(currentPageIndex + 1) }
 
         setupControls()
-        setupGestures()
+        setupControls()
+        setupRecyclerView()
         updateTitleAndInfo(fileName)
         updateFileNavButtons()
 
-        binding.ivXdwPage.post {
+        binding.rvXdwTiles.post {
             openCurrentFile(preferNative = allowNativeRenderer)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        binding.rvXdwTiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        tileAdapter = XdwTileAdapter(emptyList())
+        binding.rvXdwTiles.adapter = tileAdapter
+        
+        // Tap to toggle UI visibility
+        binding.rvXdwTiles.setOnClickListener {
+            toggleUiVisibility()
+        }
+    }
+
+    private inner class XdwTileAdapter(private var tiles: List<Bitmap>) :
+        androidx.recyclerview.widget.RecyclerView.Adapter<XdwTileAdapter.TileViewHolder>() {
+        
+        inner class TileViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+            val ivTile: android.widget.ImageView = view.findViewById(R.id.ivTile)
+            
+            init {
+                ivTile.setOnClickListener {
+                    toggleUiVisibility()
+                }
+            }
+        }
+
+        override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): TileViewHolder {
+            val view = layoutInflater.inflate(R.layout.item_xdw_tile, parent, false)
+            return TileViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: TileViewHolder, position: Int) {
+            holder.ivTile.setImageBitmap(tiles[position])
+        }
+
+        override fun getItemCount(): Int = tiles.size
+        
+        fun updateTiles(newTiles: List<Bitmap>) {
+            tiles = newTiles
+            notifyDataSetChanged()
         }
     }
 
@@ -134,7 +164,7 @@ class XdwViewerActivity : AppCompatActivity() {
             isRendering = false
             if (openedPages > 0) {
                 usingNativeRenderer = true
-                binding.ivXdwPage.visibility = View.VISIBLE
+                binding.rvXdwTiles.visibility = View.VISIBLE
                 updateTitleAndInfo(file.name)
                 totalPages = openedPages
                 updatePageNav()
@@ -187,31 +217,29 @@ class XdwViewerActivity : AppCompatActivity() {
         if (isRendering) return
 
         val helper = xdwReaderHelper ?: return
-        val targetWidth = binding.ivXdwPage.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
-        val topBarHeight = binding.layoutTopBar.height.takeIf { it > 0 } ?: 0
-        val navHeight = binding.layoutNav.height.takeIf { it > 0 } ?: 0
-        val overlayHeight = binding.btnPrevPage.height.takeIf { it > 0 } ?: 0
-        val targetHeight = (binding.ivXdwPage.height.takeIf { it > 0 }
-            ?: (resources.displayMetrics.heightPixels - topBarHeight - navHeight - overlayHeight))
-            .coerceAtLeast(400)
-
+        
+        // Dùng kích thước canvas lớn nhưng an toàn (max width ~ 2000)
+        // Chiều cao sẽ được tính tự động dựa trên tỷ lệ thật
+        val targetWidth = 2000
+        val targetHeight = 3000 // dummy, không quan trọng vì crop sẽ xử lý chiều dài thật
+        
         isRendering = true
         lifecycleScope.launch {
             val scaleFromSettings = SettingsManager.getXdwRenderScale().toFloat()
-            var bitmap = withContext(Dispatchers.IO) {
-                helper.getPageBitmap(index, targetWidth, targetHeight, scaleFromSettings)
+            var tiles = withContext(Dispatchers.IO) {
+                helper.getPageTiles(index, targetWidth, targetHeight, scaleFromSettings)
             }
             
-            if (bitmap == null && scaleFromSettings > 0) {
-                // Try again with default brute force
-                bitmap = withContext(Dispatchers.IO) {
-                    helper.getPageBitmap(index, targetWidth, targetHeight, -1f)
+            if (tiles.isEmpty() && scaleFromSettings > 0) {
+                // Try again with brute force
+                tiles = withContext(Dispatchers.IO) {
+                    helper.getPageTiles(index, targetWidth, targetHeight, -1f)
                 }
             }
 
             isRendering = false
 
-            if (bitmap == null) {
+            if (tiles.isEmpty()) {
                 Toast.makeText(
                     this@XdwViewerActivity,
                     safeGetString("cannot_open", "Không thể mở file") + " .xdw",
@@ -222,15 +250,12 @@ class XdwViewerActivity : AppCompatActivity() {
                 return@launch
             }
 
-            currentBitmap?.recycle()
-            currentBitmap = bitmap
+            currentTiles.forEach { it.recycle() }
+            currentTiles = tiles
             currentPageIndex = index
             
-            isZoomed = false
-            matrix.reset()
-            binding.ivXdwPage.scaleType = android.widget.ImageView.ScaleType.MATRIX
-            binding.ivXdwPage.setImageBitmap(bitmap)
-            binding.ivXdwPage.post { fitToScreen(bitmap) }
+            tileAdapter?.updateTiles(currentTiles)
+            binding.rvXdwTiles.scrollToPosition(0)
             
             updatePageNav()
         }
@@ -312,113 +337,10 @@ class XdwViewerActivity : AppCompatActivity() {
         updateFileNavButtons()
     }
 
-    private fun setupGestures() {
-        gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                toggleUiVisibility()
-                return true
-            }
-
-            override fun onFling(
-                e1: MotionEvent?,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                val start = e1 ?: return false
-                if (isNavigating || isRendering) return false
-
-                val diffX = e2.x - start.x
-                val diffY = e2.y - start.y
-                val absX = abs(diffX)
-                val absY = abs(diffY)
-
-                if (absX > absY && absX > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
-                    if (diffX > 0) switchFile(-1) else switchFile(1)
-                    return true
-                }
-
-                if (usingNativeRenderer && absY > absX && absY > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
-                    if (diffY < 0) showPage(currentPageIndex + 1) else showPage(currentPageIndex - 1)
-                    return true
-                }
-                return false
-            }
-        })
-
-        binding.ivXdwPage.setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
-            
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    savedMatrix.set(matrix)
-                    lastX = event.x
-                    lastY = event.y
-                    mode = DRAG
-                }
-                MotionEvent.ACTION_POINTER_DOWN -> {
-                    dist = spacing(event)
-                    if (dist > 10f) {
-                        savedMatrix.set(matrix)
-                        midPoint(event)
-                        mode = ZOOM
-                    }
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    if (mode == DRAG && isZoomed) {
-                        matrix.set(savedMatrix)
-                        matrix.postTranslate(event.x - lastX, event.y - lastY)
-                        binding.ivXdwPage.imageMatrix = matrix
-                    } else if (mode == ZOOM && event.pointerCount == 2) {
-                        val newDist = spacing(event)
-                        if (newDist > 10f) {
-                            matrix.set(savedMatrix)
-                            val scale = newDist / dist
-                            matrix.postScale(scale, scale, midX, midY)
-                            binding.ivXdwPage.imageMatrix = matrix
-                            val vals = FloatArray(9)
-                            matrix.getValues(vals)
-                            isZoomed = vals[android.graphics.Matrix.MSCALE_X] > 1.05f
-                        }
-                    }
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> mode = NONE
-            }
-            true
-        }
-    }
-
     private fun toggleUiVisibility() {
         uiVisible = !uiVisible
         binding.layoutTopBar.visibility = if (uiVisible) View.VISIBLE else View.GONE
         binding.layoutNav.visibility = if (uiVisible && fileList.size > 1) View.VISIBLE else View.GONE
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        gestureDetector.onTouchEvent(ev)
-        return super.dispatchTouchEvent(ev)
-    }
-
-    private fun spacing(event: MotionEvent): Float {
-        val x = event.getX(0) - event.getX(1)
-        val y = event.getY(0) - event.getY(1)
-        return kotlin.math.sqrt(x * x + y * y)
-    }
-
-    private fun midPoint(event: MotionEvent) {
-        midX = (event.getX(0) + event.getX(1)) / 2
-        midY = (event.getY(0) + event.getY(1)) / 2
-    }
-
-    private fun fitToScreen(bmp: Bitmap) {
-        val vW = binding.ivXdwPage.width.toFloat()
-        val vH = binding.ivXdwPage.height.toFloat()
-        if (vW == 0f || vH == 0f) return
-        val s = kotlin.math.min(vW / bmp.width, vH / bmp.height)
-        matrix.reset()
-        matrix.postScale(s, s)
-        matrix.postTranslate((vW - bmp.width * s) / 2f, (vH - bmp.height * s) / 2f)
-        binding.ivXdwPage.imageMatrix = matrix
     }
 
     /**
@@ -482,9 +404,9 @@ class XdwViewerActivity : AppCompatActivity() {
     }
 
     private fun releaseCurrentDocument() {
-        currentBitmap?.recycle()
-        currentBitmap = null
-        binding.ivXdwPage.setImageDrawable(null)
+        currentTiles.forEach { it.recycle() }
+        currentTiles = emptyList()
+        tileAdapter?.updateTiles(emptyList())
         try {
             xdwReaderHelper?.closeDocument()
         } catch (e: Exception) {

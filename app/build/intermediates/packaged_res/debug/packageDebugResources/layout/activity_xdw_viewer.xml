@@ -49,12 +49,13 @@
         android:layout_above="@id/layoutNav"
         android:layout_below="@id/layoutTopBar">
         
-        <ImageView
-            android:id="@+id/ivXdwPage"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvXdwTiles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:scaleType="fitCenter" />
+            android:padding="0dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
             
 
 
