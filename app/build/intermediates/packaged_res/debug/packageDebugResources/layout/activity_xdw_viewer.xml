@@ -46,85 +46,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layoutNav"
         android:layout_below="@id/layoutTopBar">
         
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvXdwTiles"
+        <ImageView
+            android:id="@+id/ivPage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="0dp"
-            android:clipToPadding="false"
-            android:scrollbars="vertical" />
-            
-
-
-        <LinearLayout
-            android:id="@+id/layoutPageNav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:background="#88000000"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="8dp">
-            
-            <Button
-                android:id="@+id/btnPrevPage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="◀ Trang" />
-                
-            <TextView
-                android:id="@+id/tvPageInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="16dp"
-                android:textColor="#FFFFFF"
-                android:text="1/1" />
-                
-            <Button
-                android:id="@+id/btnNextPage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trang ▶" />
-        </LinearLayout>
+            android:scaleType="matrix" />
     </RelativeLayout>
-
-    <!-- Bottom nav -->
-    <LinearLayout
-        android:id="@+id/layoutNav"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_alignParentBottom="true"
-        android:background="#CC1A1A1A"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnPrevFile"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="8dp"
-            android:text="◀ File trước"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#333333"
-            style="@style/Widget.MaterialComponents.Button" />
-
-        <Button
-            android:id="@+id/btnNextFile"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="8dp"
-            android:text="File tiếp theo ▶"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#1565C0"
-            style="@style/Widget.MaterialComponents.Button" />
-    </LinearLayout>
-
 </RelativeLayout>

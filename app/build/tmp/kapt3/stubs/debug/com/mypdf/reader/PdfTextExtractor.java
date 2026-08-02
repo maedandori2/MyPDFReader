@@ -7,7 +7,7 @@ package com.mypdf.reader;
  * Sử dụng bounding box (vị trí pixel) để xác định giá trị nằm
  * ở ô bên phải của key trong bảng, thay vì parse text thuần.
  */
-@kotlin.Metadata(mv = {2, 2, 0}, k = 1, xi = 48, d1 = {"\u0000d\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0000\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u0006\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010$\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0006\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0010\u0002\n\u0002\b\u0003\b\u00c6\u0002\u0018\u00002\u00020\u0001:\u0001/B\t\b\u0002\u00a2\u0006\u0004\b\u0002\u0010\u0003J\"\u0010\u0010\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00112\u0006\u0010\u0012\u001a\u00020\u0005H\u0086@\u00a2\u0006\u0002\u0010\u0013J\u0018\u0010\u0014\u001a\u0004\u0018\u00010\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0082@\u00a2\u0006\u0002\u0010\u0018J\u001c\u0010\u0019\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00112\u0006\u0010\u001a\u001a\u00020\u0015H\u0002J \u0010\u001b\u001a\u0004\u0018\u00010\u00052\u0006\u0010\u001c\u001a\u00020\u00052\f\u0010\u001d\u001a\b\u0012\u0004\u0012\u00020\u001f0\u001eH\u0002J \u0010 \u001a\u0004\u0018\u00010\u001f2\u0006\u0010\u001c\u001a\u00020\u00052\f\u0010\u001d\u001a\b\u0012\u0004\u0012\u00020\u001f0\u001eH\u0002J\u0010\u0010!\u001a\u00020\"2\u0006\u0010#\u001a\u00020\u0005H\u0002Ji\u0010$\u001a\u00020\u00072\f\u0010%\u001a\b\u0012\u0004\u0012\u00020\u00050\u001e2K\u0010&\u001aG\u0012\u0013\u0012\u00110\u0007\u00a2\u0006\f\b(\u0012\b\b)\u0012\u0004\b\b(*\u0012\u0013\u0012\u00110\u0007\u00a2\u0006\f\b(\u0012\b\b)\u0012\u0004\b\b(+\u0012\u0013\u0012\u00110\u0005\u00a2\u0006\f\b(\u0012\b\b)\u0012\u0004\b\b(,\u0012\u0004\u0012\u00020-0\'H\u0086@\u00a2\u0006\u0002\u0010.R\u000e\u0010\u0004\u001a\u00020\u0005X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0007X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\b\u001a\u00020\tX\u0082T\u00a2\u0006\u0002\n\u0000R\u001b\u0010\n\u001a\u00020\u000b8BX\u0082\u0084\u0002\u00a2\u0006\f\n\u0004\b\u000e\u0010\u000f\u001a\u0004\b\f\u0010\r\u00a8\u00060"}, d2 = {"Lcom/mypdf/reader/PdfTextExtractor;", "", "<init>", "()V", "TAG", "", "RENDER_WIDTH", "", "SAME_ROW_THRESHOLD_RATIO", "", "recognizer", "Lcom/google/mlkit/vision/text/TextRecognizer;", "getRecognizer", "()Lcom/google/mlkit/vision/text/TextRecognizer;", "recognizer$delegate", "Lkotlin/Lazy;", "extractFromFirstPage", "", "pdfPath", "(Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "runOcr", "Lcom/google/mlkit/vision/text/Text;", "bitmap", "Landroid/graphics/Bitmap;", "(Landroid/graphics/Bitmap;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "extractByBoundingBox", "ocrResult", "findValueForKey", "key", "elements", "", "Lcom/mypdf/reader/PdfTextExtractor$OcrElement;", "findKeyElement", "isMetadataKey", "", "text", "extractBatch", "filePaths", "onProgress", "Lkotlin/Function3;", "Lkotlin/ParameterName;", "name", "current", "total", "fileName", "", "(Ljava/util/List;Lkotlin/jvm/functions/Function3;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "OcrElement", "app_debug"})
+@kotlin.Metadata(mv = {2, 2, 0}, k = 1, xi = 48, d1 = {"\u0000j\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0000\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u0006\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010$\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0007\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0006\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u0002\n\u0002\b\u0003\b\u00c6\u0002\u0018\u00002\u00020\u0001:\u00013B\t\b\u0002\u00a2\u0006\u0004\b\u0002\u0010\u0003J*\u0010\u0010\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00112\u0006\u0010\u0012\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0005H\u0086@\u00a2\u0006\u0002\u0010\u0015J\u0018\u0010\u0016\u001a\u0004\u0018\u00010\u00172\u0006\u0010\u0018\u001a\u00020\u0019H\u0082@\u00a2\u0006\u0002\u0010\u001aJ4\u0010\u001b\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00112\u0006\u0010\u0012\u001a\u00020\u00132\u0006\u0010\u001c\u001a\u00020\u00052\u0006\u0010\u0018\u001a\u00020\u00192\u0006\u0010\u001d\u001a\u00020\u0017H\u0002J \u0010\u001e\u001a\u0004\u0018\u00010\u00052\u0006\u0010\u001f\u001a\u00020\u00052\f\u0010 \u001a\b\u0012\u0004\u0012\u00020\"0!H\u0002J \u0010#\u001a\u0004\u0018\u00010\"2\u0006\u0010\u001f\u001a\u00020\u00052\f\u0010 \u001a\b\u0012\u0004\u0012\u00020\"0!H\u0002J\u0010\u0010$\u001a\u00020%2\u0006\u0010&\u001a\u00020\u0005H\u0002J*\u0010\'\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00112\u0006\u0010\u0012\u001a\u00020\u00132\u0006\u0010(\u001a\u00020\u0005H\u0086@\u00a2\u0006\u0002\u0010\u0015Jq\u0010)\u001a\u00020\u00072\u0006\u0010\u0012\u001a\u00020\u00132\f\u0010*\u001a\b\u0012\u0004\u0012\u00020\u00050!2K\u0010+\u001aG\u0012\u0013\u0012\u00110\u0007\u00a2\u0006\f\b-\u0012\b\b.\u0012\u0004\b\b(/\u0012\u0013\u0012\u00110\u0007\u00a2\u0006\f\b-\u0012\b\b.\u0012\u0004\b\b(0\u0012\u0013\u0012\u00110\u0005\u00a2\u0006\f\b-\u0012\b\b.\u0012\u0004\b\b(\u001c\u0012\u0004\u0012\u0002010,H\u0086@\u00a2\u0006\u0002\u00102R\u000e\u0010\u0004\u001a\u00020\u0005X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0007X\u0082T\u00a2\u0006\u0002\n\u0000R\u000e\u0010\b\u001a\u00020\tX\u0082T\u00a2\u0006\u0002\n\u0000R\u001b\u0010\n\u001a\u00020\u000b8BX\u0082\u0084\u0002\u00a2\u0006\f\n\u0004\b\u000e\u0010\u000f\u001a\u0004\b\f\u0010\r\u00a8\u00064"}, d2 = {"Lcom/mypdf/reader/PdfTextExtractor;", "", "<init>", "()V", "TAG", "", "RENDER_WIDTH", "", "SAME_ROW_THRESHOLD_RATIO", "", "recognizer", "Lcom/google/mlkit/vision/text/TextRecognizer;", "getRecognizer", "()Lcom/google/mlkit/vision/text/TextRecognizer;", "recognizer$delegate", "Lkotlin/Lazy;", "extractFromFirstPage", "", "context", "Landroid/content/Context;", "pdfPath", "(Landroid/content/Context;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "runOcr", "Lcom/google/mlkit/vision/text/Text;", "bitmap", "Landroid/graphics/Bitmap;", "(Landroid/graphics/Bitmap;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "extractByBoundingBox", "fileName", "ocrResult", "findValueForKey", "key", "elements", "", "Lcom/mypdf/reader/PdfTextExtractor$OcrElement;", "findKeyElement", "isMetadataKey", "", "text", "extractFromXdwFirstPage", "xdwPath", "extractBatch", "filePaths", "onProgress", "Lkotlin/Function3;", "Lkotlin/ParameterName;", "name", "current", "total", "", "(Landroid/content/Context;Ljava/util/List;Lkotlin/jvm/functions/Function3;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "OcrElement", "app_debug"})
 public final class PdfTextExtractor {
     @org.jetbrains.annotations.NotNull()
     private static final java.lang.String TAG = "PdfTextExtractor";
@@ -28,10 +28,11 @@ public final class PdfTextExtractor {
     
     /**
      * Trích xuất metadata từ trang đầu của file PDF.
-     * @return Map<String, String> với các key tìm thấy (品名, 自社品番, 自社品名)
+     * @return Map<String, String> với các key tìm thấy (品名, 自社品番, 自社品名) và giá trị là đường dẫn ảnh.
      */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object extractFromFirstPage(@org.jetbrains.annotations.NotNull()
+    android.content.Context context, @org.jetbrains.annotations.NotNull()
     java.lang.String pdfPath, @org.jetbrains.annotations.NotNull()
     kotlin.coroutines.Continuation<? super java.util.Map<java.lang.String, java.lang.String>> $completion) {
         return null;
@@ -47,14 +48,9 @@ public final class PdfTextExtractor {
     
     /**
      * Trích xuất metadata dựa trên vị trí bounding box.
-     *
-     * Logic:
-     * 1. Thu thập tất cả element OCR với bounding box
-     * 2. Tìm element chứa key (品名, 自社品番, 自社品名)
-     * 3. Tìm element nằm ngay bên PHẢI key, cùng dòng (Y gần nhau)
-     * 4. Element đó là giá trị cần lấy
+     * Cắt (crop) vùng ảnh bên phải của từ khoá và lưu thành file.
      */
-    private final java.util.Map<java.lang.String, java.lang.String> extractByBoundingBox(com.google.mlkit.vision.text.Text ocrResult) {
+    private final java.util.Map<java.lang.String, java.lang.String> extractByBoundingBox(android.content.Context context, java.lang.String fileName, android.graphics.Bitmap bitmap, com.google.mlkit.vision.text.Text ocrResult) {
         return null;
     }
     
@@ -88,10 +84,22 @@ public final class PdfTextExtractor {
     }
     
     /**
+     * Trích xuất metadata từ trang đầu của file XDW.
+     */
+    @org.jetbrains.annotations.Nullable()
+    public final java.lang.Object extractFromXdwFirstPage(@org.jetbrains.annotations.NotNull()
+    android.content.Context context, @org.jetbrains.annotations.NotNull()
+    java.lang.String xdwPath, @org.jetbrains.annotations.NotNull()
+    kotlin.coroutines.Continuation<? super java.util.Map<java.lang.String, java.lang.String>> $completion) {
+        return null;
+    }
+    
+    /**
      * Trích xuất metadata cho nhiều file, với callback progress
      */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object extractBatch(@org.jetbrains.annotations.NotNull()
+    android.content.Context context, @org.jetbrains.annotations.NotNull()
     java.util.List<java.lang.String> filePaths, @org.jetbrains.annotations.NotNull()
     kotlin.jvm.functions.Function3<? super java.lang.Integer, ? super java.lang.Integer, ? super java.lang.String, kotlin.Unit> onProgress, @org.jetbrains.annotations.NotNull()
     kotlin.coroutines.Continuation<? super java.lang.Integer> $completion) {

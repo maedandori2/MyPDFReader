@@ -39,9 +39,9 @@ object PdfTextExtractor {
 
     /**
      * Trích xuất metadata từ trang đầu của file PDF.
-     * @return Map<String, String> với các key tìm thấy (品名, 自社品番, 自社品名)
+     * @return Map<String, String> với các key tìm thấy (品名, 自社品番, 自社品名) và giá trị là đường dẫn ảnh.
      */
-    suspend fun extractFromFirstPage(pdfPath: String): Map<String, String> = withContext(Dispatchers.IO) {
+    suspend fun extractFromFirstPage(context: android.content.Context, pdfPath: String): Map<String, String> = withContext(Dispatchers.IO) {
         var fileDescriptor: ParcelFileDescriptor? = null
         var pdfRenderer: PdfRenderer? = null
         var page: PdfRenderer.Page? = null
@@ -75,12 +75,16 @@ object PdfTextExtractor {
 
             // 2. Chạy OCR — lấy cả text VÀ bounding box
             val ocrResult = runOcr(bitmap)
+            
+            if (ocrResult == null) {
+                bitmap.recycle()
+                return@withContext emptyMap()
+            }
+
+            // 3. Trích xuất metadata bằng cách crop hình ảnh dựa trên bounding box
+            val metadata = extractByBoundingBox(context, file.name, bitmap, ocrResult)
             bitmap.recycle()
-
-            if (ocrResult == null) return@withContext emptyMap()
-
-            // 3. Trích xuất metadata dựa trên vị trí bounding box
-            val metadata = extractByBoundingBox(ocrResult)
+            
             Log.d(TAG, "Extracted from ${file.name}: $metadata")
             metadata
 
@@ -124,14 +128,9 @@ object PdfTextExtractor {
 
     /**
      * Trích xuất metadata dựa trên vị trí bounding box.
-     *
-     * Logic:
-     * 1. Thu thập tất cả element OCR với bounding box
-     * 2. Tìm element chứa key (品名, 自社品番, 自社品名)
-     * 3. Tìm element nằm ngay bên PHẢI key, cùng dòng (Y gần nhau)
-     * 4. Element đó là giá trị cần lấy
+     * Cắt (crop) vùng ảnh bên phải của từ khoá và lưu thành file.
      */
-    private fun extractByBoundingBox(ocrResult: Text): Map<String, String> {
+    private fun extractByBoundingBox(context: android.content.Context, fileName: String, bitmap: Bitmap, ocrResult: Text): Map<String, String> {
         // Thu thập tất cả element với bounding box
         val allElements = mutableListOf<OcrElement>()
 
@@ -146,17 +145,41 @@ object PdfTextExtractor {
 
         if (allElements.isEmpty()) return emptyMap()
 
-        // Debug: log tất cả elements
-        for (e in allElements) {
-            Log.d(TAG, "Element: '${e.text}' at (${e.box.left},${e.box.top})-(${e.box.right},${e.box.bottom})")
-        }
-
         val result = mutableMapOf<String, String>()
+        val imgDir = File(context.filesDir, "metadata_images")
+        if (!imgDir.exists()) imgDir.mkdirs()
 
         for (key in PdfMetadataManager.METADATA_KEYS) {
-            val value = findValueForKey(key, allElements)
-            if (!value.isNullOrBlank()) {
-                result[key] = value
+            val keyElement = findKeyElement(key, allElements)
+            if (keyElement != null) {
+                val box = keyElement.box
+                val keyHeight = box.bottom - box.top
+                
+                // Crop area: ngay bên phải key, rộng bằng 15 lần chiều cao hoặc tới lề phải
+                val padding = 5
+                val left = Math.max(0, box.right)
+                val top = Math.max(0, box.top - padding)
+                val right = Math.min(bitmap.width, box.right + keyHeight * 15)
+                val bottom = Math.min(bitmap.height, box.bottom + padding)
+                
+                val width = right - left
+                val height = bottom - top
+                
+                if (width > 0 && height > 0) {
+                    try {
+                        val cropped = Bitmap.createBitmap(bitmap, left, top, width, height)
+                        val outName = "${fileName}_$key.jpg"
+                        val outFile = File(imgDir, outName)
+                        java.io.FileOutputStream(outFile).use { out ->
+                            cropped.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                        }
+                        cropped.recycle()
+                        
+                        result[key] = "img://$outName"
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error cropping image for key: $key", e)
+                    }
+                }
             }
         }
 
@@ -301,9 +324,39 @@ object PdfTextExtractor {
     }
 
     /**
+     * Trích xuất metadata từ trang đầu của file XDW.
+     */
+    suspend fun extractFromXdwFirstPage(context: android.content.Context, xdwPath: String): Map<String, String> = withContext(Dispatchers.IO) {
+        try {
+            val file = File(xdwPath)
+            if (!file.exists()) return@withContext emptyMap()
+
+            val bitmap = XdwReaderHelper.renderPageForOCR(context, xdwPath)
+            if (bitmap == null) return@withContext emptyMap()
+
+            val ocrResult = runOcr(bitmap)
+            
+            if (ocrResult == null) {
+                bitmap.recycle()
+                return@withContext emptyMap()
+            }
+
+            val metadata = extractByBoundingBox(context, file.name, bitmap, ocrResult)
+            bitmap.recycle()
+            
+            Log.d(TAG, "Extracted from ${file.name}: $metadata")
+            metadata
+        } catch (e: Exception) {
+            Log.e(TAG, "Error extracting from $xdwPath", e)
+            emptyMap()
+        }
+    }
+
+    /**
      * Trích xuất metadata cho nhiều file, với callback progress
      */
     suspend fun extractBatch(
+        context: android.content.Context,
         filePaths: List<String>,
         onProgress: (current: Int, total: Int, fileName: String) -> Unit
     ): Int {
@@ -315,7 +368,12 @@ object PdfTextExtractor {
             onProgress(index + 1, filePaths.size, fileName)
 
             try {
-                val metadata = extractFromFirstPage(path)
+                val metadata = if (fileName.endsWith(".xdw", ignoreCase = true)) {
+                    extractFromXdwFirstPage(context, path)
+                } else {
+                    extractFromFirstPage(context, path)
+                }
+                
                 if (metadata.isNotEmpty()) {
                     PdfMetadataManager.setMetadata(fileName, metadata)
                     extracted++

@@ -3236,11 +3236,9 @@ id btnLogin
 id btnLogout
 id btnMoveDown
 id btnMoveUp
-id btnNextFile
 id btnNextPage
 id btnOpenFile
 id btnOpenReading
-id btnPrevFile
 id btnPrevPage
 id btnRemove
 id btnScanMetadata
@@ -3399,8 +3397,9 @@ id layoutControls
 id layoutDownloadProgress
 id layoutLoggedIn
 id layoutLoggedOut
+id layoutMetadataContainer
+id layoutMetadataScroll
 id layoutNav
-id layoutPageNav
 id layoutReadingList
 id layoutTopBar
 id left
@@ -3543,7 +3542,6 @@ id rounded
 id row_index_key
 id rvFiles
 id rvReadingList
-id rvXdwTiles
 id save_non_transition_alpha
 id save_overlay_view
 id sawtooth
@@ -3662,13 +3660,13 @@ id tvDriveFolder
 id tvEmpty
 id tvFileCount
 id tvFileName
+id tvFileSize
 id tvFolderLabel
 id tvIndex
 id tvInitSyncStatus
 id tvLastSync
 id tvLoginDesc
 id tvLoginTitle
-id tvMetadata
 id tvMetadataColorDesc
 id tvMetadataColorTitle
 id tvPageInfo

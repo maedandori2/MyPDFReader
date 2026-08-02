@@ -71,7 +71,7 @@ public final class PdfFileAdapter extends androidx.recyclerview.widget.RecyclerV
         return 0;
     }
     
-    @kotlin.Metadata(mv = {2, 2, 0}, k = 1, xi = 48, d1 = {"\u0000*\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0016\b\u0086\u0004\u0018\u00002\u00020\u0001B\u000f\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\u0004\b\u0004\u0010\u0005R\u0011\u0010\u0006\u001a\u00020\u0007\u00a2\u0006\b\n\u0000\u001a\u0004\b\b\u0010\tR\u0011\u0010\n\u001a\u00020\u000b\u00a2\u0006\b\n\u0000\u001a\u0004\b\f\u0010\rR\u0011\u0010\u000e\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0010\u0010\u0011R\u0011\u0010\u0012\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0013\u0010\u0011R\u0011\u0010\u0014\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0015\u0010\u0011R\u0011\u0010\u0016\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0017\u0010\u0011R\u0011\u0010\u0018\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0019\u0010\u0011R\u0011\u0010\u001a\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001b\u0010\u001cR\u0011\u0010\u001d\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001e\u0010\u0011R\u0011\u0010\u001f\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b \u0010\u0011R\u0011\u0010!\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\"\u0010\u0011R\u0011\u0010#\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b$\u0010\u0011\u00a8\u0006%"}, d2 = {"Lcom/mypdf/reader/PdfFileAdapter$ViewHolder;", "Landroidx/recyclerview/widget/RecyclerView$ViewHolder;", "view", "Landroid/view/View;", "<init>", "(Lcom/mypdf/reader/PdfFileAdapter;Landroid/view/View;)V", "tvIndex", "Landroid/widget/EditText;", "getTvIndex", "()Landroid/widget/EditText;", "ivThumbnail", "Landroid/widget/ImageView;", "getIvThumbnail", "()Landroid/widget/ImageView;", "tvName", "Landroid/widget/TextView;", "getTvName", "()Landroid/widget/TextView;", "tvStatus", "getTvStatus", "tvMetadata", "getTvMetadata", "btnOpenFile", "getBtnOpenFile", "btnAddToList", "getBtnAddToList", "layoutControls", "getLayoutControls", "()Landroid/view/View;", "btnOpenReading", "getBtnOpenReading", "btnMoveUp", "getBtnMoveUp", "btnMoveDown", "getBtnMoveDown", "btnRemove", "getBtnRemove", "app_debug"})
+    @kotlin.Metadata(mv = {2, 2, 0}, k = 1, xi = 48, d1 = {"\u0000*\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0016\b\u0086\u0004\u0018\u00002\u00020\u0001B\u000f\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\u0004\b\u0004\u0010\u0005R\u0011\u0010\u0006\u001a\u00020\u0007\u00a2\u0006\b\n\u0000\u001a\u0004\b\b\u0010\tR\u0011\u0010\n\u001a\u00020\u000b\u00a2\u0006\b\n\u0000\u001a\u0004\b\f\u0010\rR\u0011\u0010\u000e\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0010\u0010\u0011R\u0011\u0010\u0012\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0013\u0010\u0011R\u0011\u0010\u0014\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0015\u0010\u0011R\u0011\u0010\u0016\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0017\u0010\u0011R\u0011\u0010\u0018\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0019\u0010\u0011R\u0011\u0010\u001a\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001b\u0010\u001cR\u0011\u0010\u001d\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\u001e\u0010\u0011R\u0011\u0010\u001f\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b \u0010\u0011R\u0011\u0010!\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b\"\u0010\u0011R\u0011\u0010#\u001a\u00020\u000f\u00a2\u0006\b\n\u0000\u001a\u0004\b$\u0010\u0011\u00a8\u0006%"}, d2 = {"Lcom/mypdf/reader/PdfFileAdapter$ViewHolder;", "Landroidx/recyclerview/widget/RecyclerView$ViewHolder;", "view", "Landroid/view/View;", "<init>", "(Lcom/mypdf/reader/PdfFileAdapter;Landroid/view/View;)V", "tvIndex", "Landroid/widget/EditText;", "getTvIndex", "()Landroid/widget/EditText;", "ivThumbnail", "Landroid/widget/ImageView;", "getIvThumbnail", "()Landroid/widget/ImageView;", "tvName", "Landroid/widget/TextView;", "getTvName", "()Landroid/widget/TextView;", "tvFileSize", "getTvFileSize", "tvStatus", "getTvStatus", "btnOpenFile", "getBtnOpenFile", "btnAddToList", "getBtnAddToList", "layoutControls", "getLayoutControls", "()Landroid/view/View;", "btnOpenReading", "getBtnOpenReading", "btnMoveUp", "getBtnMoveUp", "btnMoveDown", "getBtnMoveDown", "btnRemove", "getBtnRemove", "app_debug"})
     public final class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         @org.jetbrains.annotations.NotNull()
         private final android.widget.EditText tvIndex = null;
@@ -80,9 +80,9 @@ public final class PdfFileAdapter extends androidx.recyclerview.widget.RecyclerV
         @org.jetbrains.annotations.NotNull()
         private final android.widget.TextView tvName = null;
         @org.jetbrains.annotations.NotNull()
-        private final android.widget.TextView tvStatus = null;
+        private final android.widget.TextView tvFileSize = null;
         @org.jetbrains.annotations.NotNull()
-        private final android.widget.TextView tvMetadata = null;
+        private final android.widget.TextView tvStatus = null;
         @org.jetbrains.annotations.NotNull()
         private final android.widget.TextView btnOpenFile = null;
         @org.jetbrains.annotations.NotNull()
@@ -119,12 +119,12 @@ public final class PdfFileAdapter extends androidx.recyclerview.widget.RecyclerV
         }
         
         @org.jetbrains.annotations.NotNull()
-        public final android.widget.TextView getTvStatus() {
+        public final android.widget.TextView getTvFileSize() {
             return null;
         }
         
         @org.jetbrains.annotations.NotNull()
-        public final android.widget.TextView getTvMetadata() {
+        public final android.widget.TextView getTvStatus() {
             return null;
         }
         

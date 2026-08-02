@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,13 +47,19 @@ public final class ItemPdfFileBinding implements ViewBinding {
   public final LinearLayout layoutControls;
 
   @NonNull
+  public final LinearLayout layoutMetadataContainer;
+
+  @NonNull
+  public final HorizontalScrollView layoutMetadataScroll;
+
+  @NonNull
   public final TextView tvFileName;
 
   @NonNull
-  public final EditText tvIndex;
+  public final TextView tvFileSize;
 
   @NonNull
-  public final TextView tvMetadata;
+  public final EditText tvIndex;
 
   @NonNull
   public final TextView tvStatus;
@@ -60,8 +67,9 @@ public final class ItemPdfFileBinding implements ViewBinding {
   private ItemPdfFileBinding(@NonNull LinearLayout rootView, @NonNull TextView btnAddToList,
       @NonNull TextView btnMoveDown, @NonNull TextView btnMoveUp, @NonNull TextView btnOpenFile,
       @NonNull TextView btnOpenReading, @NonNull TextView btnRemove, @NonNull ImageView ivThumbnail,
-      @NonNull LinearLayout layoutControls, @NonNull TextView tvFileName, @NonNull EditText tvIndex,
-      @NonNull TextView tvMetadata, @NonNull TextView tvStatus) {
+      @NonNull LinearLayout layoutControls, @NonNull LinearLayout layoutMetadataContainer,
+      @NonNull HorizontalScrollView layoutMetadataScroll, @NonNull TextView tvFileName,
+      @NonNull TextView tvFileSize, @NonNull EditText tvIndex, @NonNull TextView tvStatus) {
     this.rootView = rootView;
     this.btnAddToList = btnAddToList;
     this.btnMoveDown = btnMoveDown;
@@ -71,9 +79,11 @@ public final class ItemPdfFileBinding implements ViewBinding {
     this.btnRemove = btnRemove;
     this.ivThumbnail = ivThumbnail;
     this.layoutControls = layoutControls;
+    this.layoutMetadataContainer = layoutMetadataContainer;
+    this.layoutMetadataScroll = layoutMetadataScroll;
     this.tvFileName = tvFileName;
+    this.tvFileSize = tvFileSize;
     this.tvIndex = tvIndex;
-    this.tvMetadata = tvMetadata;
     this.tvStatus = tvStatus;
   }
 
@@ -152,21 +162,33 @@ public final class ItemPdfFileBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.layoutMetadataContainer;
+      LinearLayout layoutMetadataContainer = ViewBindings.findChildViewById(rootView, id);
+      if (layoutMetadataContainer == null) {
+        break missingId;
+      }
+
+      id = R.id.layoutMetadataScroll;
+      HorizontalScrollView layoutMetadataScroll = ViewBindings.findChildViewById(rootView, id);
+      if (layoutMetadataScroll == null) {
+        break missingId;
+      }
+
       id = R.id.tvFileName;
       TextView tvFileName = ViewBindings.findChildViewById(rootView, id);
       if (tvFileName == null) {
         break missingId;
       }
 
-      id = R.id.tvIndex;
-      EditText tvIndex = ViewBindings.findChildViewById(rootView, id);
-      if (tvIndex == null) {
+      id = R.id.tvFileSize;
+      TextView tvFileSize = ViewBindings.findChildViewById(rootView, id);
+      if (tvFileSize == null) {
         break missingId;
       }
 
-      id = R.id.tvMetadata;
-      TextView tvMetadata = ViewBindings.findChildViewById(rootView, id);
-      if (tvMetadata == null) {
+      id = R.id.tvIndex;
+      EditText tvIndex = ViewBindings.findChildViewById(rootView, id);
+      if (tvIndex == null) {
         break missingId;
       }
 
@@ -177,8 +199,8 @@ public final class ItemPdfFileBinding implements ViewBinding {
       }
 
       return new ItemPdfFileBinding((LinearLayout) rootView, btnAddToList, btnMoveDown, btnMoveUp,
-          btnOpenFile, btnOpenReading, btnRemove, ivThumbnail, layoutControls, tvFileName, tvIndex,
-          tvMetadata, tvStatus);
+          btnOpenFile, btnOpenReading, btnRemove, ivThumbnail, layoutControls,
+          layoutMetadataContainer, layoutMetadataScroll, tvFileName, tvFileSize, tvIndex, tvStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

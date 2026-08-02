@@ -1,5 +1,13 @@
 [
     {
+        "merged": "com.mypdf.reader.app-debug-43:/layout_item_pdf_file.xml.flat",
+        "source": "com.mypdf.reader.app-main-45:/layout/item_pdf_file.xml"
+    },
+    {
+        "merged": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-debug-43:\\layout_item_xdw_tile.xml.flat",
+        "source": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-main-45:\\layout\\item_xdw_tile.xml"
+    },
+    {
         "merged": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-debug-43:\\layout_item_pdf_file.xml.flat",
         "source": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-main-45:\\layout\\item_pdf_file.xml"
     },
@@ -46,13 +54,5 @@
     {
         "merged": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-debug-43:\\layout_activity_xdw_viewer.xml.flat",
         "source": "C:\\Users\\sangt\\.gradle\\daemon\\9.5.0\\com.mypdf.reader.app-main-45:\\layout\\activity_xdw_viewer.xml"
-    },
-    {
-        "merged": "com.mypdf.reader.app-debug-43:/layout_item_xdw_tile.xml.flat",
-        "source": "com.mypdf.reader.app-main-45:/layout/item_xdw_tile.xml"
-    },
-    {
-        "merged": "com.mypdf.reader.app-debug-43:/layout_activity_xdw_viewer.xml.flat",
-        "source": "com.mypdf.reader.app-main-45:/layout/activity_xdw_viewer.xml"
     }
 ]

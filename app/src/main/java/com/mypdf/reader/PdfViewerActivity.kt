@@ -77,7 +77,8 @@ class PdfViewerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         filePath = intent.getStringExtra("file_path") ?: run { finish(); return }
-        val fileName = intent.getStringExtra("file_name") ?: ""
+        val rawFileName = intent.getStringExtra("file_name") ?: ""
+        val fileName = rawFileName.substringBeforeLast(".")
         val intentList = intent.getStringArrayListExtra("file_list")
         fileList = if (!intentList.isNullOrEmpty()) intentList else listOf(filePath)
         fileIndex = fileList.indexOf(filePath).takeIf { it >= 0 } ?: 0
@@ -145,28 +146,30 @@ class PdfViewerActivity : AppCompatActivity() {
                 val absDx = abs(dx)
                 val absDy = abs(dy)
 
-                // Vuốt trái/phải: chỉ chuyển file
+                // Vuốt trái/phải: chuyển trang, nếu hết trang thì chuyển file
                 if (absDx > absDy && absDx > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
                     if (dx < 0) {
-                        // Vuốt trái → file tiếp theo
-                        switchFile(1)
+                        // Vuốt trái (Next)
+                        if (currentPageIndex < totalPages - 1) {
+                            renderPage(currentPageIndex + 1)
+                        } else {
+                            if (fileIndex < fileList.size - 1) {
+                                switchFile(1)
+                            } else {
+                                Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("last_file"), Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     } else {
-                        // Vuốt phải → file trước
-                        switchFile(-1)
-                    }
-                    return true
-                }
-
-                // Vuốt lên/xuống: chỉ chuyển trang trong file hiện tại
-                if (absDy > absDx && absDy > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY) {
-                    if (dy < 0) {
-                        // Vuốt lên → trang tiếp theo
-                        if (currentPageIndex < totalPages - 1) renderPage(currentPageIndex + 1)
-                        else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("last_page"), Toast.LENGTH_SHORT).show()
-                    } else {
-                        // Vuốt xuống → trang trước
-                        if (currentPageIndex > 0) renderPage(currentPageIndex - 1)
-                        else Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("first_page"), Toast.LENGTH_SHORT).show()
+                        // Vuốt phải (Prev)
+                        if (currentPageIndex > 0) {
+                            renderPage(currentPageIndex - 1)
+                        } else {
+                            if (fileIndex > 0) {
+                                switchFile(-1)
+                            } else {
+                                Toast.makeText(this@PdfViewerActivity, LocaleHelper.getString("first_file"), Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                     return true
                 }
@@ -257,7 +260,7 @@ class PdfViewerActivity : AppCompatActivity() {
                 finish()
                 return
             }
-            binding.tvTitle.text = "[${fileIndex + 1}/${fileList.size}] ${newFile.name}"
+            binding.tvTitle.text = "[${fileIndex + 1}/${fileList.size}] ${newFile.name.substringBeforeLast(".")}"
             openPdf(newPath)
             showUI()
         } catch (e: Exception) {

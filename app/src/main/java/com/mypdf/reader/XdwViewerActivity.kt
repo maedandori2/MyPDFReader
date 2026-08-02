@@ -2,6 +2,7 @@ package com.mypdf.reader
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mypdf.reader.databinding.ActivityXdwViewerBinding
 import java.io.File
 import kotlin.math.abs
+import kotlin.math.min
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,23 +37,36 @@ class XdwViewerActivity : AppCompatActivity() {
     private var xdwReaderHelper: XdwReaderHelper? = null
     private var currentPageIndex = 0
     private var totalPages = 0
-    private var currentTiles: List<Bitmap> = emptyList()
     private var isNavigating = false
     private var isRendering = false
     private var usingNativeRenderer = false
     private var uiVisible = true
     private var allowNativeRenderer = true
 
-    private var tileAdapter: XdwTileAdapter? = null
+    // Zoom & pan
+    private val matrix = Matrix()
+    private val savedMatrix = Matrix()
+    private var lastX = 0f
+    private var lastY = 0f
+    private var midX = 0f
+    private var midY = 0f
+    private var mode = NONE
+    private var dist = 0f
+    private var isZoomed = false
+    private var currentBitmap: Bitmap? = null
 
     companion object {
         private const val TAG = "XdwViewerActivity"
         const val SWIPE_THRESHOLD = 80
         const val SWIPE_VELOCITY = 80
+        const val NONE = 0
+        const val DRAG = 1
+        const val ZOOM = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        XdwReaderHelper.isViewerActive = true
         applyKeepScreenOn()
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
@@ -65,67 +80,15 @@ class XdwViewerActivity : AppCompatActivity() {
         fileIndex = fileList.indexOf(filePath).takeIf { it >= 0 } ?: 0
 
         binding.btnBack.text = "← " + safeGetString("back_button", "Quay lại")
-        binding.btnPrevFile.text = "◀ " + safeGetString("prev_file", "File trước")
-        binding.btnNextFile.text = safeGetString("next_file", "File tiếp theo") + " ▶"
-        binding.btnPrevPage.text = "◀ " + safeGetString("prev_page", "Trang trước")
-        binding.btnNextPage.text = safeGetString("next_page", "Trang sau") + " ▶"
-
-        // Bỏ qua kiểm tra isAvailable để bắt lỗi thực sự nếu thư viện không load được
         allowNativeRenderer = true
 
         binding.btnBack.setOnClickListener { finish() }
-        binding.btnPrevPage.setOnClickListener { showPage(currentPageIndex - 1) }
-        binding.btnNextPage.setOnClickListener { showPage(currentPageIndex + 1) }
 
-        setupControls()
-        setupControls()
-        setupRecyclerView()
+        setupGestures()
         updateTitleAndInfo(fileName)
-        updateFileNavButtons()
 
-        binding.rvXdwTiles.post {
+        binding.ivPage.post {
             openCurrentFile(preferNative = allowNativeRenderer)
-        }
-    }
-
-    private fun setupRecyclerView() {
-        binding.rvXdwTiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
-        tileAdapter = XdwTileAdapter(emptyList())
-        binding.rvXdwTiles.adapter = tileAdapter
-        
-        // Tap to toggle UI visibility
-        binding.rvXdwTiles.setOnClickListener {
-            toggleUiVisibility()
-        }
-    }
-
-    private inner class XdwTileAdapter(private var tiles: List<Bitmap>) :
-        androidx.recyclerview.widget.RecyclerView.Adapter<XdwTileAdapter.TileViewHolder>() {
-        
-        inner class TileViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
-            val ivTile: android.widget.ImageView = view.findViewById(R.id.ivTile)
-            
-            init {
-                ivTile.setOnClickListener {
-                    toggleUiVisibility()
-                }
-            }
-        }
-
-        override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): TileViewHolder {
-            val view = layoutInflater.inflate(R.layout.item_xdw_tile, parent, false)
-            return TileViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: TileViewHolder, position: Int) {
-            holder.ivTile.setImageBitmap(tiles[position])
-        }
-
-        override fun getItemCount(): Int = tiles.size
-        
-        fun updateTiles(newTiles: List<Bitmap>) {
-            tiles = newTiles
-            notifyDataSetChanged()
         }
     }
 
@@ -164,10 +127,8 @@ class XdwViewerActivity : AppCompatActivity() {
             isRendering = false
             if (openedPages > 0) {
                 usingNativeRenderer = true
-                binding.rvXdwTiles.visibility = View.VISIBLE
                 updateTitleAndInfo(file.name)
                 totalPages = openedPages
-                updatePageNav()
                 showPage(0)
             } else {
                 Log.w(TAG, "Native renderer failed for ${file.absolutePath}, fallback to external viewer.")
@@ -181,7 +142,6 @@ class XdwViewerActivity : AppCompatActivity() {
                         .setPositiveButton("Open External") { _, _ ->
                             usingNativeRenderer = false
                             totalPages = 0
-                            updatePageNav()
                             openInExternalViewer()
                         }
                         .setNegativeButton("Cancel", null)
@@ -189,19 +149,6 @@ class XdwViewerActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-
-    private fun setupControls() {
-        binding.btnPrevPage.setOnClickListener { showPage(currentPageIndex - 1) }
-        binding.btnNextPage.setOnClickListener { showPage(currentPageIndex + 1) }
-
-        // Apply translations for previous/next file buttons
-        binding.btnPrevFile.text = safeGetString("prev_file", "File trước")
-        binding.btnNextFile.text = safeGetString("next_file", "File tiếp theo")
-
-        binding.btnPrevFile.setOnClickListener { switchFile(-1) }
-        binding.btnNextFile.setOnClickListener { switchFile(1) }
     }
 
     private fun showPage(index: Int) {
@@ -219,27 +166,33 @@ class XdwViewerActivity : AppCompatActivity() {
         val helper = xdwReaderHelper ?: return
         
         // Dùng kích thước canvas lớn nhưng an toàn (max width ~ 2000)
-        // Chiều cao sẽ được tính tự động dựa trên tỷ lệ thật
         val targetWidth = 2000
-        val targetHeight = 3000 // dummy, không quan trọng vì crop sẽ xử lý chiều dài thật
+        val targetHeight = 3000 // dummy, crop sẽ xử lý chiều dài thật
         
         isRendering = true
         lifecycleScope.launch {
             val scaleFromSettings = SettingsManager.getXdwRenderScale().toFloat()
-            var tiles = withContext(Dispatchers.IO) {
-                helper.getPageTiles(index, targetWidth, targetHeight, scaleFromSettings)
+            var bitmap = withContext(Dispatchers.IO) {
+                helper.getPageBitmap(index, targetWidth, targetHeight, scaleFromSettings)?.let {
+                    val cropped = helper.cropWhitespace(it)
+                    if (cropped !== it && !it.isRecycled) it.recycle()
+                    cropped
+                }
             }
             
-            if (tiles.isEmpty() && scaleFromSettings > 0) {
-                // Try again with brute force
-                tiles = withContext(Dispatchers.IO) {
-                    helper.getPageTiles(index, targetWidth, targetHeight, -1f)
+            if (bitmap == null && scaleFromSettings > 0) {
+                bitmap = withContext(Dispatchers.IO) {
+                    helper.getPageBitmap(index, targetWidth, targetHeight, -1f)?.let {
+                        val cropped = helper.cropWhitespace(it)
+                        if (cropped !== it && !it.isRecycled) it.recycle()
+                        cropped
+                    }
                 }
             }
 
             isRendering = false
 
-            if (tiles.isEmpty()) {
+            if (bitmap == null) {
                 Toast.makeText(
                     this@XdwViewerActivity,
                     safeGetString("cannot_open", "Không thể mở file") + " .xdw",
@@ -250,21 +203,31 @@ class XdwViewerActivity : AppCompatActivity() {
                 return@launch
             }
 
-            currentTiles.forEach { it.recycle() }
-            currentTiles = tiles
+            val oldBitmap = currentBitmap
+            currentBitmap = bitmap
             currentPageIndex = index
             
-            tileAdapter?.updateTiles(currentTiles)
-            binding.rvXdwTiles.scrollToPosition(0)
+            isZoomed = false
+            matrix.reset()
+            binding.ivPage.scaleType = android.widget.ImageView.ScaleType.MATRIX
+            binding.ivPage.setImageBitmap(bitmap)
+            binding.ivPage.post { fitToScreen(bitmap) }
             
-            updatePageNav()
+            oldBitmap?.recycle()
         }
     }
 
-    /**
-     * Mở file .xdw bằng ứng dụng DocuWorks Viewer bên ngoài.
-     * Dùng làm đường mặc định an toàn để tránh crash từ native DocuWorks legacy.
-     */
+    private fun fitToScreen(bmp: Bitmap) {
+        val vW = binding.ivPage.width.toFloat()
+        val vH = binding.ivPage.height.toFloat()
+        if (vW == 0f || vH == 0f) return
+        val s = min(vW / bmp.width, vH / bmp.height)
+        matrix.reset()
+        matrix.postScale(s, s)
+        matrix.postTranslate((vW - bmp.width * s) / 2f, (vH - bmp.height * s) / 2f)
+        binding.ivPage.imageMatrix = matrix
+    }
+
     private fun openInExternalViewer() {
         val file = File(filePath)
         if (!file.exists()) {
@@ -272,10 +235,6 @@ class XdwViewerActivity : AppCompatActivity() {
             finish()
             return
         }
-
-        binding.btnPrevPage.visibility = View.GONE
-        binding.btnNextPage.visibility = View.GONE
-        binding.tvPageInfo.visibility = View.GONE
 
         try {
             val uri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
@@ -311,43 +270,18 @@ class XdwViewerActivity : AppCompatActivity() {
     }
 
     private fun updateTitleAndInfo(fileName: String) {
+        val displayFileName = fileName.substringBeforeLast(".")
         val prefix = if (fileList.size > 1) "[${fileIndex + 1}/${fileList.size}] " else ""
-        binding.tvTitle.text = prefix + fileName
-    }
-
-    private fun updateFileNavButtons() {
-        binding.btnPrevFile.isEnabled = fileIndex > 0
-        binding.btnNextFile.isEnabled = fileIndex < fileList.size - 1
-        binding.layoutNav.visibility = if (fileList.size > 1) View.VISIBLE else View.GONE
-    }
-
-    private fun updatePageNav() {
-        if (usingNativeRenderer && totalPages > 1) {
-            binding.btnPrevPage.visibility = View.VISIBLE
-            binding.btnNextPage.visibility = View.VISIBLE
-            binding.tvPageInfo.visibility = View.VISIBLE
-            binding.tvPageInfo.text = "${currentPageIndex + 1}/$totalPages"
-            binding.btnPrevPage.isEnabled = currentPageIndex > 0
-            binding.btnNextPage.isEnabled = currentPageIndex < totalPages - 1
-        } else {
-            binding.btnPrevPage.visibility = View.GONE
-            binding.btnNextPage.visibility = View.GONE
-            binding.tvPageInfo.visibility = View.GONE
-        }
-        updateFileNavButtons()
+        // Hiển thị cả trang hiện tại vì đã xóa các nút chuyển trang/file
+        val pageInfo = if (totalPages > 1) " - Trang ${currentPageIndex + 1}/$totalPages" else ""
+        binding.tvTitle.text = prefix + displayFileName + pageInfo
     }
 
     private fun toggleUiVisibility() {
         uiVisible = !uiVisible
         binding.layoutTopBar.visibility = if (uiVisible) View.VISIBLE else View.GONE
-        binding.layoutNav.visibility = if (uiVisible && fileList.size > 1) View.VISIBLE else View.GONE
     }
 
-    /**
-     * Chuyển sang file trước/sau trong danh sách.
-     * Nếu file tiếp theo là PDF, chuyển sang PdfViewerActivity.
-     * Nếu file tiếp theo là XDW, dùng đường mở an toàn hiện tại.
-     */
     private fun switchFile(direction: Int) {
         if (isNavigating) return
         if (fileList.size <= 1) {
@@ -396,7 +330,6 @@ class XdwViewerActivity : AppCompatActivity() {
             totalPages = 0
             usingNativeRenderer = false
             updateTitleAndInfo(newFile.name)
-            updatePageNav()
             openCurrentFile(preferNative = allowNativeRenderer)
         } finally {
             isNavigating = false
@@ -404,9 +337,9 @@ class XdwViewerActivity : AppCompatActivity() {
     }
 
     private fun releaseCurrentDocument() {
-        currentTiles.forEach { it.recycle() }
-        currentTiles = emptyList()
-        tileAdapter?.updateTiles(emptyList())
+        currentBitmap?.recycle()
+        currentBitmap = null
+        binding.ivPage.setImageBitmap(null)
         try {
             xdwReaderHelper?.closeDocument()
         } catch (e: Exception) {
@@ -416,13 +349,111 @@ class XdwViewerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         releaseCurrentDocument()
+        XdwReaderHelper.isViewerActive = false
         super.onDestroy()
     }
 
-    /**
-     * Áp dụng cài đặt giữ sáng màn hình từ SettingsManager.
-     * An toàn khi SettingsManager chưa init — catch exception và dùng default.
-     */
+    private fun spacing(event: MotionEvent): Float {
+        val x = event.getX(0) - event.getX(1)
+        val y = event.getY(0) - event.getY(1)
+        return kotlin.math.sqrt(x * x + y * y)
+    }
+
+    private fun midPoint(event: MotionEvent) {
+        midX = (event.getX(0) + event.getX(1)) / 2
+        midY = (event.getY(0) + event.getY(1)) / 2
+    }
+
+    private fun setupGestures() {
+        gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                toggleUiVisibility()
+                return true
+            }
+
+            override fun onFling(
+                e1: MotionEvent?,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                val start = e1 ?: return false
+                if (isNavigating || isRendering || isZoomed) return false
+
+                val dx = e2.x - start.x
+                val dy = e2.y - start.y
+                val absDx = abs(dx)
+                val absDy = abs(dy)
+
+                if (absDx > absDy && absDx > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY) {
+                    if (dx < 0) {
+                        // Vuốt trái (Next)
+                        if (currentPageIndex < totalPages - 1) {
+                            showPage(currentPageIndex + 1)
+                            updateTitleAndInfo(File(filePath).name)
+                        } else if (fileIndex < fileList.size - 1) {
+                            switchFile(1)
+                        } else {
+                            Toast.makeText(this@XdwViewerActivity, safeGetString("last_file", "Đây là file cuối cùng"), Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        // Vuốt phải (Prev)
+                        if (currentPageIndex > 0) {
+                            showPage(currentPageIndex - 1)
+                            updateTitleAndInfo(File(filePath).name)
+                        } else if (fileIndex > 0) {
+                            switchFile(-1)
+                        } else {
+                            Toast.makeText(this@XdwViewerActivity, safeGetString("first_file", "Đây là file đầu tiên"), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
+        })
+
+        binding.ivPage.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    savedMatrix.set(matrix)
+                    lastX = event.x
+                    lastY = event.y
+                    mode = DRAG
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                    dist = spacing(event)
+                    if (dist > 10f) {
+                        savedMatrix.set(matrix)
+                        midPoint(event)
+                        mode = ZOOM
+                    }
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    if (mode == DRAG && isZoomed) {
+                        matrix.set(savedMatrix)
+                        matrix.postTranslate(event.x - lastX, event.y - lastY)
+                        binding.ivPage.imageMatrix = matrix
+                    } else if (mode == ZOOM && event.pointerCount == 2) {
+                        val newDist = spacing(event)
+                        if (newDist > 10f) {
+                            matrix.set(savedMatrix)
+                            val scale = newDist / dist
+                            matrix.postScale(scale, scale, midX, midY)
+                            binding.ivPage.imageMatrix = matrix
+                            val vals = FloatArray(9)
+                            matrix.getValues(vals)
+                            isZoomed = vals[Matrix.MSCALE_X] > 1.05f
+                        }
+                    }
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> mode = NONE
+            }
+            true
+        }
+    }
+
     private fun applyKeepScreenOn() {
         try {
             if (SettingsManager.isKeepScreenOn()) {

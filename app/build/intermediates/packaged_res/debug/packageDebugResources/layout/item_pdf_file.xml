@@ -42,16 +42,30 @@
             android:background="@android:color/transparent"
             android:visibility="visible" />
 
-        <!-- File name -->
-        <TextView
-            android:id="@+id/tvFileName"
+        <!-- File name and Size -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="15sp"
-            android:textColor="#212121"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="10dp" />
+            android:orientation="vertical"
+            android:layout_marginHorizontal="10dp">
+
+            <TextView
+                android:id="@+id/tvFileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#212121"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvFileSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#757575"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
 
         <!-- Nút mở file (mắt) - tab All -->
         <TextView
@@ -141,22 +155,23 @@
         android:visibility="gone" />
 
     <!-- Metadata (品名, 自社品番, 自社品名) -->
-    <TextView
-        android:id="@+id/tvMetadata"
+    <HorizontalScrollView
+        android:id="@+id/layoutMetadataScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="#333333"
-        android:background="@drawable/bg_metadata_badge"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="5dp"
-        android:lineSpacingExtra="2dp"
         android:layout_marginStart="58dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:visibility="gone" />
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/layoutMetadataContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical" />
+    </HorizontalScrollView>
 
     <View
         android:layout_width="match_parent"

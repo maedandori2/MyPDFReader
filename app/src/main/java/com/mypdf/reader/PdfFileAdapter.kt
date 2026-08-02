@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PdfFileAdapter(
     private val files: List<PdfFile>,
@@ -43,8 +44,8 @@ class PdfFileAdapter(
         val tvIndex: EditText = view.findViewById(R.id.tvIndex)
         val ivThumbnail: ImageView = view.findViewById(R.id.ivThumbnail)
         val tvName: TextView = view.findViewById(R.id.tvFileName)
+        val tvFileSize: TextView = view.findViewById(R.id.tvFileSize)
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
-        val tvMetadata: TextView = view.findViewById(R.id.tvMetadata)
         val btnOpenFile: TextView = view.findViewById(R.id.btnOpenFile)
         val btnAddToList: TextView = view.findViewById(R.id.btnAddToList)
         val layoutControls: View = view.findViewById(R.id.layoutControls)
@@ -62,16 +63,107 @@ class PdfFileAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val file = files[position]
-        val realName = java.io.File(file.path).name
-        holder.tvName.text = realName
+        val fileObj = java.io.File(file.path)
+        val realName = fileObj.name
+        
+        var displayString = realName
+        if (displayString.endsWith(".xdw", ignoreCase = true)) {
+            displayString = displayString.dropLast(4)
+        }
+        holder.tvName.text = displayString
 
-        // Hiển thị metadata (品名, 自社品番, 自社品名) cho cả 2 tab với làm nổi bật tự động
-        val metadataText = PdfMetadataManager.formatForHighlightedDisplay(realName)
-        if (metadataText != null) {
-            holder.tvMetadata.text = metadataText
-            holder.tvMetadata.visibility = View.VISIBLE
+        val sizeString = android.text.format.Formatter.formatShortFileSize(holder.itemView.context, fileObj.length())
+        holder.tvFileSize.text = sizeString
+
+
+        // Hiển thị metadata (品名, 自社品番, 自社品名)
+        val layoutMetadataScroll: View = holder.itemView.findViewById(R.id.layoutMetadataScroll)
+        val layoutMetadataContainer: android.widget.LinearLayout = holder.itemView.findViewById(R.id.layoutMetadataContainer)
+        
+        layoutMetadataContainer.removeAllViews()
+        val metadataElements = PdfMetadataManager.getMetadataElements(realName)
+        
+        if (metadataElements.isNotEmpty()) {
+            layoutMetadataScroll.visibility = View.VISIBLE
+            
+            for ((index, pair) in metadataElements.withIndex()) {
+                val key = pair.first
+                val value = pair.second
+                
+                // Container cho 1 item
+                val itemLayout = android.widget.LinearLayout(holder.itemView.context).apply {
+                    orientation = android.widget.LinearLayout.HORIZONTAL
+                    gravity = android.view.Gravity.CENTER_VERTICAL
+                    setPadding(16, 8, 16, 8)
+                    background = androidx.core.content.ContextCompat.getDrawable(context, R.drawable.bg_metadata_badge)
+                    
+                    val params = android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    if (index > 0) params.marginStart = 16
+                    layoutParams = params
+                }
+                
+                // Label (Key)
+                val tvLabel = TextView(holder.itemView.context).apply {
+                    text = "$key: "
+                    textSize = 12f
+                    setTextColor(Color.parseColor(SettingsManager.getMetadataLabelColor(key)))
+                }
+                itemLayout.addView(tvLabel)
+                
+                // Value (Ảnh hoặc Chữ)
+                if (value.startsWith("img://")) {
+                    val imgPath = value.substring(6)
+                    val imgFile = java.io.File(holder.itemView.context.filesDir, "metadata_images/$imgPath")
+                    
+                    val ivValue = ImageView(holder.itemView.context).apply {
+                        adjustViewBounds = true
+                        scaleType = ImageView.ScaleType.FIT_CENTER
+                        val params = android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                            (24 * context.resources.displayMetrics.density).toInt() // max height 24dp
+                        )
+                        params.marginStart = 4
+                        layoutParams = params
+                    }
+                    
+                    if (imgFile.exists()) {
+                        // Load image
+                        adapterScope?.launch(Dispatchers.IO) {
+                            try {
+                                val bitmap = android.graphics.BitmapFactory.decodeFile(imgFile.absolutePath)
+                                withContext(Dispatchers.Main) {
+                                    if (bitmap != null) {
+                                        ivValue.setImageBitmap(bitmap)
+                                    } else {
+                                        ivValue.visibility = View.GONE
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                // ignore
+                            }
+                        }
+                    } else {
+                        ivValue.visibility = View.GONE
+                    }
+                    itemLayout.addView(ivValue)
+                } else {
+                    // Nếu là text cũ (trước khi nâng cấp)
+                    val tvValue = TextView(holder.itemView.context).apply {
+                        text = value
+                        textSize = 14f
+                        setTypeface(null, android.graphics.Typeface.BOLD)
+                        setTextColor(Color.parseColor(SettingsManager.getMetadataValueColor(key)))
+                    }
+                    itemLayout.addView(tvValue)
+                }
+                
+                layoutMetadataContainer.addView(itemLayout)
+            }
         } else {
-            holder.tvMetadata.visibility = View.GONE
+            layoutMetadataScroll.visibility = View.GONE
         }
 
         if (isReadingList) {
@@ -119,18 +211,18 @@ class PdfFileAdapter(
 
             // Xử lý load thumbnail
             holder.ivThumbnail.tag = file.path
-            if (file.path.endsWith(".xdw", ignoreCase = true)) {
-                holder.ivThumbnail.setImageResource(R.drawable.ic_xdw)
-                holder.ivThumbnail.setBackgroundColor(Color.TRANSPARENT)
-            } else {
-                holder.ivThumbnail.setImageBitmap(null)
-                holder.ivThumbnail.setBackgroundColor(Color.parseColor("#E0E0E0"))
+            holder.ivThumbnail.setImageBitmap(null)
+            holder.ivThumbnail.setBackgroundColor(Color.parseColor("#E0E0E0"))
 
-                adapterScope?.launch {
-                    val bitmap = PdfThumbnailLoader.loadThumbnail(file.path, 120, 160)
-                    if (holder.ivThumbnail.tag == file.path) {
-                        if (bitmap != null) {
-                            holder.ivThumbnail.setImageBitmap(bitmap)
+            adapterScope?.launch {
+                val bitmap = PdfThumbnailLoader.loadThumbnail(holder.itemView.context, file.path, 120, 160)
+                if (holder.ivThumbnail.tag == file.path) {
+                    if (bitmap != null) {
+                        holder.ivThumbnail.setImageBitmap(bitmap)
+                        holder.ivThumbnail.setBackgroundColor(Color.TRANSPARENT)
+                    } else {
+                        if (file.path.endsWith(".xdw", ignoreCase = true)) {
+                            holder.ivThumbnail.setImageResource(R.drawable.ic_xdw)
                             holder.ivThumbnail.setBackgroundColor(Color.TRANSPARENT)
                         } else {
                             // Lỗi load ảnh, đổi màu báo lỗi

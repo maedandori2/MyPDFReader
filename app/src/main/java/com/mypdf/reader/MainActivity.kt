@@ -415,7 +415,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startMetadataScan() {
         val unscannedFiles = allFiles.filter {
-            File(it.path).extension.equals("pdf", ignoreCase = true) && !PdfMetadataManager.hasMetadata(File(it.path).name)
+            (File(it.path).extension.equals("pdf", ignoreCase = true) || File(it.path).extension.equals("xdw", ignoreCase = true)) && !PdfMetadataManager.hasMetadata(File(it.path).name)
         }
         if (unscannedFiles.isEmpty()) {
             Toast.makeText(this, LocaleHelper.getString("all_scanned"), Toast.LENGTH_SHORT).show()
@@ -454,7 +454,8 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val paths = unscannedFiles.map { it.path }
-            val count = PdfTextExtractor.extractBatch(paths) { current, total, fileName ->
+            // 3. Tiến hành OCR (nhường thread để UI không bị freeze)
+            val count = PdfTextExtractor.extractBatch(this@MainActivity, paths) { current, total, fileName ->
                 runOnUiThread {
                     progressBar.progress = current
                     tvProgress.text = "$current / $total : $fileName"

@@ -187,6 +187,20 @@ object PdfMetadataManager {
     }
 
     /**
+     * Lấy các cặp Key-Value metadata cho 1 file PDF.
+     * Sử dụng cho UI hiển thị động (VD: tải ảnh từ thư mục)
+     */
+    fun getMetadataElements(fileName: String): List<Pair<String, String>> {
+        val data = findMetadataEntry(fileName) ?: return emptyList()
+        if (data.isEmpty()) return emptyList()
+        
+        return METADATA_KEYS.mapNotNull { key ->
+            val valStr = data[key] ?: data.entries.firstOrNull { it.key.trim() == key }?.value
+            if (!valStr.isNullOrBlank()) Pair(key, valStr) else null
+        }
+    }
+
+    /**
      * Format metadata để làm description trên Drive
      */
     fun formatForDescription(fileName: String): String? {

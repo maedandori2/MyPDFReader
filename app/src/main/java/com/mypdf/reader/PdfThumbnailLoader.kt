@@ -21,11 +21,20 @@ object PdfThumbnailLoader {
         }
     }
 
-    suspend fun loadThumbnail(path: String, reqWidth: Int, reqHeight: Int): Bitmap? {
+    suspend fun loadThumbnail(context: android.content.Context, path: String, reqWidth: Int, reqHeight: Int): Bitmap? {
         val cached = memoryCache.get(path)
         if (cached != null) return cached
 
         return withContext(Dispatchers.IO) {
+            if (path.endsWith(".xdw", ignoreCase = true)) {
+                val bitmap = XdwReaderHelper.generateThumbnail(context, path, reqWidth, reqHeight)
+                if (bitmap != null) {
+                    memoryCache.put(path, bitmap)
+                    return@withContext bitmap
+                }
+                return@withContext null
+            }
+
             var fileDescriptor: ParcelFileDescriptor? = null
             var pdfRenderer: PdfRenderer? = null
             var page: PdfRenderer.Page? = null

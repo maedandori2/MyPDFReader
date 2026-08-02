@@ -69,6 +69,199 @@ class XdwReaderHelper(private val context: Context) {
                 }
             }
         }
+        // Cờ cho biết XdwViewerActivity đang hoạt động, không được tạo thumbnail để tránh ghi đè BaseBridge
+        var isViewerActive = false
+
+        /**
+         * Sinh thumbnail một cách an toàn, gom chung open/get/close vào 1 synchronized block.
+         */
+        fun generateThumbnail(context: Context, filePath: String, width: Int, height: Int): Bitmap? {
+            if (isViewerActive) return null
+            synchronized(bridgeLock) {
+                if (isViewerActive) return null
+                try {
+                    val b = initBridge() ?: return null
+                    val file = File(filePath)
+                    if (!file.exists()) return null
+
+                    val tempDir = File(context.cacheDir, "dwlib")
+                    if (!tempDir.exists()) tempDir.mkdirs()
+                    b.setTempEnv(tempDir.absolutePath + "/")
+                    try { b.closeDocument() } catch (e: Exception) {}
+
+                    val lang = Locale.getDefault().language
+                    val codePage = when {
+                        lang == Locale.JAPAN.language -> 932
+                        lang == Locale.CHINA.language -> if (Locale.getDefault().country == Locale.CHINA.country) 936 else 950
+                        lang == Locale.KOREA.language -> 949
+                        lang == "th" -> 874
+                        lang == "vi" -> 1258
+                        else -> 1252
+                    }
+
+                    if (b.openDocument(filePath, codePage) < 0) return null
+                    try { b.initTiledLayer(com.fujifilm.fb.docuworks.android.viewercomponent.view.DrawerStatusObservable.getInstance()) } catch (e: Exception) {}
+                    b.initDocEdit()
+                    var pages = b.getNumberOfPages()
+                    if (pages == 0) pages = b.getXbdPageCount()
+                    if (pages <= 0) return null
+
+                    val renderW = 1200
+                    val renderH = 1600
+                    b.createCanvasAndBitmap(renderW, renderH)
+                    try { b.setDrawingEnv(renderW, renderH, 25) } catch (e: Exception) {}
+                    
+                    val dummyBitmap = Bitmap.createBitmap(renderW, renderH, Bitmap.Config.ARGB_8888)
+                    dummyBitmap.eraseColor(android.graphics.Color.WHITE)
+                    
+                    var success = false
+                    var scaleToTry = 15.0f
+                    while (scaleToTry >= 1.0f) {
+                        dummyBitmap.eraseColor(android.graphics.Color.WHITE)
+                        if (b.a(0, scaleToTry, dummyBitmap, renderW, renderH) >= 0) {
+                            success = true
+                            break
+                        }
+                        if (scaleToTry == 1.0f) break
+                        scaleToTry -= 5f
+                        if (scaleToTry < 1.0f) scaleToTry = 1.0f
+                    }
+                    
+                    if (success) {
+                        val cache = com.fujifilm.fb.docuworks.android.viewercomponent.view.BaseBridge.cache
+                        val rawBitmap = if (cache != null && !cache.isRecycled && cache.width == renderW && cache.height == renderH) {
+                            Bitmap.createBitmap(cache)
+                        } else {
+                            dummyBitmap
+                        }
+                        // Crop whitespace
+                        val cropped = cropWhitespaceInternal(rawBitmap)
+                        if (cropped !== rawBitmap && !rawBitmap.isRecycled) rawBitmap.recycle()
+                        
+                        // Scale to thumbnail size
+                        val scale = Math.min(width.toFloat() / cropped.width, height.toFloat() / cropped.height)
+                        val finalW = (cropped.width * scale).toInt().coerceAtLeast(1)
+                        val finalH = (cropped.height * scale).toInt().coerceAtLeast(1)
+                        
+                        val thumb = Bitmap.createScaledBitmap(cropped, finalW, finalH, true)
+                        if (thumb !== cropped && !cropped.isRecycled) cropped.recycle()
+                        return thumb
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Thumbnail error", e)
+                } finally {
+                    try { bridge?.closeDocument() } catch (e: Exception) {}
+                }
+            }
+            return null
+        }
+
+        /**
+         * Render trang đầu tiên ở độ phân giải cao để phục vụ cho ML Kit OCR trích xuất Metadata.
+         */
+        fun renderPageForOCR(context: Context, filePath: String): Bitmap? {
+            if (isViewerActive) return null
+            synchronized(bridgeLock) {
+                if (isViewerActive) return null
+                try {
+                    val b = initBridge() ?: return null
+                    val file = File(filePath)
+                    if (!file.exists()) return null
+
+                    val tempDir = File(context.cacheDir, "dwlib")
+                    if (!tempDir.exists()) tempDir.mkdirs()
+                    b.setTempEnv(tempDir.absolutePath + "/")
+                    try { b.closeDocument() } catch (e: Exception) {}
+
+                    val lang = Locale.getDefault().language
+                    val codePage = when {
+                        lang == Locale.JAPAN.language -> 932
+                        lang == Locale.CHINA.language -> if (Locale.getDefault().country == Locale.CHINA.country) 936 else 950
+                        lang == Locale.KOREA.language -> 949
+                        lang == "th" -> 874
+                        lang == "vi" -> 1258
+                        else -> 1252
+                    }
+
+                    if (b.openDocument(filePath, codePage) < 0) return null
+                    try { b.initTiledLayer(com.fujifilm.fb.docuworks.android.viewercomponent.view.DrawerStatusObservable.getInstance()) } catch (e: Exception) {}
+                    b.initDocEdit()
+                    var pages = b.getNumberOfPages()
+                    if (pages == 0) pages = b.getXbdPageCount()
+                    if (pages <= 0) return null
+
+                    val width = 1500
+                    val height = 2100
+                    b.createCanvasAndBitmap(width, height)
+                    try { b.setDrawingEnv(width, height, 25) } catch (e: Exception) {}
+                    
+                    val dummyBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                    dummyBitmap.eraseColor(android.graphics.Color.WHITE)
+                    
+                    if (b.a(0, 100.0f, dummyBitmap, width, height) >= 0) {
+                        val cache = com.fujifilm.fb.docuworks.android.viewercomponent.view.BaseBridge.cache
+                        val rawBitmap = if (cache != null && !cache.isRecycled && cache.width == width && cache.height == height) {
+                            Bitmap.createBitmap(cache)
+                        } else {
+                            dummyBitmap
+                        }
+                        val result = cropWhitespaceInternal(rawBitmap)
+                        if (result !== rawBitmap && !rawBitmap.isRecycled) rawBitmap.recycle()
+                        return result
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "OCR render error", e)
+                } finally {
+                    try { bridge?.closeDocument() } catch (e: Exception) {}
+                }
+            }
+            return null
+        }
+
+        private fun cropWhitespaceInternal(bitmap: Bitmap): Bitmap {
+            val width = bitmap.width
+            val height = bitmap.height
+            var top = 0
+            var bottom = height - 1
+            var left = 0
+            var right = width - 1
+            val rowPixels = IntArray(width)
+            var found = false
+            for (y in 0 until height) {
+                bitmap.getPixels(rowPixels, 0, width, 0, y, width, 1)
+                for (x in 0 until width) {
+                    if (rowPixels[x] != android.graphics.Color.WHITE) { top = y; found = true; break }
+                }
+                if (found) break
+            }
+            if (!found) return bitmap
+            found = false
+            for (y in height - 1 downTo top) {
+                bitmap.getPixels(rowPixels, 0, width, 0, y, width, 1)
+                for (x in 0 until width) {
+                    if (rowPixels[x] != android.graphics.Color.WHITE) { bottom = y; found = true; break }
+                }
+                if (found) break
+            }
+            found = false
+            for (x in 0 until width) {
+                for (y in top..bottom) {
+                    if (bitmap.getPixel(x, y) != android.graphics.Color.WHITE) { left = x; found = true; break }
+                }
+                if (found) break
+            }
+            found = false
+            for (x in width - 1 downTo left) {
+                for (y in top..bottom) {
+                    if (bitmap.getPixel(x, y) != android.graphics.Color.WHITE) { right = x; found = true; break }
+                }
+                if (found) break
+            }
+            val newWidth = right - left + 1
+            val newHeight = bottom - top + 1
+            if (newWidth <= 0 || newHeight <= 0 || (newWidth == width && newHeight == height)) return bitmap
+            return Bitmap.createBitmap(bitmap, left, top, newWidth, newHeight)
+        }
     }
 
     private var totalPages = 0
@@ -292,10 +485,10 @@ class XdwReaderHelper(private val context: Context) {
                     return false
                 }
 
-                // DocuWorks native uses 1-based index, MUST try pageIndex + 1 first
-                if (!tryRender(pageIndex + 1)) {
-                    // Fallback to 0-based
-                    tryRender(pageIndex)
+                // Try 0-based index first
+                if (!tryRender(pageIndex)) {
+                    // Fallback to 1-based index if 0-based fails
+                    tryRender(pageIndex + 1)
                 }
 
                 writeTrace("Finished b.a(): $bestResult at scale $finalScale for page $finalPage")
@@ -332,7 +525,7 @@ class XdwReaderHelper(private val context: Context) {
     /**
      * Loại bỏ khoảng trắng (white border) xung quanh ảnh và trả về ảnh đã crop.
      */
-    private fun cropWhitespace(bitmap: Bitmap): Bitmap {
+    fun cropWhitespace(bitmap: Bitmap): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
 
