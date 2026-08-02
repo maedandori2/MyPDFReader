@@ -494,3 +494,5 @@
  
 
 - 02-08-2026, 10:25: Tái cấu trúc XdwViewerActivity và XdwReaderHelper sử dụng kỹ thuật Tiling (chia nhỏ ảnh) qua RecyclerView, giải quyết triệt để lỗi OutOfMemory (OOM) khi render XDW lớn mà vẫn giữ được độ phân giải cao.
+
+- 02-08-2026, 11:39: Bổ sung luật ProGuard (keep class) cho package \com.fujifilm.fb.**\ để sửa lỗi crash do R8 obfuscate code JNI khi build bản Release (như trên GitHub Actions).

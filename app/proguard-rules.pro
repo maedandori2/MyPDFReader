@@ -27,3 +27,7 @@
 -keepclassmembers class jp.co.fujixerox.** { *; }
 -dontwarn jp.co.fujixerox.**
 
+-keep class com.fujifilm.fb.** { *; }
+-keepclassmembers class com.fujifilm.fb.** { *; }
+-dontwarn com.fujifilm.fb.**
+
