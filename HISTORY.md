@@ -1,5 +1,24 @@
 # 📋 Lịch sử thay đổi — MyPDFReader
 
+## [v1.5.4] - 2026-08-02
+
+### ✨ Tính năng mới & Cải tiến
+- 02-08-2026, 16:32: Cải thiện giao diện Đọc tài liệu: Ẩn đi phần đuôi mở rộng của file (.pdf, .xdw) ở tiêu đề phía trên màn hình đọc PDF và XDW để tiêu đề trở nên gọn gàng hơn.
+- 02-08-2026, 16:27: Chuyển đổi trích xuất Metadata sang Cắt ảnh (Image Cropping): Sử dụng OCR để xác định vị trí toạ độ của các từ khoá (品名, 自社品番, v.v.), sau đó trực tiếp cắt (crop) phần ảnh chứa giá trị bên phải và hiển thị ảnh đó lên danh sách thay vì hiển thị dạng chữ để khắc phục nhược điểm nhận diện sai của OCR. Giao diện danh sách được cập nhật dùng ScrollView ngang để hiển thị các ảnh giá trị này.
+- 02-08-2026, 16:18: Tích hợp ML Kit OCR cho file XDW: Tự động trích xuất metadata (品名, 自社品番, 自社品名) từ trang đầu tiên của file XDW giống như PDF và hiển thị dưới dạng nhãn nổi bật.
+- 02-08-2026, 16:17: Thay đổi thao tác điều hướng trong màn hình đọc PDF: Vuốt ngang (trái/phải) để chuyển trang và chuyển file khi đến giới hạn trang, đồng nhất trải nghiệm với XDW.
+- 02-08-2026, 16:17: Cải thiện Thumbnail XDW: Sửa lỗi ảnh thu nhỏ bị phóng to một góc, giờ đây Thumbnail sẽ render toàn bộ trang và thu nhỏ lại đúng hình dạng thực tế của tài liệu.
+- 02-08-2026, 16:03: Bổ sung tính năng tự động tạo ảnh thu nhỏ (thumbnail) cho các file XDW ngoài màn hình danh sách chính tương tự như PDF. Thêm cơ chế an toàn để không tải thumbnail khi màn hình đọc XDW đang mở nhằm tránh lỗi ghi đè dữ liệu của BaseBridge.
+- 02-08-2026, 15:58: Cắt bỏ khoảng trắng thừa của XDW (auto crop whitespace) sau khi render nguyên trang để ảnh không bị thu nhỏ và nằm lọt thỏm giữa màn hình do canvas dư thừa.
+- 02-08-2026, 15:52: Loại bỏ hoàn toàn các thanh điều hướng bằng nút bấm trong XDW Viewer để giao diện gọn gàng hơn. Đồng thời thêm chức năng pinch-to-zoom (chụm tay để phóng to/thu nhỏ) khi đọc XDW tương tự như bên PDF.
+- 02-08-2026, 15:46: Bổ sung thao tác vuốt ngang (trái/phải) để chuyển trang hoặc chuyển sang file tiếp theo/trước đó. Hiển thị thông báo (Toast) khi đã tới file đầu hoặc file cuối của danh sách.
+- 02-08-2026, 15:42: Sửa lỗi render XDW bị trùng trang (các trang đều giống trang cuối) do truyền sai chỉ mục (index) vào native library (ưu tiên dùng 0-based index thay vì 1-based index).
+- 02-08-2026, 12:08: Hiển thị thêm kích thước file bên dưới tên file trong danh sách và tự động ẩn đuôi .xdw (giữ nguyên .pdf) để giao diện hiển thị tinh gọn hơn.
+- 02-08-2026, 11:39: Bổ sung luật ProGuard (keep class) cho package \com.fujifilm.fb.**\ để sửa lỗi crash do R8 obfuscate code JNI khi build bản Release (như trên GitHub Actions).
+- 02-08-2026, 10:25: Tái cấu trúc XdwViewerActivity và XdwReaderHelper sử dụng kỹ thuật Tiling (chia nhỏ ảnh) qua RecyclerView, giải quyết triệt để lỗi OutOfMemory (OOM) khi render XDW lớn mà vẫn giữ được độ phân giải cao.
+
+---
+
 ## [v1.5.3] - 2026-08-01
 
 ### 🐛 Sửa lỗi crash khi mở file XDW
@@ -415,25 +434,3 @@
 - Đọc file PDF từ thư mục `/sdcard/MyPDF`
 - Danh sách file PDF cục bộ
 - Xem PDF toàn màn hình
--
-- 02-08-2026, 10:25: Tái cấu trúc XdwViewerActivity và XdwReaderHelper sử dụng kỹ thuật Tiling (chia nhỏ ảnh) qua RecyclerView, giải quyết triệt để lỗi OutOfMemory (OOM) khi render XDW lớn mà vẫn giữ được độ phân giải cao.
-
-- 02-08-2026, 11:39: Bổ sung luật ProGuard (keep class) cho package \com.fujifilm.fb.**\ để sửa lỗi crash do R8 obfuscate code JNI khi build bản Release (như trên GitHub Actions).
-
-- 02-08-2026, 12:08: Hiển thị thêm kích thước file bên dưới tên file trong danh sách và tự động ẩn đuôi .xdw (giữ nguyên .pdf) để giao diện hiển thị tinh gọn hơn.
-
-- 02-08-2026, 15:42: Sửa lỗi render XDW bị trùng trang (các trang đều giống trang cuối) do truyền sai chỉ mục (index) vào native library (ưu tiên dùng 0-based index thay vì 1-based index).
-
-- 02-08-2026, 15:46: Bổ sung thao tác vuốt ngang (trái/phải) để chuyển trang hoặc chuyển sang file tiếp theo/trước đó. Hiển thị thông báo (Toast) khi đã tới file đầu hoặc file cuối của danh sách.
-
-- 02-08-2026, 15:52: Loại bỏ hoàn toàn các thanh điều hướng bằng nút bấm trong XDW Viewer để giao diện gọn gàng hơn. Đồng thời thêm chức năng pinch-to-zoom (chụm tay để phóng to/thu nhỏ) khi đọc XDW tương tự như bên PDF.
-
-- 02-08-2026, 15:58: Cắt bỏ khoảng trắng thừa của XDW (auto crop whitespace) sau khi render nguyên trang để ảnh không bị thu nhỏ và nằm lọt thỏm giữa màn hình do canvas dư thừa.
-
-- 02-08-2026, 16:03: Bổ sung tính năng tự động tạo ảnh thu nhỏ (thumbnail) cho các file XDW ngoài màn hình danh sách chính tương tự như PDF. Thêm cơ chế an toàn để không tải thumbnail khi màn hình đọc XDW đang mở nhằm tránh lỗi ghi đè dữ liệu của BaseBridge.
-
-- 02-08-2026, 16:17: Cải thiện Thumbnail XDW: Sửa lỗi ảnh thu nhỏ bị phóng to một góc, giờ đây Thumbnail sẽ render toàn bộ trang và thu nhỏ lại đúng hình dạng thực tế của tài liệu.
-- 02-08-2026, 16:17: Thay đổi thao tác điều hướng trong màn hình đọc PDF: Vuốt ngang (trái/phải) để chuyển trang và chuyển file khi đến giới hạn trang, đồng nhất trải nghiệm với XDW.
-- 02-08-2026, 16:18: Tích hợp ML Kit OCR cho file XDW: Tự động trích xuất metadata (品名, 自社品番, 自社品名) từ trang đầu tiên của file XDW giống như PDF và hiển thị dưới dạng nhãn nổi bật.
-- 02-08-2026, 16:27: Chuyển đổi trích xuất Metadata sang Cắt ảnh (Image Cropping): Sử dụng OCR để xác định vị trí toạ độ của các từ khoá (品名, 自社品番, v.v.), sau đó trực tiếp cắt (crop) phần ảnh chứa giá trị bên phải và hiển thị ảnh đó lên danh sách thay vì hiển thị dạng chữ để khắc phục nhược điểm nhận diện sai của OCR. Giao diện danh sách được cập nhật dùng ScrollView ngang để hiển thị các ảnh giá trị này.
-- 02-08-2026, 16:32: Cải thiện giao diện Đọc tài liệu: Ẩn đi phần đuôi mở rộng của file (.pdf, .xdw) ở tiêu đề phía trên màn hình đọc PDF và XDW để tiêu đề trở nên gọn gàng hơn.
